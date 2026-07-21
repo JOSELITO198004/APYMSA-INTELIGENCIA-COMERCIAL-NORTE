@@ -264,15 +264,9 @@
   .segment-projection-value{width:100%!important}
 }
 
-/* V8.2 · Tarjetas limpias: sin formulas ni textos metodologicos visibles */
+/* V8.4 */
 .operational-card span{display:none!important}
-.operational-card{min-height:104px!important}
-.operational-card small{font-size:8px!important;line-height:1.25!important;text-transform:uppercase!important;font-weight:900!important}
-.operational-card b{margin-top:10px!important}
-
-/* V8.3 · El inicio por rol conserva la misma tarjeta de la jerarquia */
-#regional-cards:has(> .advisor-card-btn:only-child),
-#advisor-cards:has(> .advisor-card-btn:only-child){grid-template-columns:minmax(300px,390px)!important;justify-content:start!important}
+#regional-cards:has(> .advisor-card-btn:only-child),#advisor-cards:has(> .advisor-card-btn:only-child){grid-template-columns:minmax(300px,390px)!important;justify-content:start!important}
 </style></head>
 <body>
 <header class="no-print bg-glass border-b border-neon-cyan sticky top-0 z-50">
@@ -923,33 +917,10 @@
     async function submitAccess(){const user=document.getElementById('access-user').value.trim(),pin=document.getElementById('access-pin').value,err=document.getElementById('access-error');err.classList.add('hidden');if(!user||!pin){err.innerText='Captura usuario y PIN';err.classList.remove('hidden');return}const hash=await hashPin(pin),account=accessUsers().find(x=>accessNorm(x.user)===accessNorm(user)&&x.hash===hash&&x.active!==false);if(!account){err.innerText='Usuario o PIN incorrecto, o usuario inactivo';err.classList.remove('hidden');return}ACCESS_SESSION={user:account.user,role:account.role,entity:account.entity};sessionStorage.setItem(ACCESS_SESSION_KEY,JSON.stringify(ACCESS_SESSION));document.getElementById('access-overlay').classList.add('hidden');document.getElementById('btnLogout').classList.remove('hidden');document.getElementById('btnAccessAdmin').classList.add('hidden');applyAccessLanding()}
     function applyAccessLanding(){
         step1.classList.add('hidden');step2.classList.remove('hidden');btnBack.classList.remove('hidden');
-        document.getElementById('client-view').classList.add('hidden');
-        document.getElementById('advisor-view').classList.add('hidden');
-        document.getElementById('regional-view').classList.remove('hidden');
-        if(ACCESS_SESSION.role==='TERRITORIAL'){
-            renderTerritorialCards();
-            return;
-        }
-        if(ACCESS_SESSION.role==='REGIONAL'){
-            const reg=companyTree.get(ACCESS_SESSION.entity);
-            if(!reg){showAlert('REGIÓN ASIGNADA NO ENCONTRADA');return;}
-            currentSelectedTerritorial=reg.territorial;currentSelectedRegional=null;currentSelectedAdvisor=null;
-            document.getElementById('directory-title').innerHTML='Región autorizada de <span class="text-neon-cyan">'+reg.territorial+'</span>';
-            document.getElementById('directory-subtitle').innerText='Selecciona tu tarjeta regional para comenzar';
-            document.getElementById('btnBackTerritories').classList.add('hidden');
-            document.getElementById('territorial-dashboard').classList.remove('hidden');
-            renderRegionalCards();switchTerritorialTab('regions');
-            appCurrentState='INICIO_REGIONAL';return;
-        }
-        let found=null,reg=null;
-        for(const r of companyTree.values()){if(r.asesores.has(ACCESS_SESSION.entity)){reg=r;found=r.asesores.get(ACCESS_SESSION.entity);break}}
-        if(!found){showAlert('ASESOR ASIGNADO NO ENCONTRADO');return;}
-        currentSelectedTerritorial=reg.territorial;currentSelectedRegional=reg;currentSelectedAdvisor=null;
-        document.getElementById('regional-view').classList.add('hidden');
-        document.getElementById('advisor-view').classList.remove('hidden');
-        document.getElementById('current-regional-title').innerText=reg.name;
-        renderAdvisorCards();switchRegionalTab('advisors');
-        appCurrentState='INICIO_ASESOR';
+        document.getElementById('client-view').classList.add('hidden');document.getElementById('advisor-view').classList.add('hidden');document.getElementById('regional-view').classList.remove('hidden');
+        if(ACCESS_SESSION.role==='TERRITORIAL'){renderTerritorialCards();return;}
+        if(ACCESS_SESSION.role==='REGIONAL'){const reg=companyTree.get(ACCESS_SESSION.entity);if(!reg){showAlert('REGIÓN ASIGNADA NO ENCONTRADA');return;}currentSelectedTerritorial=reg.territorial;currentSelectedRegional=null;currentSelectedAdvisor=null;document.getElementById('directory-title').innerHTML='Región autorizada de <span class="text-neon-cyan">'+reg.territorial+'</span>';document.getElementById('directory-subtitle').innerText='Selecciona tu tarjeta regional para comenzar';document.getElementById('btnBackTerritories').classList.add('hidden');document.getElementById('territorial-dashboard').classList.remove('hidden');renderRegionalCards();switchTerritorialTab('regions');appCurrentState='INICIO_REGIONAL';return;}
+        let found=null,reg=null;for(const r of companyTree.values()){if(r.asesores.has(ACCESS_SESSION.entity)){reg=r;found=r.asesores.get(ACCESS_SESSION.entity);break}}if(!found){showAlert('ASESOR ASIGNADO NO ENCONTRADO');return;}currentSelectedTerritorial=reg.territorial;currentSelectedRegional=reg;currentSelectedAdvisor=null;document.getElementById('regional-view').classList.add('hidden');document.getElementById('advisor-view').classList.remove('hidden');document.getElementById('current-regional-title').innerText=reg.name;renderAdvisorCards();switchRegionalTab('advisors');appCurrentState='INICIO_ASESOR';
     }
     function logoutAccess(){sessionStorage.removeItem(ACCESS_SESSION_KEY);ACCESS_SESSION=null;location.reload()}
     function openAccessAdmin(){showAlert('LOS USUARIOS SE ADMINISTRAN EN LA HOJA ACCESOS DEL EXCEL Y SE ACTUALIZAN AL REGENERAR NORTE.JSON.GZ.')}
@@ -1541,16 +1512,17 @@
         });
     }
 
+    function confirmExitToLoader(){return window.confirm('¿Deseas salir de la sesión actual y volver a la pantalla de carga?\n\nSi continúas, tendrás que cargar nuevamente el archivo local o la información de la nube.');}
+    function exitToLoader(){if(!confirmExitToLoader())return false;step2.classList.add('hidden');stepStrategy.classList.add('hidden');document.getElementById('discipline-client-detail').classList.add('hidden');step1.classList.remove('hidden');btnBack.classList.add('hidden');fileInput.value='';ACCESS_SESSION=null;sessionStorage.removeItem(ACCESS_SESSION_KEY);appCurrentState='LOAD';return true;}
     function backToSelection() {
         if (appCurrentState === "CATALOGO_LISTO") { catalogContainer.innerHTML = ''; stepStrategy.classList.remove('hidden'); btnPrint.setAttribute('disabled', 'true'); closeCartDrawer(); appCurrentState = "MENU_ESTRATEGIAS"; }
         else if (appCurrentState === "MENU_ESTRATEGIAS") { stepStrategy.classList.add('hidden'); step2.classList.remove('hidden'); hideCartBar(); if(ACCESS_SESSION&&ACCESS_SESSION.role==='ASESOR'){switchTab('intel');appCurrentState='PANEL_ASESOR';}else{switchTab('clientes');appCurrentState='LISTA_CLIENTES';} }
-        else if (appCurrentState === 'INICIO_ASESOR' || appCurrentState === 'INICIO_REGIONAL') { applyAccessLanding(); }
-        else if (appCurrentState === 'PANEL_ASESOR_PROPIO') { backToAdvisors(); }
+        else if (appCurrentState === 'INICIO_ASESOR' || appCurrentState === 'INICIO_REGIONAL') { exitToLoader(); }
         else if (appCurrentState === "LISTA_CLIENTES") backToAdvisors();
         else if (appCurrentState === "PANEL_ASESORES") backToRegionals();
         else if (appCurrentState === "PANEL_REGIONALES") { if(currentSelectedTerritorial){document.getElementById('advisor-view').classList.add('hidden');document.getElementById('regional-view').classList.remove('hidden');document.getElementById('territorial-dashboard').classList.remove('hidden');switchTerritorialTab('intel');appCurrentState='PANEL_TERRITORIAL';}else backToTerritories(); }
         else if (appCurrentState === "PANEL_TERRITORIAL") { backToTerritories(); }
-        else if (appCurrentState === "PANEL_TERRITORIALES") { step2.classList.add('hidden'); step1.classList.remove('hidden'); btnBack.classList.add('hidden'); fileInput.value = ''; appCurrentState = "LOAD"; }
+        else if (appCurrentState === "PANEL_TERRITORIALES") { exitToLoader(); }
     }
 
     function getLastPriceForClient(sku, clientObj) {
