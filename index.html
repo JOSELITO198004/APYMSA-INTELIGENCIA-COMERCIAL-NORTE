@@ -264,9 +264,17 @@
   .segment-projection-value{width:100%!important}
 }
 
-/* V8.4 */
+/* V8.5 · Nube secuencial, Android y tarjetas limpias */
 .operational-card span{display:none!important}
 #regional-cards:has(> .advisor-card-btn:only-child),#advisor-cards:has(> .advisor-card-btn:only-child){grid-template-columns:minmax(300px,390px)!important;justify-content:start!important}
+
+/* V8.6 · Nombre de promo abreviado y precio solicitado separado */
+.card .spec-tag{min-height:18px!important}
+.card .spec-tag .spec-value{flex:0 0 auto!important}
+
+/* V8.8 · Fuente estricta del catálogo:
+   precio = Productos.precio_solicitado
+   nombre promo = Productos.comentario */
 </style></head>
 <body>
 <header class="no-print bg-glass border-b border-neon-cyan sticky top-0 z-50">
@@ -285,7 +293,7 @@
 </div>
 </div>
 <div class="flex flex-wrap items-center justify-center gap-3"><button class="hidden bg-[#0f172a] border border-neon-cyan text-neon-cyan px-4 py-2 rounded-lg text-[10px] font-black uppercase" id="btnAccessAdmin" onclick="openAccessAdmin()" style="display:none!important">Usuarios</button><button class="hidden bg-[#0f172a] border border-neon-red text-neon-red px-4 py-2 rounded-lg text-[10px] font-black uppercase" id="btnLogout" onclick="logoutAccess()">Cerrar sesión</button>
-<input accept=".json.gz,.gz,application/gzip" class="hidden" id="dataFile" type="file"/>
+<input accept="*/*" class="hidden" id="dataFile" type="file"/>
 <button class="bg-[#0f172a] hover:bg-[#1e293b] px-4 py-2 rounded-lg text-[10px] font-bold border border-slate-500 text-white flex items-center gap-2 shadow-lg" id="btnFullScreen" onclick="toggleFullScreen()">
 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l-5 5m11 5l-5-5m5 5v-4m0 4h-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span class="uppercase" id="fs-text">Pantalla Completa</span>
@@ -319,7 +327,7 @@
 <span class="text-xs font-bold text-neon-cyan uppercase tracking-widest animate-pulse" id="loader-text">Procesando Base de Datos Estructurada...</span>
 </div>
 <h2 class="text-3xl font-black text-white mb-2 tracking-tight">INTELIGENCIA COMERCIAL <span class="text-neon-cyan">V19.8</span></h2>
-<p class="text-slate-400 mb-8 text-sm font-medium">Selecciona el archivo local <span class="font-bold text-white">JSON.GZ</span> con Productos, Clientes, Jerarquía y Ventas.</p>
+<p class="text-slate-400 mb-8 text-sm font-medium">Selecciona cualquier archivo desde Android o computadora. La aplicación validará internamente que sea GZIP.</p>
 <div class="flex flex-col md:flex-row gap-4 justify-center relative z-10">
 <button class="bg-gradient-to-r from-[#ff004c] to-[#cc003d] text-white px-8 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform" id="btnSelectFile" type="button">Archivo Local (JSON.GZ)</button>
 <button class="bg-gradient-to-r from-[#00f3ff] to-[#008cff] text-black px-8 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform" id="btnLoadCloud" type="button">Cargar de la Nube</button>
@@ -521,11 +529,11 @@
 <div class="strategy-card">
 <div class="text-4xl mb-4">🛠️</div>
 <h3 class="text-white font-black text-xl uppercase mb-3">Tipo de Servicio</h3>
-<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner" id="servicio-selector">
+<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner" id="servicio-selector" onchange="syncServiceArmadoraSelector()">
 <option value="">Seleccionar servicio...</option>
 </select>
 <select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner" id="servicio-family-selector">
-<option value="">Seleccionar familia (Opcional)...</option>
+<option value="">Seleccionar armadora (Opcional)...</option>
 </select>
 <button class="w-full bg-[#0f172a] hover:bg-[#ff004c] hover:text-black border border-neon-red text-neon-red py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(255,0,76,0.2)]" onclick="generateCatalogByStrategy('tipoServicioFamilia')">Generar Catálogo</button>
 </div>
@@ -761,8 +769,9 @@
         processData(dataProductos, dataClientes, dataJerarquia, dataVentas, dataDisciplina, dataAccesos);
     }
 
-    async function decodeGzipResponse(response){const bytes=await response.arrayBuffer();const u=new Uint8Array(bytes);if(u.length<2||u[0]!==31||u[1]!==139)throw new Error('Respuesta no GZIP');if('DecompressionStream' in window){const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));return await new Response(stream).text()}if(!window.pako)throw new Error('Pako no disponible');return pako.ungzip(u,{to:'string'})}
-    async function tryLoadGzipJson(){const repository='APYMSA-INTELIGENCIA-COMERCIAL-NORTE',file='norte.json.gz',urls=[new URL(file,location.href).href,`https://joselito198004.github.io/${repository}/${file}`,`https://raw.githubusercontent.com/JOSELITO198004/${repository}/main/${file}`,`https://cdn.jsdelivr.net/gh/JOSELITO198004/${repository}@main/${file}`],controllers=urls.map(()=>new AbortController());loaderIcon.classList.add('hidden');loaderSpinner.classList.remove('hidden');document.getElementById('loader-text').innerText='Buscando la fuente más rápida...';const button=document.getElementById('btnLoadCloud');button.disabled=true;try{const attempts=urls.map((url,i)=>fetch(url,{cache:'force-cache',signal:controllers[i].signal}).then(r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return decodeGzipResponse(r).then(text=>({text,index:i}))}));const winner=await Promise.any(attempts);controllers.forEach((c,i)=>{if(i!==winner.index)c.abort()});processCloudPayload(JSON.parse(winner.text.replace(/^\uFEFF/,'').trim()))}catch(err){console.error(err);showAlert('NO SE PUDO CARGAR NORTE.JSON.GZ.');resetCarga()}finally{button.disabled=false}}
+    async function decodeGzipBytes(bytes){const u=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes);if(u.length<2||u[0]!==31||u[1]!==139)throw new Error('El archivo no tiene una firma GZIP válida.');if('DecompressionStream' in window){const stream=new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'));return await new Response(stream).text()}if(!window.pako)throw new Error('Pako no disponible');return pako.ungzip(u,{to:'string'})}
+    async function fetchWithTimeout(url,timeout=15000){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);try{const r=await fetch(url,{cache:'no-store',signal:controller.signal});if(!r.ok)throw new Error(`HTTP ${r.status}`);return new Uint8Array(await r.arrayBuffer())}finally{clearTimeout(timer)}}
+    async function tryLoadGzipJson(){const repository='APYMSA-INTELIGENCIA-COMERCIAL-NORTE',file='norte.json.gz',urls=[`https://cdn.jsdelivr.net/gh/JOSELITO198004/${repository}@main/${file}`,`https://joselito198004.github.io/${repository}/${file}`,`https://raw.githubusercontent.com/JOSELITO198004/${repository}/main/${file}`,new URL(file,location.href).href];loaderIcon.classList.add('hidden');loaderSpinner.classList.remove('hidden');const button=document.getElementById('btnLoadCloud');button.disabled=true;let lastError=null;try{for(let i=0;i<urls.length;i++){try{document.getElementById('loader-text').innerText=`Descargando base · servidor ${i+1} de ${urls.length}...`;const bytes=await fetchWithTimeout(urls[i],i===0?20000:15000);const jsonText=await decodeGzipBytes(bytes);processCloudPayload(JSON.parse(jsonText.replace(/^\uFEFF/,'').trim()));return}catch(err){lastError=err;console.warn('Fuente no disponible',urls[i],err)}}throw lastError||new Error('No se encontró una fuente disponible')}catch(err){console.error(err);showAlert('NO SE PUDO CARGAR LA NUBE. PUEDES USAR EL ARCHIVO LOCAL.');resetCarga()}finally{button.disabled=false}}
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => { dropZone.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); }); });
     dropZone.addEventListener('dragover', () => { dropZone.classList.add('bg-[#00f3ff]/10', 'border-[#00f3ff]'); });
     dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('bg-[#00f3ff]/10', 'border-[#00f3ff]'); });
@@ -855,11 +864,7 @@
         const fileName = String(file.name || '').trim();
         const lowerName = fileName.toLowerCase();
 
-        if (!(lowerName.endsWith('.json.gz') || lowerName.endsWith('.gz'))) {
-            showAlert('SELECCIONA UN ARCHIVO LOCAL .JSON.GZ O .GZ.');
-            fileInput.value = '';
-            return;
-        }
+
 
         loaderIcon.classList.add('hidden');
         loaderSpinner.classList.remove('hidden');
@@ -914,7 +919,7 @@
     function accessUsers(){return CLOUD_ACCESS_USERS.slice()}
     function saveAccessUsers(v){console.warn('Los usuarios se administran en la hoja Accesos del Excel.')}
     function initializeAccessControl(){const overlay=document.getElementById('access-overlay');overlay.classList.remove('hidden');step1.classList.add('hidden');document.getElementById('access-title').innerText='Acceso Inteligencia Comercial';document.getElementById('access-help').innerText='Para asesores, el usuario es el asesor_id de Jerarquia. Para gerentes, usa el usuario definido en Accesos.'}
-    async function submitAccess(){const user=document.getElementById('access-user').value.trim(),pin=document.getElementById('access-pin').value,err=document.getElementById('access-error');err.classList.add('hidden');if(!user||!pin){err.innerText='Captura usuario y PIN';err.classList.remove('hidden');return}const hash=await hashPin(pin),account=accessUsers().find(x=>accessNorm(x.user)===accessNorm(user)&&x.hash===hash&&x.active!==false);if(!account){err.innerText='Usuario o PIN incorrecto, o usuario inactivo';err.classList.remove('hidden');return}ACCESS_SESSION={user:account.user,role:account.role,entity:account.entity};sessionStorage.setItem(ACCESS_SESSION_KEY,JSON.stringify(ACCESS_SESSION));document.getElementById('access-overlay').classList.add('hidden');document.getElementById('btnLogout').classList.remove('hidden');document.getElementById('btnAccessAdmin').classList.add('hidden');applyAccessLanding()}
+    async function submitAccess(){const user=document.getElementById('access-user').value.trim(),pin=document.getElementById('access-pin').value,err=document.getElementById('access-error');err.classList.add('hidden');if(!user||!pin){err.innerText='Captura usuario y PIN';err.classList.remove('hidden');return}const hash=await hashPin(pin),account=accessUsers().find(x=>accessNorm(x.user)===accessNorm(user)&&x.hash===hash&&x.active!==false);if(!account){err.innerText='Usuario o PIN incorrecto, o usuario inactivo';err.classList.remove('hidden');return}ACCESS_SESSION={user:account.user,role:account.role,entity:account.entity};document.getElementById('access-overlay').classList.add('hidden');document.getElementById('btnLogout').classList.remove('hidden');document.getElementById('btnAccessAdmin').classList.add('hidden');applyAccessLanding()}
     function applyAccessLanding(){
         step1.classList.add('hidden');step2.classList.remove('hidden');btnBack.classList.remove('hidden');
         document.getElementById('client-view').classList.add('hidden');document.getElementById('advisor-view').classList.add('hidden');document.getElementById('regional-view').classList.remove('hidden');
@@ -922,7 +927,7 @@
         if(ACCESS_SESSION.role==='REGIONAL'){const reg=companyTree.get(ACCESS_SESSION.entity);if(!reg){showAlert('REGIÓN ASIGNADA NO ENCONTRADA');return;}currentSelectedTerritorial=reg.territorial;currentSelectedRegional=null;currentSelectedAdvisor=null;document.getElementById('directory-title').innerHTML='Región autorizada de <span class="text-neon-cyan">'+reg.territorial+'</span>';document.getElementById('directory-subtitle').innerText='Selecciona tu tarjeta regional para comenzar';document.getElementById('btnBackTerritories').classList.add('hidden');document.getElementById('territorial-dashboard').classList.remove('hidden');renderRegionalCards();switchTerritorialTab('regions');appCurrentState='INICIO_REGIONAL';return;}
         let found=null,reg=null;for(const r of companyTree.values()){if(r.asesores.has(ACCESS_SESSION.entity)){reg=r;found=r.asesores.get(ACCESS_SESSION.entity);break}}if(!found){showAlert('ASESOR ASIGNADO NO ENCONTRADO');return;}currentSelectedTerritorial=reg.territorial;currentSelectedRegional=reg;currentSelectedAdvisor=null;document.getElementById('regional-view').classList.add('hidden');document.getElementById('advisor-view').classList.remove('hidden');document.getElementById('current-regional-title').innerText=reg.name;renderAdvisorCards();switchRegionalTab('advisors');appCurrentState='INICIO_ASESOR';
     }
-    function logoutAccess(){sessionStorage.removeItem(ACCESS_SESSION_KEY);ACCESS_SESSION=null;location.reload()}
+    function logoutAccess(){ACCESS_SESSION=null;location.reload()}
     function openAccessAdmin(){showAlert('LOS USUARIOS SE ADMINISTRAN EN LA HOJA ACCESOS DEL EXCEL Y SE ACTUALIZAN AL REGENERAR NORTE.JSON.GZ.')}
     function closeAccessAdmin(){document.getElementById('access-admin-modal').classList.add('hidden')}
     function refreshAccessEntityOptions(){const role=document.getElementById('new-access-role').value,sel=document.getElementById('new-access-entity');let vals=[];if(role==='TERRITORIAL')vals=['*'];else if(role==='REGIONAL')vals=[...companyTree.keys()].sort();else vals=[...new Set([...companyTree.values()].flatMap(r=>[...r.asesores.keys()]))].sort();sel.innerHTML=vals.map(v=>`<option value="${v}">${v==='*'?'ACCESO COMPLETO':v}</option>`).join('')}
@@ -981,7 +986,7 @@
             const item = normalizeRow(row);
             const sku = getSku(item);
             if (!sku) return;
-            const tempPromoVal = parseMoney(item["precio solicitado"] || item["preciosolicitado"] || item["precio promocion"] || item["preciopromocion"] || item["precio promo"] || item["preciopromo"] || 0);
+            const tempPromoVal = parseMoney(item.precio_solicitado ?? item.preciosolicitado ?? item["precio solicitado"] ?? 0);
             const rawPromoText = String(item["tipo promocion"] || item["tipopromocion"] || item["promocion"] || item["promo"] || "").trim();
             const rawComment = String(item["comentario"] || item["comentario promocion"] || item["comentariopromocion"] || "").trim();
             const isValidPromoText = value => { const normalized = String(value || "").trim().toLowerCase(); return normalized && !["0", "null", "undefined", "na", "n/a"].includes(normalized); };
@@ -991,6 +996,8 @@
             if (tempPromoVal > 0) globalPromociones[sku] = tempPromoVal;
             if (tempPromoText) globalPromoText[sku] = tempPromoText;
             if (tempPromoComment) globalComentarioPromo[sku] = tempPromoComment;
+            item._precio_solicitado_catalogo = tempPromoVal;
+            item._nombre_promocion_catalogo = tempPromoComment;
 
             globalProducts.set(sku, item);
         });
@@ -1512,8 +1519,8 @@
         });
     }
 
-    function confirmExitToLoader(){return window.confirm('¿Deseas salir de la sesión actual y volver a la pantalla de carga?\n\nSi continúas, tendrás que cargar nuevamente el archivo local o la información de la nube.');}
-    function exitToLoader(){if(!confirmExitToLoader())return false;step2.classList.add('hidden');stepStrategy.classList.add('hidden');document.getElementById('discipline-client-detail').classList.add('hidden');step1.classList.remove('hidden');btnBack.classList.add('hidden');fileInput.value='';ACCESS_SESSION=null;sessionStorage.removeItem(ACCESS_SESSION_KEY);appCurrentState='LOAD';return true;}
+    function confirmExitToLoader(){return window.confirm('¿Deseas salir de la sesión actual y volver a la pantalla de carga?\n\nSi continúas, deberás autenticarte nuevamente. La información cargada se cerrará.');}
+    function exitToLoader(){if(!confirmExitToLoader())return false;step2.classList.add('hidden');stepStrategy.classList.add('hidden');document.getElementById('discipline-client-detail').classList.add('hidden');step1.classList.remove('hidden');btnBack.classList.add('hidden');fileInput.value='';ACCESS_SESSION=null;appCurrentState='LOAD';return true;}
     function backToSelection() {
         if (appCurrentState === "CATALOGO_LISTO") { catalogContainer.innerHTML = ''; stepStrategy.classList.remove('hidden'); btnPrint.setAttribute('disabled', 'true'); closeCartDrawer(); appCurrentState = "MENU_ESTRATEGIAS"; }
         else if (appCurrentState === "MENU_ESTRATEGIAS") { stepStrategy.classList.add('hidden'); step2.classList.remove('hidden'); hideCartBar(); if(ACCESS_SESSION&&ACCESS_SESSION.role==='ASESOR'){switchTab('intel');appCurrentState='PANEL_ASESOR';}else{switchTab('clientes');appCurrentState='LISTA_CLIENTES';} }
@@ -1854,10 +1861,10 @@
             targetProducts = sortedGlobalSkusPesos.map(sku => globalProducts.get(sku)).filter(item => item && normalizeBrandName(getFamily(item)) === normalizeBrandName(selectedFamily) && marcasPropias.map(b=>normalizeBrandName(b)).includes(normalizeBrandName(getBrand(item))) && (!selectedSistema || normalizeBrandName(getSistema(item)) === normalizeBrandName(selectedSistema))).slice(0, 50);
         } else if (strategyType === 'tipoServicioFamilia') {
             const selectedServicio = document.getElementById('servicio-selector').value;
-            const selectedFamilia = document.getElementById('servicio-family-selector').value;
+            const selectedArmadora = document.getElementById('servicio-family-selector').value;
             if (!selectedServicio) { showAlert("SELECCIONA UN TIPO DE SERVICIO."); return; }
-            currentStrategyLabel = `Servicio: ${selectedServicio}` + (selectedFamilia ? ` | Familia: ${selectedFamilia}` : '');
-            targetProducts = sortedGlobalSkusPesos.map(sku => globalProducts.get(sku)).filter(item => item && normalizeBrandName(getTipoServicio(item)) === normalizeBrandName(selectedServicio) && (!selectedFamilia || normalizeBrandName(getFamily(item)) === normalizeBrandName(selectedFamilia))).slice(0, 50);
+            currentStrategyLabel = `Servicio: ${selectedServicio}` + (selectedArmadora ? ` | Armadora: ${selectedArmadora}` : '');
+            targetProducts = sortedGlobalSkusPesos.map(sku => globalProducts.get(sku)).filter(item => item && normalizeBrandName(getTipoServicio(item)) === normalizeBrandName(selectedServicio) && (!selectedArmadora || normalizeBrandName(getArmadora(item)) === normalizeBrandName(selectedArmadora))).slice(0, 50);
         }
 
         if(strategyType!=='codigosNuevos')targetProducts=applyOpportunityFilter(targetProducts);
@@ -1914,20 +1921,12 @@
                     if (pz > 0) { uPrecio = mn / pz; break; }
                 }
 
-                let promoFinal = "";
-                if (globalPromociones[skuCode] > 0) promoFinal = moneyFmt.format(globalPromociones[skuCode]);
-                else if (globalPromoText[skuCode]) {
-                    let pureNum = Number(globalPromoText[skuCode].trim().replace(/[^\d.-]/g, ''));
-                    promoFinal = (!isNaN(pureNum) && pureNum > 0 && !globalPromoText[skuCode].toLowerCase().includes('x')) ? moneyFmt.format(pureNum) : globalPromoText[skuCode];
-                }
-
-                let nombrePromo = (globalPromoText[skuCode] || globalComentarioPromo[skuCode] || "").toUpperCase();
-                let promoHtml = "";
-                if (nombrePromo || (promoFinal && promoFinal !== "0" && promoFinal !== "$0.00")) {
-                    let tagLabel = nombrePromo ? `🔥 ${nombrePromo}` : "🔥 PROMOCIÓN", tagValue = (promoFinal && promoFinal !== "0" && promoFinal !== "$0.00") ? promoFinal : "";
-                    if (!tagValue) { tagValue = nombrePromo; tagLabel = "🔥 PROMOCIÓN"; }
-                    promoHtml = `<div class="spec-tag !border-[#ff004c]/30 mt-1 pb-1 flex justify-between items-center"><span class="text-[#ff004c] font-black truncate max-w-[50%] text-[6.5px]" title="${tagLabel}">${tagLabel}</span><span class="spec-value text-[#ff004c] font-black text-[11px]">${tagValue}</span></div>`;
-                }
+                const precioSolicitado = Number(globalPromociones[skuCode] || prod._precio_solicitado_catalogo || parseMoney(prod.precio_solicitado ?? prod.preciosolicitado ?? prod["precio solicitado"] ?? 0));
+                const promoFinal = precioSolicitado > 0 ? moneyFmt.format(precioSolicitado) : "SIN PROMOCIÓN";
+                const nombrePromoCompleto = String(globalComentarioPromo[skuCode] || prod._nombre_promocion_catalogo || prod.comentario || "").trim().toUpperCase();
+                const abreviarPromo = (value, max=24) => value.length > max ? value.slice(0, max - 1).trimEnd() + "…" : value;
+                const nombrePromoVisible = nombrePromoCompleto ? abreviarPromo(nombrePromoCompleto) : "PROMOCIÓN";
+                const promoHtml = `<div class="spec-tag !border-[#ff004c]/30 mt-1 pb-1 flex justify-between items-center"><span class="text-[#ff004c] font-black max-w-[55%] text-[6.5px] leading-tight" title="${nombrePromoCompleto || 'PROMOCIÓN'}">🔥 ${nombrePromoVisible}</span><span class="spec-value text-[#ff004c] font-black text-[10px]">${promoFinal}</span></div>`;
 
                 let estadoCompra = uPrecio > 0 ? `<div class="w-full bg-[#00ff66]/10 border border-[#00ff66] text-[#00b347] text-center py-1.5 rounded text-[8.5px] font-black uppercase">✔ Adquirido Previamente</div>` : `<div class="w-full bg-[#ff004c]/10 border border-[#ff004c] text-[#ff004c] text-center py-1.5 rounded text-[8.5px] font-black uppercase"><span class="animate-pulse">🔥</span> Nueva Oportunidad</div>`;
 
@@ -2025,6 +2024,17 @@
     }
 
     function syncStrategyFamilySelector(brandId,familyId,onlyNew=false){const brand=document.getElementById(brandId)?.value||'',sel=document.getElementById(familyId);if(!sel)return;const fs=[...new Set(Array.from(globalProducts.values()).filter(p=>p&&(!onlyNew||isNewProduct(p))&&(!brand||normalizeBrandName(getBrand(p))===normalizeBrandName(brand))).map(getFamily).filter(f=>f&&f!=='SIN FAMILIA'))].sort((a,b)=>a.localeCompare(b,'es'));sel.innerHTML='<option value="">Todas las familias...</option>';fs.forEach(f=>{const o=document.createElement('option');o.value=f;o.innerText=f.toUpperCase();sel.appendChild(o)})}
+    function syncServiceArmadoraSelector(){
+        const servicio=document.getElementById('servicio-selector')?.value||'';
+        const selector=document.getElementById('servicio-family-selector');
+        if(!selector)return;
+        const armadoras=[...new Set(Array.from(globalProducts.values())
+            .filter(item=>item&&(!servicio||normalizeBrandName(getTipoServicio(item))===normalizeBrandName(servicio)))
+            .map(item=>getArmadora(item)).filter(a=>a&&a!=='SIN ARMADORA'))]
+            .sort((a,b)=>a.localeCompare(b,'es'));
+        selector.innerHTML='<option value="">Seleccionar armadora (Opcional)...</option>';
+        armadoras.forEach(a=>{const opt=document.createElement('option');opt.value=a;opt.innerText=a.toUpperCase();selector.appendChild(opt)});
+    }
     function populateSelectors() {
         const uniqueBrands = [...new Set(Array.from(globalProducts.values()).map(item => getBrand(item)).filter(b => b && b !== "SIN MARCA"))].sort();
         const bSel = document.getElementById('brand-selector'); if(bSel) { bSel.innerHTML = '<option value="">Seleccionar marca...</option>'; uniqueBrands.forEach(b => { const opt = document.createElement('option'); opt.value = b; opt.innerText = b; bSel.appendChild(opt); }); }
@@ -2035,13 +2045,7 @@
         const uniqueOwnFamilies = [...new Set(Array.from(globalProducts.values()).filter(item => marcasPropias.map(b=>b.toUpperCase()).includes(normalizeBrandName(getBrand(item)))).map(item => getFamily(item)).filter(f => f && f !== "SIN FAMILIA"))].sort();
         const fSel = document.getElementById('family-selector'); if(fSel) { fSel.innerHTML = '<option value="">Seleccionar familia...</option>'; uniqueOwnFamilies.forEach(f => { const opt = document.createElement('option'); opt.value = f; opt.innerText = f.toUpperCase(); fSel.appendChild(opt); }); }
 
-        const uniqueAllFamilies = [...new Set(Array.from(globalProducts.values()).map(item => getFamily(item)).filter(f => f && f !== "SIN FAMILIA"))].sort();
-        
-        const sfSel = document.getElementById('servicio-family-selector');
-        if (sfSel) {
-            sfSel.innerHTML = '<option value="">Seleccionar familia (Opcional)...</option>';
-            uniqueAllFamilies.forEach(f => { const opt = document.createElement('option'); opt.value = f; opt.innerText = f.toUpperCase(); sfSel.appendChild(opt); });
-        }
+        syncServiceArmadoraSelector();
 
         const uniqueSistemas = [...new Set(Array.from(globalProducts.values()).map(item => getSistema(item)).filter(s => s && s !== "SIN SISTEMA"))].sort();
         const sSel = document.getElementById('sistema-selector'); if(sSel) { sSel.innerHTML = '<option value="">Seleccionar sistema (Opcional)...</option>'; uniqueSistemas.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.innerText = s.toUpperCase(); sSel.appendChild(opt); }); }
