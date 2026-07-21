@@ -771,7 +771,30 @@
 
     async function decodeGzipBytes(bytes){const u=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes);if(u.length<2||u[0]!==31||u[1]!==139)throw new Error('El archivo no tiene una firma GZIP válida.');if('DecompressionStream' in window){const stream=new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'));return await new Response(stream).text()}if(!window.pako)throw new Error('Pako no disponible');return pako.ungzip(u,{to:'string'})}
     async function fetchWithTimeout(url,timeout=15000){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);try{const r=await fetch(url,{cache:'no-store',signal:controller.signal});if(!r.ok)throw new Error(`HTTP ${r.status}`);return new Uint8Array(await r.arrayBuffer())}finally{clearTimeout(timer)}}
-    async function tryLoadGzipJson(){const repository='APYMSA-INTELIGENCIA-COMERCIAL-NORTE',file='norte.json.gz',urls=[`https://cdn.jsdelivr.net/gh/JOSELITO198004/${repository}@main/${file}`,`https://joselito198004.github.io/${repository}/${file}`,`https://raw.githubusercontent.com/JOSELITO198004/${repository}/main/${file}`,new URL(file,location.href).href];loaderIcon.classList.add('hidden');loaderSpinner.classList.remove('hidden');const button=document.getElementById('btnLoadCloud');button.disabled=true;let lastError=null;try{for(let i=0;i<urls.length;i++){try{document.getElementById('loader-text').innerText=`Descargando base · servidor ${i+1} de ${urls.length}...`;const bytes=await fetchWithTimeout(urls[i],i===0?20000:15000);const jsonText=await decodeGzipBytes(bytes);processCloudPayload(JSON.parse(jsonText.replace(/^\uFEFF/,'').trim()));return}catch(err){lastError=err;console.warn('Fuente no disponible',urls[i],err)}}throw lastError||new Error('No se encontró una fuente disponible')}catch(err){console.error(err);showAlert('NO SE PUDO CARGAR LA NUBE. PUEDES USAR EL ARCHIVO LOCAL.');resetCarga()}finally{button.disabled=false}}
+    async function tryLoadGzipJson(){
+        const repository='APYMSA-INTELIGENCIA-COMERCIAL-NORTE',file='norte.json.gz',version=Date.now();
+        const urls=[
+            new URL(`${file}?v=${version}`,location.href).href,
+            `https://joselito198004.github.io/${repository}/${file}?v=${version}`,
+            `https://raw.githubusercontent.com/JOSELITO198004/${repository}/Principal/${file}?v=${version}`,
+            `https://cdn.jsdelivr.net/gh/JOSELITO198004/${repository}@Principal/${file}?v=${version}`
+        ];
+        loaderIcon.classList.add('hidden');loaderSpinner.classList.remove('hidden');
+        const button=document.getElementById('btnLoadCloud');button.disabled=true;let lastError=null;
+        try{
+            for(let i=0;i<urls.length;i++){
+                try{
+                    document.getElementById('loader-text').innerText=`Descargando base actualizada · fuente ${i+1} de ${urls.length}...`;
+                    const bytes=await fetchWithTimeout(urls[i],i===0?25000:15000);
+                    const jsonText=await decodeGzipBytes(bytes);
+                    processCloudPayload(JSON.parse(jsonText.replace(/^\uFEFF/,'').trim()));
+                    return;
+                }catch(err){lastError=err;console.warn('Fuente no disponible',urls[i],err)}
+            }
+            throw lastError||new Error('No se encontró una fuente disponible');
+        }catch(err){console.error(err);showAlert('NO SE PUDO CARGAR LA BASE ACTUALIZADA. PUEDES USAR EL ARCHIVO LOCAL.');resetCarga()}
+        finally{button.disabled=false}
+    }
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => { dropZone.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); }); });
     dropZone.addEventListener('dragover', () => { dropZone.classList.add('bg-[#00f3ff]/10', 'border-[#00f3ff]'); });
     dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('bg-[#00f3ff]/10', 'border-[#00f3ff]'); });
