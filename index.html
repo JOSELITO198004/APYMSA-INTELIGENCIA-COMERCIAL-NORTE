@@ -1,24 +1,22 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Inteligencia Comercial APYMSA V15.9</title>
-    <meta property="og:title" content="Inteligencia Comercial APYMSA V15.9">
-    <meta property="og:description" content="Reporte de Inteligencia Comercial (ICA)">
-    <meta property="og:image" content="https://placehold.co/600x400/030712/00f3ff/png?text=ICA&font=Montserrat">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23030712%22/><text x=%2250%22 y=%2255%22 font-family=%22Arial%22 font-size=%2245%22 font-weight=%22bold%22 fill=%22%2300f3ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>ICA</text></svg>">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Inteligencia Comercial APYMSA 2.0</title>
+<meta content="Inteligencia Comercial APYMSA 2.0" property="og:title"/>
+<meta content="Reporte de Inteligencia Comercial (ICA)" property="og:description"/>
+<meta content="https://placehold.co/600x400/030712/00f3ff/png?text=ICA&amp;font=Montserrat" property="og:image"/>
+<link href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23030712%22/&gt;&lt;text x=%2250%22 y=%2255%22 font-family=%22Arial%22 font-size=%2245%22 font-weight=%22bold%22 fill=%22%2300f3ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22&gt;ICA&lt;/text&gt;&lt;/svg&gt;" rel="icon"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<style>
         :root {
             --neon-red: #ff004c;
             --neon-red-glow: rgba(255, 0, 76, 0.6);
@@ -104,312 +102,522 @@
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
-    </style>
-</head>
+    
+</style>
+<style id="apymsa-v75-stable">
+:root{--bg:#071522;--panel:#10263b;--panel2:#183852;--ice:#eef6f8;--ink:#102336;--muted:#587184;--cyan:#2dd4e3;--green:#31c987;--amber:#f2a93b;--red:#e95462;--line:#94b5c2;--neon-cyan:var(--cyan);--neon-green:var(--green);--neon-orange:var(--amber);--neon-red:var(--red)}
+*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}body{background:linear-gradient(145deg,#071522,#0d293a)!important;color:#f8fbfc!important}.bg-glass,#step-1,#step-2,#step-strategy,#discipline-client-detail{background:rgba(10,28,44,.96)!important;color:#f8fbfc!important;border:1px solid #2c4a64!important}.text-neon-cyan{color:var(--cyan)!important}.text-neon-green{color:var(--green)!important}.text-neon-orange{color:var(--amber)!important}.text-neon-red{color:var(--red)!important}.text-slate-400,.text-slate-500{color:#a9bdca!important}
+/* layouts */
+.operational-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important}.operational-block{padding:22px!important;background:var(--panel)!important;border:1px solid #34536d!important;border-radius:17px!important}.operational-card{display:flex!important;flex-direction:column!important;justify-content:center!important;min-width:0!important;min-height:116px!important;padding:16px!important;background:var(--panel2)!important;border:1px solid #3b5b75!important;border-radius:13px!important}.operational-card small{color:#b8cbd7!important}.operational-card b{color:#fff!important;font-size:22px!important}.operational-card span{color:#91a9b8!important}
+#territorial-intel-kpis,#regional-intel-kpis,#advisor-intel-kpis,#territorial-discipline-kpis,#regional-discipline-kpis,#advisor-discipline-kpis{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}.segment-kpi-card{position:relative!important;min-width:0!important;background:linear-gradient(145deg,#173653,#204766)!important;border:1px solid #3d6380!important;border-radius:16px!important;color:#fff!important;overflow:hidden!important}.segment-kpi-card .grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}.segment-kpi-card .grid>div{min-width:0!important;padding:11px 7px!important;background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:11px!important}.segment-kpi-card b{display:block!important;width:100%!important;font-size:clamp(11px,.92vw,15px)!important;line-height:1.08!important;letter-spacing:-.035em!important;white-space:nowrap!important;overflow:visible!important;text-overflow:clip!important;color:#fff!important}.segment-lamp{position:absolute;right:18px;top:18px;width:18px;height:18px;border-radius:50%;border:3px solid #fff}.segment-lamp-red{background:var(--red);box-shadow:0 0 0 5px rgba(233,84,98,.18),0 0 14px rgba(233,84,98,.55)}.segment-lamp-amber{background:var(--amber);box-shadow:0 0 0 5px rgba(242,169,59,.18),0 0 14px rgba(242,169,59,.5)}.segment-lamp-green{background:var(--green);box-shadow:0 0 0 5px rgba(49,201,135,.18),0 0 14px rgba(49,201,135,.48)}
+/* cards */
+#regional-cards,#advisor-cards{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px!important}.advisor-card-btn,#client-list>div,.apple-depth-card{background:linear-gradient(155deg,#f9fcfd,#e4eef2)!important;color:var(--ink)!important;border:1px solid var(--line)!important;border-radius:16px!important}.advisor-card-btn{min-width:0!important;min-height:260px!important;padding:22px!important}.advisor-card-btn .text-white{color:var(--ink)!important}.advisor-card-btn .text-slate-400{color:var(--muted)!important}.advisor-card-btn .grid{background:#d8e8ed!important;border:1px solid #a0bbc5!important;border-radius:11px!important;padding:12px!important}.advisor-card-btn .grid .text-white{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;font-size:13px!important}
+.client-identity-row{display:flex!important;gap:7px!important;flex-wrap:wrap!important;padding-bottom:10px!important}.client-segment-badge,.client-id-badge{display:inline-flex!important;padding:7px 10px!important;border-radius:7px!important;font-size:8px!important;font-weight:900!important}.client-segment-badge{background:#173653!important;color:#fff!important}.client-id-badge{background:#cee3ea!important;color:#173a4e!important;border:1px solid #78a8b7!important}#client-list{max-height:620px!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;gap:18px!important}#client-list>div{flex:0 0 auto!important;display:grid!important;grid-template-columns:minmax(0,1fr) 200px!important;min-height:260px!important;padding:22px!important;border-left:5px solid var(--cyan)!important;overflow:visible!important}#client-list>div .text-xl,#client-list>div .text-white{color:var(--ink)!important}#client-list>div .grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;background:#d7e7ec!important;border:1px solid #9fbac5!important;border-radius:11px!important;padding:12px!important}#client-list>div .grid .text-white,#client-list>div .grid .text-neon-cyan{color:var(--ink)!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+/* no visit modal and table: explicit contrast */
+#no-visit-modal>div{background:#f8fbfc!important;color:var(--ink)!important;border:1px solid #91b1be!important}.no-visit-table{width:100%!important;background:#fff!important;border-collapse:collapse!important}.no-visit-table thead th{position:sticky!important;top:0!important;z-index:3!important;background:#102b40!important;color:#fff!important;-webkit-text-fill-color:#fff!important;padding:12px 10px!important;border:1px solid #34566f!important;font-size:9px!important;text-align:left!important}.no-visit-table tbody td{background:#fff!important;color:#102336!important;-webkit-text-fill-color:#102336!important;padding:11px 10px!important;border:1px solid #cfdee4!important;font-size:10px!important}.no-visit-table tbody tr:nth-child(even) td{background:#eaf3f6!important}.no-visit-table tbody tr:hover td{background:#d8edf2!important}.no-visit-table td b{color:#102336!important;-webkit-text-fill-color:#102336!important}.no-visit-table td .text-red-700{color:#b42332!important;-webkit-text-fill-color:#b42332!important}
+/* urgency cards */
+.depth-card-head{display:grid!important;grid-template-columns:24px minmax(0,1fr) auto!important;gap:12px!important;align-items:center!important;min-height:96px!important;padding:17px 18px!important;background:linear-gradient(135deg,#102b40,#18506a)!important;border-bottom:3px solid var(--cyan)!important}.depth-card-head .depth-name,.depth-card-head .depth-id{color:#fff!important}.depth-body{padding:15px!important;background:#e7f0f4!important}.depth-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}.depth-metric{min-width:0!important;min-height:76px!important;padding:10px!important;background:#f9fcfd!important;color:var(--ink)!important;border:1px solid #a1bbc5!important;border-radius:11px!important}.depth-metric small{color:var(--muted)!important}.depth-metric b{color:var(--ink)!important}.depth-wide{grid-column:span 2!important}
+/* modal labels */
+#no-visit-search{background:#fff!important;color:var(--ink)!important;border:1px solid #92b1be!important}#no-visit-count{background:#feecec!important;color:#9d2936!important;border:1px solid #e0a1a7!important}
+@media(max-width:1100px){.operational-grid,#regional-cards,#advisor-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}@media(max-width:900px){#territorial-intel-kpis,#regional-intel-kpis,#advisor-intel-kpis,#territorial-discipline-kpis,#regional-discipline-kpis,#advisor-discipline-kpis{grid-template-columns:1fr!important}#client-list>div{grid-template-columns:1fr!important}}@media(max-width:640px){.operational-grid,#regional-cards,#advisor-cards{grid-template-columns:1fr!important}.segment-kpi-card .grid,.depth-grid,#client-list>div .grid{grid-template-columns:1fr!important}.depth-wide{grid-column:span 1!important}}
 
+
+/* V7.6: separacion de datos, semaforos visibles y etiquetas de meses */
+.segment-kpi-card{padding:24px!important;min-height:258px!important}
+.segment-kpi-card h3{padding-right:50px!important;line-height:1.22!important}
+.segment-kpi-card .grid{margin-top:16px!important;gap:10px!important}
+.segment-kpi-card .grid>div{display:flex!important;flex-direction:column!important;justify-content:center!important;min-height:94px!important;padding:12px 9px!important;overflow:hidden!important}
+.segment-kpi-card small{display:block!important;color:#BFD0DB!important;-webkit-text-fill-color:#BFD0DB!important;font-size:7.5px!important;line-height:1.22!important;font-weight:900!important;white-space:normal!important}
+.segment-kpi-card b{margin-top:8px!important;font-size:clamp(11px,.88vw,14px)!important;letter-spacing:-.04em!important}
+.segment-lamp{z-index:5!important;right:20px!important;top:20px!important;width:20px!important;height:20px!important;border:4px solid #F8FBFC!important}
+
+/* Priority client headers: no ID/name/badge overlap */
+.depth-card-head{grid-template-columns:24px minmax(0,1fr) 105px!important;min-height:116px!important;padding:18px!important}
+.depth-title{display:flex!important;flex-direction:column!important;gap:6px!important;min-width:0!important}
+.depth-card-head .depth-id{display:block!important;color:#A8DBE4!important;-webkit-text-fill-color:#A8DBE4!important;font-size:8px!important;line-height:1.25!important;font-weight:900!important;letter-spacing:.045em!important;white-space:normal!important;overflow-wrap:anywhere!important}
+.depth-card-head .depth-name{display:block!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;font-size:13px!important;line-height:1.28!important;font-weight:900!important;white-space:normal!important;overflow-wrap:anywhere!important}
+.urgency-label{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:96px!important;padding:8px 10px!important;border-radius:999px!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important;font-size:8px!important;font-weight:900!important;white-space:nowrap!important}
+.urgency-label.red{background:#B92E3B!important}.urgency-label.amber{background:#B97713!important}.urgency-label.green{background:#087A4F!important}
+.urgency-light{flex:0 0 auto!important}
+
+/* Discipline card labels aligned and visible */
+.discipline-kpi-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin-top:16px!important}
+.discipline-kpi-item{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;min-height:82px!important;padding:10px!important;background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:10px!important;text-align:center!important}
+.discipline-kpi-value{font-size:24px!important;color:#FFFFFF!important;-webkit-text-fill-color:#FFFFFF!important}
+.discipline-kpi-label{margin-top:6px!important;color:#BFD0DB!important;-webkit-text-fill-color:#BFD0DB!important;font-size:8px!important}
+.discipline-kpi-coverage{margin-top:14px!important;padding-top:12px!important;border-top:1px solid rgba(255,255,255,.16)!important;font-size:14px!important;font-weight:900!important}
+
+/* Chart labels and plot text visible on dark background */
+.segment-chart-title{color:#F8FBFC!important;-webkit-text-fill-color:#F8FBFC!important}
+.segment-chart-subtitle{color:#B8CBD7!important;-webkit-text-fill-color:#B8CBD7!important}
+.segment-chart-card{background:#0E2235!important;border:1px solid #31516A!important}
+
+@media(max-width:640px){.depth-card-head{grid-template-columns:22px minmax(0,1fr)!important}.urgency-label{grid-column:1/-1!important;justify-self:start!important}.segment-kpi-card .grid{grid-template-columns:1fr!important}}
+
+
+/* =========================================================
+   V7.7 · CIERRE FINAL
+   1. Numeros de disciplina acordes a su significado
+   2. Proyeccion del segmento claramente visible
+   ========================================================= */
+
+/* Los cuatro datos conservan color semantico y no se empalman. */
+.discipline-kpi-item{
+  overflow:hidden!important;
+}
+.discipline-kpi-value{
+  display:block!important;
+  width:100%!important;
+  margin:0!important;
+  font-size:clamp(22px,2vw,30px)!important;
+  line-height:1!important;
+  font-weight:900!important;
+  font-variant-numeric:tabular-nums!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  text-shadow:none!important;
+}
+.discipline-kpi-value.text-white{
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF!important;
+}
+.discipline-kpi-value.text-neon-orange{
+  color:#FFC15A!important;
+  -webkit-text-fill-color:#FFC15A!important;
+}
+.discipline-kpi-value.text-neon-green{
+  color:#50E2A2!important;
+  -webkit-text-fill-color:#50E2A2!important;
+}
+.discipline-kpi-value.text-neon-red{
+  color:#FF7180!important;
+  -webkit-text-fill-color:#FF7180!important;
+}
+.discipline-kpi-label{
+  display:block!important;
+  width:100%!important;
+  line-height:1.2!important;
+  white-space:normal!important;
+}
+
+/* Cobertura de visita sigue el mismo color que el semaforo. */
+.discipline-kpi-coverage.text-neon-green{
+  color:#50E2A2!important;
+  -webkit-text-fill-color:#50E2A2!important;
+}
+.discipline-kpi-coverage.text-neon-red{
+  color:#FF7180!important;
+  -webkit-text-fill-color:#FF7180!important;
+}
+
+/* Pie de proyeccion: bloque ejecutivo visible y separado. */
+.segment-projection-footer{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  flex-wrap:wrap!important;
+  gap:10px!important;
+  width:100%!important;
+  margin-top:18px!important;
+  padding-top:14px!important;
+  border-top:1px solid rgba(191,208,219,.24)!important;
+  color:#BFD0DB!important;
+  font-size:9px!important;
+  line-height:1.2!important;
+  font-weight:900!important;
+  letter-spacing:.035em!important;
+  text-transform:uppercase!important;
+}
+.segment-projection-value{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:32px!important;
+  padding:8px 12px!important;
+  border-radius:8px!important;
+  font-size:13px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  font-variant-numeric:tabular-nums!important;
+  white-space:nowrap!important;
+  border:1px solid transparent!important;
+}
+.segment-projection-green{
+  background:rgba(49,201,135,.15)!important;
+  color:#50E2A2!important;
+  border-color:rgba(80,226,162,.48)!important;
+}
+.segment-projection-amber{
+  background:rgba(242,169,59,.15)!important;
+  color:#FFC15A!important;
+  border-color:rgba(255,193,90,.48)!important;
+}
+.segment-projection-red{
+  background:rgba(233,84,98,.15)!important;
+  color:#FF7180!important;
+  border-color:rgba(255,113,128,.50)!important;
+}
+
+@media(max-width:640px){
+  .segment-projection-footer{align-items:flex-start!important;flex-direction:column!important}
+  .segment-projection-value{width:100%!important}
+}
+</style></head>
 <body>
-
 <header class="no-print bg-glass border-b border-neon-cyan sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 p-4">
-        <div class="flex items-center gap-4">
-            <div class="bg-white p-2 rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.8)]">
-                <span class="text-[#001233] font-black italic text-2xl">APYMSA</span>
-            </div>
-            <div>
-                <h1 class="text-xl font-black italic tracking-tighter uppercase leading-none text-white">
-                    Inteligencia <span class="text-neon-cyan">Comercial V15.9</span>
-                </h1>
-                <p id="header-date-text" class="text-[9px] text-neon-cyan font-bold uppercase tracking-[0.2em] mt-1 opacity-80">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 p-4">
+<div class="flex items-center gap-4">
+<div class="bg-white p-2 rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.8)]">
+<span class="text-[#001233] font-black italic text-2xl">APYMSA</span>
+</div>
+<div>
+<h1 class="text-xl font-black italic tracking-tighter uppercase leading-none text-white">
+                    Inteligencia <span class="text-neon-cyan">Comercial V19.8</span>
+</h1>
+<p class="text-[9px] text-neon-cyan font-bold uppercase tracking-[0.2em] mt-1 opacity-80" id="header-date-text">
                     Calculando mes... • Radiografía comercial
                 </p>
-            </div>
-        </div>
-
-        <div class="flex flex-wrap items-center justify-center gap-3">
-            <input type="file" id="dataFile" accept=".json.gz,.gz,application/gzip" class="hidden">
-            <button id="btnFullScreen" onclick="toggleFullScreen()" class="bg-[#0f172a] hover:bg-[#1e293b] px-4 py-2 rounded-lg text-[10px] font-bold border border-slate-500 text-white flex items-center gap-2 shadow-lg">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l-5 5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
-                <span id="fs-text" class="uppercase">Pantalla Completa</span>
-            </button>
-            <button onclick="clearCacheAndReload()" class="bg-[#0f172a] hover:bg-[#ff004c] hover:text-black px-4 py-2 rounded-lg text-[10px] font-bold transition-all border border-[#ff004c] text-white shadow-[0_0_15px_rgba(255,0,76,0.2)]">RECARGAR APLICACIÓN</button>
-            <button id="btnBack" onclick="backToSelection()" class="hidden bg-[#0f172a] hover:bg-[#ff004c] hover:text-black text-[#ff004c] px-4 py-2 rounded-lg text-[10px] font-bold transition-all border border-[#ff004c] uppercase shadow-[0_0_15px_rgba(255,0,76,0.3)]">← Regresar</button>
-            <button onclick="window.print()" id="btnPrint" class="bg-gradient-to-r from-[#00f3ff] to-[#00b3ff] text-black hover:scale-105 px-8 py-2 rounded-lg font-black text-[10px] uppercase shadow-[0_0_25px_rgba(0,243,255,0.6)] disabled:opacity-30 disabled:hover:scale-100 transition-all" disabled>Imprimir Reporte</button>
-        </div>
-    </div>
+</div>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-3">
+<input accept=".json.gz,.gz,application/gzip" class="hidden" id="dataFile" type="file"/>
+<button class="bg-[#0f172a] hover:bg-[#1e293b] px-4 py-2 rounded-lg text-[10px] font-bold border border-slate-500 text-white flex items-center gap-2 shadow-lg" id="btnFullScreen" onclick="toggleFullScreen()">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l-5 5m11 5l-5-5m5 5v-4m0 4h-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="uppercase" id="fs-text">Pantalla Completa</span>
+</button>
+<button class="bg-[#0f172a] hover:bg-[#ff004c] hover:text-black px-4 py-2 rounded-lg text-[10px] font-bold transition-all border border-[#ff004c] text-white shadow-[0_0_15px_rgba(255,0,76,0.2)]" onclick="clearCacheAndReload()">RECARGAR APLICACIÓN</button>
+<button class="hidden bg-[#0f172a] hover:bg-[#ff004c] hover:text-black text-[#ff004c] px-4 py-2 rounded-lg text-[10px] font-bold transition-all border border-[#ff004c] uppercase shadow-[0_0_15px_rgba(255,0,76,0.3)]" id="btnBack" onclick="backToSelection()">← Regresar</button>
+<button class="bg-gradient-to-r from-[#00f3ff] to-[#00b3ff] text-black hover:scale-105 px-8 py-2 rounded-lg font-black text-[10px] uppercase shadow-[0_0_25px_rgba(0,243,255,0.6)] disabled:opacity-30 disabled:hover:scale-100 transition-all" disabled="" id="btnPrint" onclick="window.print()">Imprimir Reporte</button>
+</div>
+</div>
 </header>
-
-<main id="main-content" class="min-h-[calc(100vh-80px)] flex flex-col items-center p-6 relative">
-
-    <div id="alert-box" class="hidden fixed top-24 right-6 z-[60] bg-glass border-l-4 border-neon-red shadow-[0_0_30px_rgba(255,0,76,0.3)] p-4 rounded-lg max-w-sm">
-        <div class="flex items-center gap-3">
-            <div class="bg-[#ff004c]/20 text-[#ff004c] p-2 rounded-full font-bold w-8 h-8 flex items-center justify-center border border-[#ff004c]/50">!</div>
-            <p id="alert-msg" class="text-xs font-bold text-white uppercase break-words"></p>
-        </div>
-    </div>
-
-    <div id="step-1" class="no-print w-full max-w-5xl bg-glass rounded-3xl shadow-[0_0_50px_rgba(0,243,255,0.05)] p-10 border border-white/10 mt-6 flex flex-col items-center">
-        <div id="drop-zone" class="w-full bg-black/50 rounded-2xl border-2 border-dashed border-[#00f3ff]/40 cursor-pointer hover:bg-[#00f3ff]/5 transition-all p-12 text-center group mb-8 relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-b from-[#00f3ff]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div id="load-icon" class="bg-[#00f3ff]/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform"><svg class="w-10 h-10 text-neon-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
-            <div id="loader-spinner" class="hidden mb-6 flex flex-col items-center">
-                <div class="w-10 h-10 border-4 border-[#00f3ff]/20 border-t-[#00f3ff] rounded-full animate-spin mb-3"></div>
-                <span class="text-xs font-bold text-neon-cyan uppercase tracking-widest animate-pulse" id="loader-text">Procesando Base de Datos Estructurada...</span>
-            </div>
-            <h2 class="text-3xl font-black text-white mb-2 tracking-tight">INTELIGENCIA COMERCIAL <span class="text-neon-cyan">V15.9</span></h2>
-            <p class="text-slate-400 mb-8 text-sm font-medium">Selecciona el archivo local <span class="font-bold text-white">JSON.GZ</span> con Productos, Clientes, Jerarquía y Ventas.</p>
-            
-            <div class="flex flex-col md:flex-row gap-4 justify-center relative z-10">
-                <button type="button" id="btnSelectFile" class="bg-gradient-to-r from-[#ff004c] to-[#cc003d] text-white px-8 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform">Archivo Local (JSON.GZ)</button>
-                <button type="button" id="btnLoadCloud" class="bg-gradient-to-r from-[#00f3ff] to-[#008cff] text-black px-8 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform">Cargar de la Nube</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="step-2" class="no-print w-full max-w-6xl bg-glass rounded-3xl shadow-2xl p-10 hidden border border-white/10">
-        <div id="regional-view">
-            <div class="mb-8 border-b border-white/10 pb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-                <div>
-                    <h2 class="text-4xl font-black text-white tracking-tight">Directorio de <span class="text-neon-cyan">Regiones</span></h2>
-                    <p class="text-neon-red text-sm mt-2 uppercase font-bold tracking-wider">Selecciona una región para ver asesores</p>
-                </div>
-                <div id="summary-count" class="text-[11px] font-black uppercase text-neon-cyan bg-black/50 px-5 py-2.5 rounded-xl border border-[#00f3ff]/30 shadow-[0_0_15px_rgba(0,243,255,0.15)]"></div>
-            </div>
-            <div id="regional-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-4"></div>
-        </div>
-
-        <div id="advisor-view" class="hidden">
-            <div class="mb-8 border-b border-white/10 pb-6 flex flex-col gap-4">
-                <div class="flex items-center gap-5">
-                    <button onclick="backToRegionals()" class="bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black text-neon-cyan border border-neon-cyan px-5 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all shadow-[0_0_15px_rgba(0,243,255,0.3)]">← Regiones</button>
-                    <div>
-                        <h2 class="text-3xl font-black text-white uppercase tracking-tight" id="current-regional-title"></h2>
-                        <p class="text-neon-red text-xs mt-1 uppercase font-bold tracking-widest">Asesores en la región</p>
-                    </div>
-                </div>
-            </div>
-            <div id="advisor-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-4"></div>
-        </div>
-
-        <div id="client-view" class="hidden">
-            <div class="mb-8 border-b border-white/10 pb-6 flex flex-col gap-4">
-                <div class="flex flex-col md:flex-row items-center gap-5 justify-between w-full">
-                    <div class="flex items-center gap-5 w-full md:w-auto">
-                        <button onclick="backToAdvisors()" class="bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black text-neon-cyan border border-neon-cyan px-5 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all shadow-[0_0_15px_rgba(0,243,255,0.3)] whitespace-nowrap">← Asesores</button>
-                        <div>
-                            <h2 class="text-3xl font-black text-white uppercase tracking-tight" id="current-advisor-title"></h2>
-                            <p class="text-neon-red text-xs mt-1 uppercase font-bold tracking-widest">Panel del Asesor</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex gap-2 w-full md:w-auto mt-4 md:mt-0">
-                        <button id="tab-clientes" onclick="switchTab('clientes')" class="flex-1 md:flex-none bg-[#00f3ff] text-black border border-neon-cyan px-6 py-3 rounded-xl text-[11px] font-black uppercase transition-all shadow-[0_0_15px_rgba(0,243,255,0.3)]">Cartera de Clientes</button>
-                        <button id="tab-bonos" onclick="switchTab('bonos')" class="flex-1 md:flex-none bg-[#0f172a] hover:bg-[#ffbb00] hover:text-black text-neon-orange border border-neon-orange px-6 py-3 rounded-xl text-[11px] font-black uppercase transition-all shadow-[0_0_15px_rgba(255,187,0,0.3)]">Bonos Semanales</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tab-content-clientes">
-                <div class="relative mb-8">
-                    <input type="text" id="clientSearch" placeholder="Buscar cliente por ID o Razón Social..." class="w-full p-5 pl-14 bg-black/60 border-2 border-white/10 rounded-2xl focus:border-neon-cyan outline-none font-bold text-white transition-all text-lg">
-                    <svg class="w-6 h-6 text-neon-cyan absolute left-5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                </div>
-                <div id="client-list" class="max-h-[500px] overflow-y-auto space-y-4 pr-4 custom-scrollbar"></div>
-            </div>
-
-            <div id="tab-content-bonos" class="hidden">
-                <div class="mb-4">
-                    <p class="text-slate-400 text-sm font-bold uppercase tracking-wider">Tu esfuerzo, tu recompensa:</p>
-                    <h3 class="text-2xl font-black text-neon-orange uppercase">Bonos Semanales - Julio 2026</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="bonus-cards-container"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="step-strategy" class="no-print w-full max-w-6xl bg-glass rounded-3xl shadow-2xl p-10 hidden border border-[#ff004c]/30">
-        <div class="mb-8 border-b border-white/10 pb-6">
-            <p class="text-neon-cyan text-[11px] font-black uppercase tracking-[0.3em] mb-2">Análisis de Cliente</p>
-            <h2 id="strategy-client-name" class="text-4xl font-black text-white uppercase leading-tight tracking-tighter"></h2>
-            <div class="bg-black/40 inline-block px-4 py-2 rounded-lg border border-white/5 mt-4">
-                <p id="strategy-client-meta" class="text-slate-300 text-xs font-bold uppercase tracking-wider"></p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-            <div class="bg-black/40 border border-white/10 rounded-2xl p-5 shadow-inner">
-                <h3 class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-4 text-center">Top 6 Marcas (Histórico)</h3>
-                <div class="h-48 w-full flex justify-center"><canvas id="chart-brands"></canvas></div>
-            </div>
-            <div class="bg-black/40 border border-white/10 rounded-2xl p-5 shadow-inner">
-                <h3 class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-4 text-center">Tendencia (Últimos 3 Meses)</h3>
-                <div class="h-48 w-full flex justify-center"><canvas id="chart-trend"></canvas></div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-            <div class="strategy-card border-neon-cyan group">
-                <div class="absolute -right-6 -top-4 bg-neon-cyan text-black text-[9px] font-black uppercase py-1.5 px-10 rotate-45 shadow-[0_0_15px_rgba(0,243,255,0.6)]">TIEMPO REAL</div>
-                <div class="text-4xl mb-4">📅</div>
-                <h3 class="text-white font-black text-xl uppercase mb-3">SKU por Mes</h3>
-                <div class="flex flex-col gap-2 mb-4">
-                    <div class="flex gap-2">
-                        <select id="sku-month-selector" class="w-1/2 bg-black/60 border border-white/20 text-neon-cyan rounded-xl p-2.5 text-[10px] font-black uppercase outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan">
-                            <option value="0">Enero</option> <option value="1">Febrero</option> <option value="2">Marzo</option> <option value="3">Abril</option>
-                            <option value="4">Mayo</option> <option value="5">Junio</option> <option value="6">Julio</option> <option value="7">Agosto</option>
-                            <option value="8">Septiembre</option> <option value="9">Octubre</option> <option value="10">Noviembre</option> <option value="11">Diciembre</option>
-                        </select>
-                        <select id="sku-year-selector" class="w-1/2 bg-black/60 border border-white/20 text-neon-cyan rounded-xl p-2.5 text-[10px] font-black uppercase outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan"></select>
-                    </div>
-                    <select id="sku-scope-selector" class="w-full bg-[#001233] border border-[#00f3ff]/40 text-white rounded-xl p-2.5 text-[10px] font-black uppercase outline-none shadow-[inset_0_0_10px_rgba(0,243,255,0.1)] focus:border-neon-cyan">
-                        <option value="client">Top de este Cliente</option>
-                        <option value="global">Top Global (Todos)</option>
-                    </select>
-                </div>
-                <p class="text-slate-400 text-[10px] font-bold uppercase mb-4">Filtra hasta 50 códigos más vendidos basados en la selección de fecha.</p>
-                <button onclick="generateCatalogByStrategy('skuPorMes')" class="w-full bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black border border-neon-cyan text-neon-cyan py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(0,243,255,0.2)] transition-all">Generar Reporte</button>
-            </div>
-
-            <div class="strategy-card" style="border-color: var(--neon-green);">
-                <div class="text-4xl mb-4">📝</div>
-                <h3 class="text-white font-black text-xl uppercase mb-3">Cotización Manual</h3>
-                <p class="text-slate-400 text-[10px] font-bold uppercase leading-relaxed mb-4">Busca y agrega códigos manualmente para generar un catálogo a la medida.</p>
-                <button onclick="openManualModal()" class="w-full bg-[#0f172a] hover:bg-[#00ff66] hover:text-black border border-neon-green text-neon-green py-3 rounded-xl text-[11px] font-black uppercase transition-all shadow-[0_0_15px_rgba(0,255,102,0.2)]">Abrir Cotizador</button>
-            </div>
-
-            <button onclick="generateCatalogByStrategy('noComprados90')" class="strategy-card">
-                <div class="text-4xl mb-4">🚨</div>
-                <h3 class="text-white font-black text-xl uppercase mb-3">Recuperación <span class="text-neon-red">+90 días</span></h3>
-                <p class="text-slate-400 text-[10px] font-bold uppercase leading-relaxed">Códigos comprados históricamente, sin movimientos en los últimos 90 días. (Por Venta Global)</p>
-            </button>
-
-            <button onclick="generateCatalogByStrategy('topGlobal')" class="strategy-card">
-                <div class="text-4xl mb-4">📈</div>
-                <h3 class="text-white font-black text-xl uppercase mb-3">Top <span class="text-neon-green">Global</span></h3>
-                <p class="text-slate-400 text-[10px] font-bold uppercase leading-relaxed">Hasta 50 códigos más vendidos globalmente basados en el total de Venta Neta global.</p>
-            </button>
-
-            <div class="strategy-card">
-                <div class="text-4xl mb-4">🎁</div>
-                <h3 class="text-white font-black text-xl uppercase mb-3">Tipo de <span class="text-neon-orange">Promo</span></h3>
-                <select id="promo-selector" class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner">
-                    <option value="">Seleccionar promo...</option>
-                </select>
-                <p class="text-slate-400 text-[9px] font-bold uppercase mb-4">Incluye todos los códigos de la promoción, ordenados de mayor a menor venta.</p>
-                <button onclick="generateCatalogByStrategy('tipoPromocion')" class="w-full bg-[#0f172a] hover:bg-[#ffbb00] hover:text-black border border-neon-orange text-neon-orange py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(255,187,0,0.2)]">Generar Catálogo</button>
-            </div>
-
-            <div class="strategy-card">
-                <div class="text-4xl mb-4">🛠️</div>
-                <h3 class="text-white font-black text-xl uppercase mb-3">Tipo de Servicio</h3>
-                <select id="servicio-selector" class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner">
-                    <option value="">Seleccionar servicio...</option>
-                </select>
-                <select id="servicio-family-selector" class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner">
-                    <option value="">Seleccionar familia (Opcional)...</option>
-                </select>
-                <button onclick="generateCatalogByStrategy('tipoServicioFamilia')" class="w-full bg-[#0f172a] hover:bg-[#ff004c] hover:text-black border border-neon-red text-neon-red py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(255,0,76,0.2)]">Generar Catálogo</button>
-            </div>
-
-            <div class="strategy-card">
-                <div class="text-4xl mb-4">🎯</div>
-                <h3 class="text-white font-black text-xl uppercase mb-3">Marca Específica</h3>
-                <select id="brand-selector" class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner">
-                    <option value="">Seleccionar marca...</option>
-                </select>
-                <select id="marca-family-selector" class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner">
-                    <option value="">Seleccionar familia (Opcional)...</option>
-                </select>
-                <button onclick="generateCatalogByStrategy('marcaFamilia')" class="w-full bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black border border-neon-cyan text-neon-cyan py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(0,243,255,0.2)]">Generar Catálogo</button>
-            </div>
-
-            <div class="strategy-card">
-                <div class="text-4xl mb-4">📂</div>
-                <h3 class="text-white font-black text-xl uppercase mb-3">Familia Propia</h3>
-                <select id="family-selector" class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner">
-                    <option value="">Seleccionar familia...</option>
-                </select>
-                <select id="sistema-selector" class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner">
-                    <option value="">Seleccionar sistema (Opcional)...</option>
-                </select>
-                <button onclick="generateCatalogByStrategy('familyEspecifica')" class="w-full bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black border border-neon-cyan text-neon-cyan py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(0,243,255,0.2)]">Generar Familia</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="manual-modal" class="no-print hidden fixed inset-0 bg-[#010308]/90 backdrop-blur-md z-[110] flex items-center justify-center p-4">
-        <div class="bg-[#030712] border border-neon-green shadow-[0_0_40px_rgba(0,255,102,0.2)] rounded-3xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden">
-            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#001233]/50">
-                <h2 class="text-xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-                    <span class="text-2xl drop-shadow-[0_0_10px_rgba(0,255,102,0.5)]">📝</span> Cotización Manual Libre
+<main class="min-h-[calc(100vh-80px)] flex flex-col items-center p-6 relative" id="main-content">
+<div class="hidden fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm p-4 flex items-center justify-center" id="load-error-panel">
+<div class="w-full max-w-3xl bg-white text-slate-900 border-4 border-red-600 rounded-2xl shadow-2xl p-6">
+<div class="flex justify-between gap-4 items-start"><div><p class="text-[10px] font-black uppercase text-red-700 tracking-widest">Error de carga JSON.GZ</p><h2 class="text-xl font-black mt-1">La aplicación encontró un problema</h2></div><button class="bg-slate-900 text-white px-4 py-2 rounded-lg font-black text-xs" onclick="closeLoadError()">Cerrar</button></div>
+<pre class="mt-5 bg-slate-100 border border-slate-300 rounded-xl p-4 text-xs whitespace-pre-wrap break-words max-h-[55vh] overflow-auto text-slate-900" id="load-error-detail"></pre>
+<button class="mt-4 bg-red-700 text-white px-5 py-3 rounded-xl font-black text-xs uppercase" onclick="copyLoadError()">Copiar diagnóstico</button>
+</div>
+</div>
+<div class="hidden fixed top-24 right-6 z-[60] bg-glass border-l-4 border-neon-red shadow-[0_0_30px_rgba(255,0,76,0.3)] p-4 rounded-lg max-w-sm" id="alert-box">
+<div class="flex items-center gap-3">
+<div class="bg-[#ff004c]/20 text-[#ff004c] p-2 rounded-full font-bold w-8 h-8 flex items-center justify-center border border-[#ff004c]/50">!</div>
+<p class="text-xs font-bold text-white uppercase break-words" id="alert-msg"></p>
+</div>
+</div>
+<div class="no-print w-full max-w-5xl bg-glass rounded-3xl shadow-[0_0_50px_rgba(0,243,255,0.05)] p-10 border border-white/10 mt-6 flex flex-col items-center" id="step-1">
+<div class="w-full bg-black/50 rounded-2xl border-2 border-dashed border-[#00f3ff]/40 cursor-pointer hover:bg-[#00f3ff]/5 transition-all p-12 text-center group mb-8 relative overflow-hidden" id="drop-zone">
+<div class="absolute inset-0 bg-gradient-to-b from-[#00f3ff]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="bg-[#00f3ff]/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform" id="load-icon"><svg class="w-10 h-10 text-neon-cyan" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></div>
+<div class="hidden mb-6 flex flex-col items-center" id="loader-spinner">
+<div class="w-10 h-10 border-4 border-[#00f3ff]/20 border-t-[#00f3ff] rounded-full animate-spin mb-3"></div>
+<span class="text-xs font-bold text-neon-cyan uppercase tracking-widest animate-pulse" id="loader-text">Procesando Base de Datos Estructurada...</span>
+</div>
+<h2 class="text-3xl font-black text-white mb-2 tracking-tight">INTELIGENCIA COMERCIAL <span class="text-neon-cyan">V19.8</span></h2>
+<p class="text-slate-400 mb-8 text-sm font-medium">Selecciona el archivo local <span class="font-bold text-white">JSON.GZ</span> con Productos, Clientes, Jerarquía y Ventas.</p>
+<div class="flex flex-col md:flex-row gap-4 justify-center relative z-10">
+<button class="bg-gradient-to-r from-[#ff004c] to-[#cc003d] text-white px-8 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform" id="btnSelectFile" type="button">Archivo Local (JSON.GZ)</button>
+<button class="bg-gradient-to-r from-[#00f3ff] to-[#008cff] text-black px-8 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform" id="btnLoadCloud" type="button">Cargar de la Nube</button>
+</div>
+</div>
+</div>
+<div class="no-print w-full max-w-6xl bg-glass rounded-3xl shadow-2xl p-10 hidden border border-white/10" id="step-2">
+<div id="regional-view">
+<div class="mb-8 border-b border-white/10 pb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+<div>
+<h2 class="text-4xl font-black text-white tracking-tight" id="directory-title">Directorio de <span class="text-neon-cyan">Territorios</span></h2>
+<p class="text-neon-red text-sm mt-2 uppercase font-bold tracking-wider" id="directory-subtitle">Selecciona un gerente territorial para ver sus regiones</p>
+</div>
+<div class="text-[11px] font-black uppercase text-neon-cyan bg-black/50 px-5 py-2.5 rounded-xl border border-[#00f3ff]/30 shadow-[0_0_15px_rgba(0,243,255,0.15)]" id="summary-count"></div>
+</div>
+<button class="hidden mb-5 bg-[#0f172a] text-white border border-neon-cyan px-5 py-2.5 rounded-xl text-[10px] font-black uppercase" id="btnBackTerritories" onclick="backToTerritories()">← Gerentes territoriales</button>
+<div class="hidden mb-8" id="territorial-dashboard">
+<div class="flex flex-wrap gap-2 mb-6">
+<button class="bg-[#00f3ff] text-black border border-neon-cyan px-5 py-3 rounded-xl text-[10px] font-black uppercase" id="territorial-tab-intel" onclick="switchTerritorialTab('intel')">Inteligencia Comercial</button>
+<button class="bg-[#0f172a] text-white border border-neon-green px-5 py-3 rounded-xl text-[10px] font-black uppercase" id="territorial-tab-discipline" onclick="switchTerritorialTab('discipline')">Disciplina Comercial</button>
+<button class="bg-[#0f172a] text-white border border-neon-cyan px-5 py-3 rounded-xl text-[10px] font-black uppercase" id="territorial-tab-regions" onclick="switchTerritorialTab('regions')">Regiones</button>
+</div>
+<div id="territorial-intel"><div id="territorial-operational"></div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6" id="territorial-intel-kpis"></div>
+<div class="segment-chart-grid" id="territorial-intel-segment-charts"></div>
+<div class="space-y-6" id="territorial-intel-tops"></div>
+</div>
+<div class="hidden" id="territorial-discipline">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4" id="territorial-discipline-kpis"></div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" id="territorial-discipline-summary"></div>
+<div class="segment-chart-grid" id="territorial-discipline-segment-charts"></div>
+<div class="space-y-6" id="territorial-discipline-tops"></div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-4" id="regional-cards"></div>
+</div>
+<div class="hidden" id="advisor-view">
+<div class="mb-8 border-b border-white/10 pb-6 flex flex-col gap-4">
+<div class="flex items-center gap-5">
+<button class="bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black text-neon-cyan border border-neon-cyan px-5 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all shadow-[0_0_15px_rgba(0,243,255,0.3)]" onclick="backToRegionals()">← Regiones</button>
+<div>
+<h2 class="text-3xl font-black text-white uppercase tracking-tight" id="current-regional-title"></h2>
+<p class="text-neon-red text-xs mt-1 uppercase font-bold tracking-widest">Asesores en la región</p>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-6">
+<button class="bg-[#00f3ff] text-black border border-neon-cyan px-5 py-3 rounded-xl text-[10px] font-black uppercase" id="regional-tab-intel" onclick="switchRegionalTab('intel')">Inteligencia Comercial</button>
+<button class="bg-[#0f172a] text-neon-green border border-neon-green px-5 py-3 rounded-xl text-[10px] font-black uppercase" id="regional-tab-discipline" onclick="switchRegionalTab('discipline')">Disciplina Comercial</button>
+<button class="bg-[#0f172a] text-neon-cyan border border-neon-cyan px-5 py-3 rounded-xl text-[10px] font-black uppercase" id="regional-tab-advisors" onclick="switchRegionalTab('advisors')">Asesores</button></div>
+<div id="regional-intel"><div id="regional-operational"></div><div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6" id="regional-intel-kpis"></div><div class="segment-chart-grid" id="regional-intel-segment-charts"></div><div class="space-y-6" id="regional-intel-tops"></div></div>
+<div class="hidden" id="regional-discipline"><div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4" id="regional-discipline-kpis"></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" id="regional-discipline-summary"></div><div class="segment-chart-grid" id="regional-discipline-segment-charts"></div><div class="space-y-6" id="regional-discipline-tops"></div></div>
+<div class="hidden" id="regional-advisors-list"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-4" id="advisor-cards"></div></div>
+</div>
+<div class="hidden" id="client-view">
+<div class="mb-8 border-b border-white/10 pb-6 flex flex-col gap-4">
+<div class="flex flex-col md:flex-row items-center gap-5 justify-between w-full">
+<div class="flex items-center gap-5 w-full md:w-auto">
+<button class="bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black text-neon-cyan border border-neon-cyan px-5 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all shadow-[0_0_15px_rgba(0,243,255,0.3)] whitespace-nowrap" onclick="backToAdvisors()">← Asesores</button>
+<div>
+<h2 class="text-3xl font-black text-white uppercase tracking-tight" id="current-advisor-title"></h2>
+<p class="text-neon-red text-xs mt-1 uppercase font-bold tracking-widest">Panel del Asesor</p>
+</div>
+</div>
+<div class="flex gap-2 w-full md:w-auto mt-4 md:mt-0">
+<button class="flex-1 md:flex-none bg-[#00f3ff] text-black border border-neon-cyan px-5 py-3 rounded-xl text-[10px] font-black uppercase" id="tab-intel" onclick="switchTab('intel')">Inteligencia Comercial</button>
+<button class="flex-1 md:flex-none bg-[#0f172a] text-neon-green border border-neon-green px-5 py-3 rounded-xl text-[10px] font-black uppercase" id="tab-discipline" onclick="switchTab('discipline')">Disciplina Comercial</button>
+<button class="flex-1 md:flex-none bg-[#0f172a] text-neon-cyan border border-neon-cyan px-6 py-3 rounded-xl text-[11px] font-black uppercase transition-all shadow-[0_0_15px_rgba(0,243,255,0.3)]" id="tab-clientes" onclick="switchTab('clientes')">Cartera de Clientes</button>
+<button class="flex-1 md:flex-none bg-[#0f172a] hover:bg-[#ffbb00] hover:text-black text-neon-orange border border-neon-orange px-6 py-3 rounded-xl text-[11px] font-black uppercase transition-all shadow-[0_0_15px_rgba(255,187,0,0.3)]" id="tab-bonos" onclick="switchTab('bonos')">Bonos Semanales</button>
+</div>
+</div>
+</div>
+<div id="tab-content-intel"><div id="advisor-operational"></div><div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6" id="advisor-intel-kpis"></div><div class="segment-chart-grid" id="advisor-intel-segment-charts"></div><div class="space-y-6" id="advisor-intel-tops"></div></div>
+<div class="hidden" id="tab-content-discipline"><div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4" id="advisor-discipline-kpis"></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" id="advisor-discipline-summary"></div><div class="segment-chart-grid" id="advisor-discipline-segment-charts"></div><div class="space-y-6" id="advisor-discipline-tops"></div></div>
+<div class="hidden" id="tab-content-clientes">
+<div class="relative mb-8">
+<input class="w-full p-5 pl-14 bg-black/60 border-2 border-white/10 rounded-2xl focus:border-neon-cyan outline-none font-bold text-white transition-all text-lg" id="clientSearch" placeholder="Buscar cliente por ID o Razón Social..." type="text"/>
+<svg class="w-6 h-6 text-neon-cyan absolute left-5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="max-h-[500px] overflow-y-auto space-y-4 pr-4 custom-scrollbar" id="client-list"></div>
+</div>
+<div class="hidden" id="tab-content-bonos">
+<div class="mb-4">
+<p class="text-slate-400 text-sm font-bold uppercase tracking-wider">Tu esfuerzo, tu recompensa:</p>
+<h3 class="text-2xl font-black text-neon-orange uppercase">Bonos Semanales - Julio 2026</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="bonus-cards-container"></div>
+</div>
+</div>
+</div>
+<div class="no-print w-full max-w-6xl bg-glass rounded-3xl shadow-2xl p-10 hidden border border-[#00ff66]/30" id="discipline-client-detail"><div class="flex items-center gap-4 mb-7 border-b border-white/10 pb-5"><button class="bg-[#0f172a] text-neon-green border border-neon-green px-5 py-2 rounded-xl text-[10px] font-black uppercase" onclick="closeDisciplineDetail()">← Regresar a Disciplina</button><div><p class="text-neon-green text-[10px] font-black uppercase tracking-widest">Detalle de Disciplina</p><h2 class="text-3xl font-black text-white uppercase" id="discipline-detail-name"></h2><p class="text-[10px] text-slate-400 font-bold" id="discipline-detail-meta"></p></div></div><div class="mb-7">
+<h3 class="text-[11px] text-white font-black uppercase mb-4">Resumen ejecutivo del cliente</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="discipline-detail-summary"></div>
+</div>
+<div class="mb-7">
+<div class="flex items-center justify-between mb-4"><h3 class="text-[11px] text-white font-black uppercase">Disciplina mensual 2026</h3><span class="text-[9px] font-black uppercase" id="discipline-detail-alert"></span></div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3" id="discipline-detail-months"></div>
+</div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-7"><div class="bg-black/40 border border-white/10 rounded-2xl p-5"><h3 class="text-[11px] text-white font-black uppercase mb-4">Monto por marcas compradas · 2026</h3><div class="h-72"><canvas id="chart-detail-brands"></canvas></div></div><div class="bg-black/40 border border-white/10 rounded-2xl p-5"><h3 class="text-[11px] text-white font-black uppercase mb-4">Códigos comprados por mes · 2026</h3><div class="max-h-72 overflow-y-auto custom-scrollbar space-y-2" id="discipline-detail-skus"></div></div></div><div class="bg-black/40 border border-neon-cyan/30 rounded-2xl p-5"><h3 class="text-[11px] text-neon-cyan font-black uppercase mb-2">Oportunidades por códigos vendidos en su ciudad</h3><p class="text-[9px] text-slate-400 font-bold uppercase mb-4">Códigos comprados en la misma ciudad durante 2026 que este cliente aún no compra</p>
+<div class="mb-5" id="discipline-opportunity-actions"></div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="discipline-detail-opps"></div></div></div>
+<div class="no-print hidden fixed inset-0 bg-[#0f172a]/70 backdrop-blur-sm z-[130] flex items-center justify-center p-4" id="no-visit-modal">
+<div class="bg-white border border-slate-300 shadow-2xl rounded-3xl w-full max-w-7xl max-h-[88vh] flex flex-col overflow-hidden">
+<div class="p-5 bg-gradient-to-r from-[#0f172a] to-[#234c7a] flex items-center justify-between gap-4">
+<div><p class="text-[9px] text-cyan-200 font-black uppercase tracking-widest">Disciplina comercial</p><h2 class="text-xl font-black text-white uppercase">Clientes no visitados en <span id="no-visit-month"></span></h2><p class="text-[9px] text-slate-200 font-bold mt-1" id="no-visit-context"></p></div>
+<button class="bg-white text-[#0f172a] px-4 py-2 rounded-xl text-[10px] font-black uppercase" onclick="closeNoVisitModal()">Cerrar ×</button>
+</div>
+<div class="p-4 flex flex-col md:flex-row gap-3 border-b border-slate-200 bg-slate-50">
+<input class="flex-1 bg-white border border-slate-300 text-slate-900 rounded-xl px-4 py-3 text-[10px] font-bold outline-none focus:border-blue-500" id="no-visit-search" oninput="renderNoVisitRows()" placeholder="Buscar cliente, razón social, asesor, región o sucursal..." type="text"/>
+<div class="bg-red-50 border border-red-200 text-red-800 rounded-xl px-4 py-3 text-[10px] font-black uppercase" id="no-visit-count"></div>
+</div>
+<div class="overflow-auto flex-1">
+<table class="no-visit-table w-full border-collapse">
+<thead><tr><th>cliente_id</th><th>razón_social</th><th>asesor</th><th>déficit venta 2026 vs cuota 2026</th><th>gerente_regional</th><th>sucursal_vendedor</th></tr></thead>
+<tbody id="no-visit-rows"></tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="no-print w-full max-w-6xl bg-glass rounded-3xl shadow-2xl p-10 hidden border border-[#ff004c]/30" id="step-strategy">
+<div class="mb-8 border-b border-white/10 pb-6">
+<p class="text-neon-cyan text-[11px] font-black uppercase tracking-[0.3em] mb-2">Análisis de Cliente</p>
+<h2 class="text-4xl font-black text-white uppercase leading-tight tracking-tighter" id="strategy-client-name"></h2>
+<div class="bg-black/40 inline-block px-4 py-2 rounded-lg border border-white/5 mt-4">
+<p class="text-slate-300 text-xs font-bold uppercase tracking-wider" id="strategy-client-meta"></p>
+</div>
+<div class="mt-5 max-w-md">
+<label class="block text-[10px] text-neon-cyan font-black uppercase tracking-widest mb-2" for="strategy-opportunity-filter">Filtro general de códigos</label>
+<select class="w-full bg-[#001233] border border-[#00f3ff]/40 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none" id="strategy-opportunity-filter">
+<option value="all">Todos los códigos</option>
+<option value="new">Nueva oportunidad: códigos nunca comprados</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+<div class="bg-black/40 border border-white/10 rounded-2xl p-5 shadow-inner">
+<h3 class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-4 text-center">Top 6 Marcas (Histórico)</h3>
+<div class="h-48 w-full flex justify-center"><canvas id="chart-brands"></canvas></div>
+</div>
+<div class="bg-black/40 border border-white/10 rounded-2xl p-5 shadow-inner">
+<h3 class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-4 text-center">Tendencia (Últimos 3 Meses)</h3>
+<div class="h-48 w-full flex justify-center"><canvas id="chart-trend"></canvas></div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+<div class="strategy-card border-neon-cyan group">
+<div class="absolute -right-6 -top-4 bg-neon-cyan text-black text-[9px] font-black uppercase py-1.5 px-10 rotate-45 shadow-[0_0_15px_rgba(0,243,255,0.6)]">TIEMPO REAL</div>
+<div class="text-4xl mb-4">📅</div>
+<h3 class="text-white font-black text-xl uppercase mb-3">SKU por Mes</h3>
+<div class="flex flex-col gap-2 mb-4">
+<div class="flex gap-2">
+<select class="w-1/2 bg-black/60 border border-white/20 text-neon-cyan rounded-xl p-2.5 text-[10px] font-black uppercase outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan" id="sku-month-selector">
+<option value="0">Enero</option> <option value="1">Febrero</option> <option value="2">Marzo</option> <option value="3">Abril</option>
+<option value="4">Mayo</option> <option value="5">Junio</option> <option value="6">Julio</option> <option value="7">Agosto</option>
+<option value="8">Septiembre</option> <option value="9">Octubre</option> <option value="10">Noviembre</option> <option value="11">Diciembre</option>
+</select>
+<select class="w-1/2 bg-black/60 border border-white/20 text-neon-cyan rounded-xl p-2.5 text-[10px] font-black uppercase outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan" id="sku-year-selector"></select>
+</div>
+<select class="w-full bg-[#001233] border border-[#00f3ff]/40 text-white rounded-xl p-2.5 text-[10px] font-black uppercase outline-none shadow-[inset_0_0_10px_rgba(0,243,255,0.1)] focus:border-neon-cyan" id="sku-scope-selector">
+<option value="client">Top de este Cliente</option>
+<option value="global">Top Global (Todos)</option>
+</select>
+</div>
+<p class="text-slate-400 text-[10px] font-bold uppercase mb-4">Filtra hasta 50 códigos más vendidos basados en la selección de fecha.</p>
+<button class="w-full bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black border border-neon-cyan text-neon-cyan py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(0,243,255,0.2)] transition-all" onclick="generateCatalogByStrategy('skuPorMes')">Generar Reporte</button>
+</div>
+<div class="strategy-card" style="border-color: var(--neon-green);">
+<div class="text-4xl mb-4">📝</div>
+<h3 class="text-white font-black text-xl uppercase mb-3">Cotización Manual</h3>
+<p class="text-slate-400 text-[10px] font-bold uppercase leading-relaxed mb-4">Busca y agrega códigos manualmente para generar un catálogo a la medida.</p>
+<button class="w-full bg-[#0f172a] hover:bg-[#00ff66] hover:text-black border border-neon-green text-neon-green py-3 rounded-xl text-[11px] font-black uppercase transition-all shadow-[0_0_15px_rgba(0,255,102,0.2)]" onclick="openManualModal()">Abrir Cotizador</button>
+</div>
+<div class="strategy-card" style="border-color:#0071e3;">
+<div class="text-4xl mb-4">📥</div>
+<h3 class="text-white font-black text-xl uppercase mb-3">Carga con <span class="text-neon-cyan">Excel</span></h3>
+<p class="text-slate-400 text-[10px] font-bold uppercase leading-relaxed mb-4">Carga un Excel con una sola columna de códigos de producto. Se aceptan encabezados como Código, Producto o SKU.</p>
+<input accept=".xlsx,.xls" class="hidden" id="strategy-excel-input" onchange="handleStrategyExcel(event)" type="file"/>
+<button class="w-full bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black border border-neon-cyan text-white py-3 rounded-xl text-[11px] font-black uppercase transition-all shadow-[0_0_15px_rgba(0,243,255,0.2)]" onclick="document.getElementById('strategy-excel-input').click()">Seleccionar Excel</button>
+<div class="text-[8px] text-slate-500 font-bold uppercase mt-3 min-h-[20px]" id="strategy-excel-status">Sin archivo cargado</div>
+</div>
+<button class="strategy-card" onclick="generateCatalogByStrategy('noComprados90')">
+<div class="text-4xl mb-4">🚨</div>
+<h3 class="text-white font-black text-xl uppercase mb-3">Recuperación <span class="text-neon-red">+90 días</span></h3>
+<p class="text-slate-400 text-[10px] font-bold uppercase leading-relaxed">Códigos comprados históricamente, sin movimientos en los últimos 90 días. (Por Venta Global)</p>
+</button>
+<button class="strategy-card" onclick="generateCatalogByStrategy('topGlobal')">
+<div class="text-4xl mb-4">📈</div>
+<h3 class="text-white font-black text-xl uppercase mb-3">Top <span class="text-neon-green">Global</span></h3>
+<p class="text-slate-400 text-[10px] font-bold uppercase leading-relaxed">Hasta 50 códigos más vendidos globalmente basados en el total de Venta Neta global.</p>
+</button>
+<div class="strategy-card">
+<div class="text-4xl mb-4">🎁</div>
+<h3 class="text-white font-black text-xl uppercase mb-3">Tipo de <span class="text-neon-orange">Promo</span></h3>
+<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner" id="promo-selector">
+<option value="">Seleccionar promo...</option>
+</select>
+<p class="text-slate-400 text-[9px] font-bold uppercase mb-4">Incluye todos los códigos de la promoción, ordenados de mayor a menor venta.</p>
+<button class="w-full bg-[#0f172a] hover:bg-[#ffbb00] hover:text-black border border-neon-orange text-neon-orange py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(255,187,0,0.2)]" onclick="generateCatalogByStrategy('tipoPromocion')">Generar Catálogo</button>
+</div>
+<div class="strategy-card">
+<div class="text-4xl mb-4">🛠️</div>
+<h3 class="text-white font-black text-xl uppercase mb-3">Tipo de Servicio</h3>
+<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner" id="servicio-selector">
+<option value="">Seleccionar servicio...</option>
+</select>
+<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner" id="servicio-family-selector">
+<option value="">Seleccionar familia (Opcional)...</option>
+</select>
+<button class="w-full bg-[#0f172a] hover:bg-[#ff004c] hover:text-black border border-neon-red text-neon-red py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(255,0,76,0.2)]" onclick="generateCatalogByStrategy('tipoServicioFamilia')">Generar Catálogo</button>
+</div>
+<div class="strategy-card">
+<div class="text-4xl mb-4">🎯</div>
+<h3 class="text-white font-black text-xl uppercase mb-3">Marca Específica</h3>
+<p class="text-slate-400 text-[9px] font-bold uppercase mb-4">Selecciona una marca y, opcionalmente, una familia de esa marca.</p>
+<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner" id="brand-selector" onchange="syncStrategyFamilySelector('brand-selector','brand-family-selector',false)"><option value="">Seleccionar marca...</option></select>
+<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner" id="brand-family-selector"><option value="">Todas las familias...</option></select>
+<button class="w-full bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black border border-neon-cyan text-neon-cyan py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(0,243,255,0.2)]" onclick="generateCatalogByStrategy('marcaFamilia')">Generar Catálogo</button>
+</div>
+<div class="strategy-card" style="border-color:var(--neon-green)">
+<div class="text-4xl mb-4">✨</div>
+<h3 class="text-white font-black text-xl uppercase mb-3">Códigos Nuevos</h3>
+<p class="text-slate-400 text-[9px] font-bold uppercase mb-4">Todos los productos cuyo campo codigo_nuevo contiene “SI”, tengan o no historial de venta.</p>
+<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner" id="new-code-brand-selector" onchange="syncStrategyFamilySelector('new-code-brand-selector','new-code-family-selector',true)"><option value="">Todas las marcas...</option></select>
+<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner" id="new-code-family-selector"><option value="">Todas las familias...</option></select>
+<button class="w-full bg-[#0f172a] hover:bg-[#00ff66] hover:text-black border border-neon-green text-neon-green py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(0,255,102,0.2)]" onclick="generateCatalogByStrategy('codigosNuevos')">Generar Códigos Nuevos</button>
+</div>
+<div class="strategy-card">
+<div class="text-4xl mb-4">📂</div>
+<h3 class="text-white font-black text-xl uppercase mb-3">Familia Propia</h3>
+<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner" id="family-selector">
+<option value="">Seleccionar familia...</option>
+</select>
+<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner" id="sistema-selector">
+<option value="">Seleccionar sistema (Opcional)...</option>
+</select>
+<button class="w-full bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black border border-neon-cyan text-neon-cyan py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(0,243,255,0.2)]" onclick="generateCatalogByStrategy('familyEspecifica')">Generar Familia</button>
+</div>
+</div>
+</div>
+<div class="no-print hidden fixed inset-0 bg-[#010308]/90 backdrop-blur-md z-[110] flex items-center justify-center p-4" id="manual-modal">
+<div class="bg-[#030712] border border-neon-green shadow-[0_0_40px_rgba(0,255,102,0.2)] rounded-3xl w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden">
+<div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#001233]/50">
+<h2 class="text-xl font-black text-white uppercase tracking-tight flex items-center gap-3">
+<span class="text-2xl drop-shadow-[0_0_10px_rgba(0,255,102,0.5)]">📝</span> Cotización Manual Libre
                 </h2>
-                <button onclick="closeManualModal()" class="text-slate-400 hover:text-neon-red p-2 bg-white/5 rounded-full transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <div class="p-6 flex-grow flex flex-col gap-4 overflow-hidden relative">
-                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Busca por código exacto o palabras de la descripción:</p>
-                
-                <div class="relative w-full z-[120]">
-                    <input type="text" id="manual-search-input" placeholder="Ej. Filtro de aceite..." class="w-full p-4 bg-[#0a0f1c] border-2 border-slate-600 rounded-xl focus:border-neon-green outline-none text-white font-bold transition-all shadow-inner" oninput="handleManualSearch()">
-                    <div id="manual-search-results" class="absolute top-full left-0 w-full bg-[#050b14] border-x border-b border-neon-green rounded-b-xl max-h-64 overflow-y-auto hidden custom-scrollbar shadow-[0_20px_40px_rgba(0,0,0,0.8)]"></div>
-                </div>
-
-                <div class="flex justify-between items-center mt-2 border-b border-white/10 pb-2">
-                    <span class="text-[10px] text-neon-green font-black uppercase">Lista de Seleccionados:</span>
-                </div>
-
-                <div id="manual-selected-list" class="flex-grow overflow-y-auto space-y-3 custom-scrollbar p-2 bg-white/5 rounded-xl border border-white/5">
-                    </div>
-            </div>
-            <div class="p-6 border-t border-white/10 bg-[#001233]/80 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button onclick="clearManualSkus()" class="border border-[#ff004c] text-[#ff004c] hover:bg-[#ff004c] hover:text-white py-3 rounded-xl text-[11px] font-black uppercase transition-all shadow-[0_0_15px_rgba(255,0,76,0.1)]">Vaciar Todo</button>
-                <button onclick="exportManualExcel()" class="border border-neon-cyan text-neon-cyan hover:bg-[#00f3ff] hover:text-black py-3 rounded-xl text-[11px] font-black uppercase transition-all shadow-[0_0_15px_rgba(0,243,255,0.1)]">Descargar Excel</button>
-                <button onclick="printManualCatalog()" class="bg-neon-green text-black py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_20px_rgba(0,255,102,0.4)] hover:scale-105 transition-all">Imprimir Catálogo</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="catalog-container" class="w-full pb-32"></div>
-
-    <div id="cart-bar" class="cart-bar no-print cursor-pointer hover:scale-[1.02]" onclick="openCartDrawer()">
-        <div class="flex flex-col">
-            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Ver Carrito General</span>
-            <span class="text-xl font-black text-white"><span id="cart-count" class="text-neon-green">0</span> Seleccionados</span>
-        </div>
-        <button class="bg-neon-green text-black px-6 py-3 rounded-full text-[11px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(0,255,102,0.4)] flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+<button class="text-slate-400 hover:text-neon-red p-2 bg-white/5 rounded-full transition-colors" onclick="closeManualModal()">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="p-6 flex-grow flex flex-col gap-4 overflow-hidden relative">
+<p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Busca por código exacto o palabras de la descripción:</p>
+<div class="relative w-full z-[120]">
+<input class="w-full p-4 bg-[#0a0f1c] border-2 border-slate-600 rounded-xl focus:border-neon-green outline-none text-white font-bold transition-all shadow-inner" id="manual-search-input" oninput="handleManualSearch()" placeholder="Ej. Filtro de aceite..." type="text"/>
+<div class="absolute top-full left-0 w-full bg-[#050b14] border-x border-b border-neon-green rounded-b-xl max-h-64 overflow-y-auto hidden custom-scrollbar shadow-[0_20px_40px_rgba(0,0,0,0.8)]" id="manual-search-results"></div>
+</div>
+<div class="flex justify-between items-center mt-2 border-b border-white/10 pb-2">
+<span class="text-[10px] text-neon-green font-black uppercase">Lista de Seleccionados:</span>
+</div>
+<div class="flex-grow overflow-y-auto space-y-3 custom-scrollbar p-2 bg-white/5 rounded-xl border border-white/5" id="manual-selected-list">
+</div>
+</div>
+<div class="p-6 border-t border-white/10 bg-[#001233]/80 grid grid-cols-1 md:grid-cols-3 gap-4">
+<button class="border border-[#ff004c] text-[#ff004c] hover:bg-[#ff004c] hover:text-white py-3 rounded-xl text-[11px] font-black uppercase transition-all shadow-[0_0_15px_rgba(255,0,76,0.1)]" onclick="clearManualSkus()">Vaciar Todo</button>
+<button class="border border-neon-cyan text-neon-cyan hover:bg-[#00f3ff] hover:text-black py-3 rounded-xl text-[11px] font-black uppercase transition-all shadow-[0_0_15px_rgba(0,243,255,0.1)]" onclick="exportManualExcel()">Descargar Excel</button>
+<button class="bg-neon-green text-black py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_20px_rgba(0,255,102,0.4)] hover:scale-105 transition-all" onclick="printManualCatalog()">Imprimir Catálogo</button>
+</div>
+</div>
+</div>
+<div class="w-full pb-32" id="catalog-container"></div>
+<div class="cart-bar no-print cursor-pointer hover:scale-[1.02]" id="cart-bar" onclick="openCartDrawer()">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Ver Carrito General</span>
+<span class="text-xl font-black text-white"><span class="text-neon-green" id="cart-count">0</span> Seleccionados</span>
+</div>
+<button class="bg-neon-green text-black px-6 py-3 rounded-full text-[11px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(0,255,102,0.4)] flex items-center gap-2">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
             ABRIR PANEL
         </button>
-    </div>
-
-    <div id="cart-drawer" class="no-print fixed top-0 right-0 w-full md:w-[450px] h-full bg-[#030712]/95 backdrop-blur-xl border-l border-neon-green transform translate-x-full transition-transform duration-500 z-[100] shadow-[-20px_0_50px_rgba(0,255,102,0.15)] flex flex-col">
-        <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#001233]/50">
-            <h2 class="text-xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-                <span class="text-2xl drop-shadow-[0_0_10px_rgba(0,255,102,0.5)]">🛒</span> Mi Cotización
+</div>
+<div class="no-print fixed top-0 right-0 w-full md:w-[450px] h-full bg-[#030712]/95 backdrop-blur-xl border-l border-neon-green transform translate-x-full transition-transform duration-500 z-[100] shadow-[-20px_0_50px_rgba(0,255,102,0.15)] flex flex-col" id="cart-drawer">
+<div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#001233]/50">
+<h2 class="text-xl font-black text-white uppercase tracking-tight flex items-center gap-3">
+<span class="text-2xl drop-shadow-[0_0_10px_rgba(0,255,102,0.5)]">🛒</span> Mi Cotización
             </h2>
-            <button onclick="closeCartDrawer()" class="text-slate-400 hover:text-neon-red p-2 bg-white/5 rounded-full"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-        </div>
-        
-        <div class="p-4 border-b border-[#ff004c]/30 bg-black/60 flex items-center gap-3">
-            <input type="text" id="remove-sku-input" onkeypress="if(event.key === 'Enter') removeSkuFromCart()" placeholder="Escribe el código a eliminar..." class="w-full bg-[#030712] border border-slate-600 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none focus:border-neon-red shadow-inner">
-            <button onclick="removeSkuFromCart()" class="bg-[#0f172a] border border-neon-red text-neon-red hover:bg-[#ff004c] hover:text-white px-5 py-3 rounded-xl text-[10px] font-black uppercase transition-all">Quitar</button>
-        </div>
-        
-        <div id="cart-drawer-items" class="flex-grow overflow-y-auto p-6 space-y-4 custom-scrollbar"></div>
-        
-        <div class="p-6 border-t border-white/10 bg-[#001233]/80 flex flex-col gap-3">
-            <button onclick="exportCartToExcel()" class="w-full bg-neon-green text-black py-4 rounded-xl text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,255,102,0.4)]">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+<button class="text-slate-400 hover:text-neon-red p-2 bg-white/5 rounded-full" onclick="closeCartDrawer()"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></button>
+</div>
+<div class="p-4 border-b border-[#ff004c]/30 bg-black/60 flex items-center gap-3">
+<input class="w-full bg-[#030712] border border-slate-600 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none focus:border-neon-red shadow-inner" id="remove-sku-input" onkeypress="if(event.key === 'Enter') removeSkuFromCart()" placeholder="Escribe el código a eliminar..." type="text"/>
+<button class="bg-[#0f172a] border border-neon-red text-neon-red hover:bg-[#ff004c] hover:text-white px-5 py-3 rounded-xl text-[10px] font-black uppercase transition-all" onclick="removeSkuFromCart()">Quitar</button>
+</div>
+<div class="flex-grow overflow-y-auto p-6 space-y-4 custom-scrollbar" id="cart-drawer-items"></div>
+<div class="p-6 border-t border-white/10 bg-[#001233]/80 flex flex-col gap-3">
+<button class="w-full bg-neon-green text-black py-4 rounded-xl text-[12px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,255,102,0.4)]" onclick="exportCartToExcel()">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 Exportar Cotización (Excel)
             </button>
-            <button onclick="clearCart()" class="w-full bg-transparent border border-[#ff004c]/50 text-[#ff004c] hover:bg-[#ff004c] hover:text-white py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+<button class="w-full bg-transparent border border-[#ff004c]/50 text-[#ff004c] hover:bg-[#ff004c] hover:text-white py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors flex items-center justify-center gap-2" onclick="clearCart()">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 Vaciar Todos los Artículos
             </button>
-        </div>
-    </div>
+</div>
+</div>
 </main>
-
 <script>
     function toggleFullScreen() {
         if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => console.log(err.message)); } 
@@ -447,7 +655,17 @@
 
     let companyTree = new Map();
     let allClientsFlat = new Map(); 
+    let clientsById = new Map(); 
+    let dataQuality = {
+        ventasSinCliente: 0,
+        ventasAmbiguas: 0,
+        codigosSinMaestro: new Set(),
+        asesoresSinJerarquia: new Set(),
+        disciplinaSinCliente: 0,
+        clientesDuplicadosCV: []
+    };
     let selectedClient = null;
+    let currentSelectedTerritorial = null;
     let currentSelectedRegional = null;
     let currentSelectedAdvisor = null; 
     let globalProducts = new Map();
@@ -466,7 +684,13 @@
     let manualSkus = []; 
     let manualSkusQty = {}; 
     let chartBrandsInstance = null;
+    let chartTerritorialIntel=null,chartTerritorialDiscipline=null,chartRegionalIntel=null,chartAdvisorIntel=null,chartRegionalDiscipline=null,chartAdvisorDiscipline=null,chartDetailBrands=null;
+    let disciplineReturnContext=null;
+    let disciplineOpportunitySkus=[];
+    let currentDisciplineClients=[];
+    let noVisitRowsCache=[];
     let chartTrendInstance = null;
+    const segmentChartInstances={};
 
     let currentStrategyLabel = "GENERAL";
     let appCurrentState = "LOAD";
@@ -481,7 +705,6 @@
     function calcularDiasTranscurridos() {
         let diasAcumulados = 0;
         let hoy = new Date();
-        
         for (let d = 1; d <= hoy.getDate(); d++) {
             let fechaIterada = new Date(hoy.getFullYear(), hoy.getMonth(), d);
             let diaSemana = fechaIterada.getDay();
@@ -531,31 +754,38 @@
         const dataProductos = pickCloudArray(root, ['Productos', 'productos', 'dataProductos']);
         const dataClientes = pickCloudArray(root, ['Clientes', 'clientes', 'dataClientes']);
         const dataJerarquia = pickCloudArray(root, ['Jerarquia', 'Jerarquía', 'jerarquia', 'dataJerarquia']);
-        const dataVentas = pickCloudArray(root, ['Ventas', 'ventas', 'dataVentas']);
-        if (!dataProductos.length || !dataClientes.length || !dataJerarquia.length || !dataVentas.length) {
-            throw new Error('El JSON no contiene Productos, Clientes, Jerarquia y Ventas.');
+        const dataVentas = pickCloudArray(root, ['Ventas','Venta','ventas','venta','dataVentas']);
+        const dataDisciplina = pickCloudArray(root, ['Disciplina','disciplina','Disciplina Comercial','dataDisciplina']);
+        const missingCollections = [];
+        if(!dataProductos.length) missingCollections.push('Productos');
+        if(!dataClientes.length) missingCollections.push('Clientes');
+        if(!dataJerarquia.length) missingCollections.push('Jerarquia');
+        if(!dataVentas.length) missingCollections.push('Ventas');
+        if(!dataDisciplina.length) missingCollections.push('Disciplina');
+        if(missingCollections.length) throw new Error('Colecciones faltantes o vacías: ' + missingCollections.join(', ') + '. Claves encontradas: ' + Object.keys(root || {}).join(', '));
+        const primeraJerarquia=normalizeRow(dataJerarquia[0]);
+        if(!('gerente_territorial' in primeraJerarquia)||!String(primeraJerarquia.gerente_territorial||'').trim()){
+            throw new Error('La hoja Jerarquía requiere la columna gerente_territorial con valores.');
         }
-        processData(dataProductos, dataClientes, dataJerarquia, dataVentas);
+        processData(dataProductos, dataClientes, dataJerarquia, dataVentas, dataDisciplina);
     }
 
     async function tryLoadGzipJson() {
-        const gzFileName = 'apymsa_inteligencia_comercial_v15_1.json.gz';
+        const gzFileName = 'norte.json.gz';
         const encodedGz = encodeURIComponent(gzFileName);
+        const repository = 'APYMSA-INTELIGENCIA-COMERCIAL-NORTE';
         const gzUrls = [
-            // Enlace exacto proporcionado. No contiene espacios en el nombre.
-            'https://github.com/JOSELITO198004/apymsa-inteligencia-comercial-v15.0/raw/refs/heads/main/' + encodedGz,
-            // URL directa recomendada de GitHub Raw.
-            'https://raw.githubusercontent.com/JOSELITO198004/apymsa-inteligencia-comercial-v15.0/refs/heads/main/' + encodedGz,
-            'https://raw.githubusercontent.com/JOSELITO198004/apymsa-inteligencia-comercial-v15.0/main/' + encodedGz,
-            'https://cdn.jsdelivr.net/gh/JOSELITO198004/apymsa-inteligencia-comercial-v15.0@main/' + encodedGz,
-            'https://joselito198004.github.io/apymsa-inteligencia-comercial-v15.0/' + encodedGz,
-            new URL(gzFileName, window.location.href).href
+            new URL(gzFileName, window.location.href).href,
+            'https://joselito198004.github.io/' + repository + '/' + encodedGz,
+            'https://raw.githubusercontent.com/JOSELITO198004/' + repository + '/main/' + encodedGz,
+            'https://github.com/JOSELITO198004/' + repository + '/raw/refs/heads/main/' + encodedGz,
+            'https://cdn.jsdelivr.net/gh/JOSELITO198004/' + repository + '@main/' + encodedGz
         ];
         const errors = [];
         const cloudButton = document.getElementById('btnLoadCloud');
         loaderIcon.classList.add('hidden');
         loaderSpinner.classList.remove('hidden');
-        document.getElementById('loader-text').innerText = 'Cargando base de datos desde la nube...';
+        document.getElementById('loader-text').innerText = 'Cargando norte.json.gz desde la nube...';
         cloudButton.disabled = true;
         cloudButton.classList.add('opacity-50', 'cursor-wait');
         try {
@@ -566,11 +796,11 @@
                     const compressed = new Uint8Array(await response.arrayBuffer());
                     if (compressed.length < 2 || compressed[0] !== 0x1f || compressed[1] !== 0x8b) {
                         const contentType = response.headers.get('content-type') || 'desconocido';
-                        throw new Error(`La respuesta no es GZIP (Content-Type: ${contentType}). Puede ser una pagina HTML, un 404 o bloqueo CORS.`);
+                        throw new Error(`La respuesta no es GZIP (Content-Type: ${contentType}).`);
                     }
                     if (!window.pako) throw new Error('No se pudo cargar Pako.');
                     const jsonText = pako.ungzip(compressed, { to: 'string' });
-                    processCloudPayload(JSON.parse(jsonText));
+                    processCloudPayload(JSON.parse(jsonText.replace(/^\uFEFF/, '').trim()));
                     return;
                 } catch (err) {
                     errors.push(`${url}: ${err.message}`);
@@ -578,8 +808,8 @@
             }
             throw new Error(errors.join(' | '));
         } catch (err) {
-            console.error('Error cargando nube:', err);
-            showAlert('NO SE PUDO CARGAR LA BASE DESDE LA NUBE. REVISA EL ARCHIVO .JSON.GZ, LA RUTA O CORS.');
+            console.error('Error cargando norte.json.gz:', err);
+            showAlert('NO SE PUDO CARGAR NORTE.JSON.GZ. REVISA QUE ESTE EN LA RAIZ DE MAIN JUNTO A INDEX.HTML.');
             resetCarga();
         } finally {
             cloudButton.disabled = false;
@@ -594,10 +824,25 @@
 
     function showAlert(msg) {
         const box = document.getElementById('alert-box');
-        document.getElementById('alert-msg').innerText = msg;
+        const text = String(msg || 'Error sin descripción');
+        const label = document.getElementById('alert-msg');
+        label.innerText = text;
+        label.style.color = '#111827';
+        box.style.background = '#ffffff';
         box.classList.remove('hidden');
-        setTimeout(() => box.classList.add('hidden'), 5000);
+        setTimeout(() => box.classList.add('hidden'), 8000);
     }
+    function showLoadError(error, stage='Carga local') {
+        toggleBackgroundLock(true);
+        const detail = error && error.stack ? error.stack : (error && error.message ? error.message : String(error || 'Error desconocido'));
+        document.getElementById('load-error-detail').textContent = `${stage}\n\n${detail}`;
+        document.getElementById('load-error-panel').classList.remove('hidden');
+    }
+    function closeLoadError(){
+        toggleBackgroundLock(false);
+        document.getElementById('load-error-panel').classList.add('hidden');
+    }
+    async function copyLoadError(){try{await navigator.clipboard.writeText(document.getElementById('load-error-detail').textContent)}catch(e){console.error(e)}}
 
     function normalizeKey(key) { return String(key || "").toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9_]/g, ""); }
     function getSku(item) { return String(item.codigo || item.producto || "").trim(); }
@@ -635,6 +880,27 @@
         let d = new Date(raw); return isNaN(d.getTime()) ? null : d;
     }
 
+    function financialPeriodKey(year, month) { return `${year}-${String(month + 1).padStart(2, '0')}`; }
+    function extractFinancialHistory(item) {
+        const history = {};
+        const months = {enero:0,febrero:1,marzo:2,abril:3,mayo:4,junio:5,julio:6,agosto:7,septiembre:8,octubre:9,noviembre:10,diciembre:11};
+        Object.entries(item || {}).forEach(([rawKey,value]) => {
+            const key = normalizeKey(rawKey).replace(/_/g,'');
+            const match = key.match(/^(venta|cuota|objetivoenfoque)(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(20\d{2})$/);
+            if(!match) return;
+            const period = financialPeriodKey(Number(match[3]), months[match[2]]);
+            if(!history[period]) history[period] = {venta:0,cuota:0,objetivoEnfoque:0};
+            const metric = match[1] === 'objetivoenfoque' ? 'objetivoEnfoque' : match[1];
+            history[period][metric] = parseMoney(value);
+        });
+        return history;
+    }
+    function financialValue(client,year,month,metric){const p=financialPeriodKey(year,month);return Number(client&&client.financiero&&client.financiero[p]?client.financiero[p][metric]||0:0)}
+    function financialYTD(client,year,metric,throughMonth=CURRENT_MONTH){let total=0;for(let m=0;m<=throughMonth;m++)total+=financialValue(client,year,m,metric);return total}
+    function refreshHierarchyFinancialTotals(){companyTree.forEach(reg=>{reg.totalVenta=0;reg.totalCuota=0;reg.asesores.forEach(adv=>{adv.totalVenta=0;adv.totalCuota=0;adv.clientes.forEach(c=>{c.venta=financialValue(c,CURRENT_YEAR,CURRENT_MONTH,'venta');c.cuota=financialValue(c,CURRENT_YEAR,CURRENT_MONTH,'cuota');c.objetivoEnfoque=financialValue(c,CURRENT_YEAR,CURRENT_MONTH,'objetivoEnfoque');adv.totalVenta+=c.venta;adv.totalCuota+=c.cuota;reg.totalVenta+=c.venta;reg.totalCuota+=c.cuota})})})}
+    function clientPurchasedSkus(client){return new Set((client&&client.rawItems||[]).map(getSku).filter(Boolean).map(x=>String(x).trim().toUpperCase()))}
+    function applyOpportunityFilter(products){const mode=document.getElementById('strategy-opportunity-filter')?.value||'all';if(mode!=='new'||!selectedClient)return products;const bought=clientPurchasedSkus(selectedClient);return products.filter(p=>!bought.has(getSku(p).toUpperCase()))}
+    function isNewProduct(item){const v=String(item.codigo_nuevo??item.codigonuevo??item.CODIGO_NUEVO??'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');return v.split(/[^a-z0-9]+/).includes('si')}
     function getSemaforoProyeccionClass(porcentaje) { return porcentaje >= 100 ? "glow-green" : (porcentaje >= 85 ? "glow-orange" : "glow-red"); }
     function getSemaforoProyeccionTextClass(porcentaje) { return porcentaje >= 100 ? "status-text-green" : (porcentaje >= 85 ? "status-text-orange" : "status-text-red"); }
 
@@ -671,7 +937,9 @@
             processCloudPayload(payload);
         } catch (err) {
             console.error('Error cargando JSON.GZ local:', err);
-            showAlert('ERROR JSON.GZ LOCAL: ' + (err && err.message ? err.message : 'Error desconocido'));
+            const message = err && err.message ? err.message : String(err || 'Error desconocido');
+            showAlert('ERROR JSON.GZ LOCAL: ' + message);
+            showLoadError(err, 'Carga local de ' + fileName);
             resetCarga();
         }
     }
@@ -691,111 +959,57 @@
         return item;
     }
 
-    function processData(dataProductos, dataClientes, dataJerarquia, dataVentas) {
-        companyTree.clear(); allClientsFlat.clear(); globalProducts.clear();
+    function processData(dataProductos, dataClientes, dataJerarquia, dataVentas, dataDisciplina) {
+        companyTree.clear(); allClientsFlat.clear(); clientsById.clear(); globalProducts.clear();
+        dataQuality={ventasSinCliente:0,ventasAmbiguas:0,codigosSinMaestro:new Set(),asesoresSinJerarquia:new Set(),disciplinaSinCliente:0,clientesDuplicadosCV:[]};
         globalSalesMn = {}; globalSalesPesos = {}; globalPiezas = {}; globalClientsPerSku = {};
         globalPromociones = {}; globalPromoText = {}; globalComentarioPromo = {}; globalLowestPrice = {};
         globalSkuStats = {};
 
-        // 1. JERARQUÍA
         dataJerarquia.forEach(row => {
             const item = normalizeRow(row);
-            const regName = String(item.gerente_regional || item.gerente || item.regional || "SIN GERENTE").trim().toUpperCase();
+            const territorialName = String(item.gerente_territorial || item.gerenteterritorial || item.territorial || "SIN GERENTE TERRITORIAL").trim().toUpperCase();
+            const regName = String(item.gerente_regional || item.gerente || item.regional || "SIN GERENTE REGIONAL").trim().toUpperCase();
             const zoneName = String(item.sucursal_vendedor || item.sucursal || "SIN SUCURSAL").trim().toUpperCase();
             const advName = String(item.asesor || item.vendedor || item.ejecutivo || "SIN ASESOR").trim().toUpperCase();
 
             if (!companyTree.has(regName)) {
-                companyTree.set(regName, { name: regName, region: zoneName, totalVenta: 0, totalCuota: 0, asesores: new Map() });
+                companyTree.set(regName, { name: regName, territorial: territorialName, region: zoneName, totalVenta: 0, totalCuota: 0, asesores: new Map() });
             }
             const regNode = companyTree.get(regName);
+            if (territorialName !== "SIN GERENTE TERRITORIAL") regNode.territorial = territorialName;
             if (!regNode.asesores.has(advName)) {
                 regNode.asesores.set(advName, { name: advName, sucursal: zoneName, totalVenta: 0, totalCuota: 0, clientes: new Map() });
             }
         });
 
-        // 2. CLIENTES
         dataClientes.forEach(row => {
-            const item = normalizeRow(row);
-            const cliId = String(item.cliente_id || item.clienteid || item.id_cliente || "").trim().toUpperCase();
-            const cliVendId = String(item.cliente_vendedor_id || item.clientevendedorid || "").trim().toUpperCase();
-            if (!cliId) return;
-
-            const advName = String(item.asesor || item.vendedor || "SIN ASESOR").trim().toUpperCase();
-            const cliName = String(item.razon_social || item.razonsocial || "SIN NOMBRE").trim();
-            const ciudad = String(item.ciudad || "").trim();
-            const tipoCliente = String(item.tipo_cliente || item.tipo || "GENERAL").trim().toUpperCase();
-            
-            let cliCuota = parseMoney(item['cuota'] || 0);
-            let cliVenta = parseMoney(item['venta_mn'] || 0); 
-            let cliVentaAnt = parseMoney(item['venta_mes_anterior'] || 0);
-            
-            let focusOriginal = String(item.enfoque || "GENERAL").trim();
-            let focus = focusOriginal;
-            
-            if (cliVentaAnt <= 0 && cliVenta <= 0) {
-                focus = "URGENTE:SIN VENTA";
-            } else if (cliVenta > 0 && focus === "URGENTE:SIN VENTA") {
-                focus = "GENERAL"; 
-            }
-
-            let foundReg = "SIN GERENTE";
-            let advNode = null;
-            let regNode = null;
-
-            for (let [rName, rNode] of companyTree.entries()) {
-                if (rNode.asesores.has(advName)) {
-                    foundReg = rName;
-                    regNode = rNode;
-                    advNode = rNode.asesores.get(advName);
-                    break;
-                }
-            }
-
-            if (!advNode) {
-                if (!companyTree.has("SIN GERENTE")) companyTree.set("SIN GERENTE", { name: "SIN GERENTE", region: "SIN SUCURSAL", totalVenta: 0, totalCuota: 0, asesores: new Map() });
-                regNode = companyTree.get("SIN GERENTE");
-                if (!regNode.asesores.has(advName)) regNode.asesores.set(advName, { name: advName, sucursal: "SIN SUCURSAL", totalVenta: 0, totalCuota: 0, clientes: new Map() });
-                advNode = regNode.asesores.get(advName);
-            }
-
-            const cliObj = {
-                id: cliId, cliVendId: cliVendId, name: cliName, ciudad: ciudad, focus: focus, advisor: advName, regional: foundReg,
-                tipoCliente: tipoCliente, venta: cliVenta, cuota: cliCuota, piezas: 0, rawItems: []
-            };
-
-            advNode.clientes.set(cliId, cliObj);
-            allClientsFlat.set(cliId, cliObj);
-
-            advNode.totalVenta += cliVenta;
-            advNode.totalCuota += cliCuota;
-            regNode.totalVenta += cliVenta;
-            regNode.totalCuota += cliCuota;
+            const item=normalizeRow(row);
+            const cliId=String(item.cliente_id||item.clienteid||'').trim().toUpperCase();
+            const cliVendId=String(item.cliente_vendedor_id||item.clientevendedorid||'').trim().toUpperCase();
+            if(!cliId||!cliVendId)return;
+            if(allClientsFlat.has(cliVendId)){dataQuality.clientesDuplicadosCV.push(cliVendId);return}
+            const advName=String(item.asesor||'SIN ASESOR').trim().toUpperCase();
+            const cliName=String(item.razon_social||item.razonsocial||'SIN NOMBRE').trim();
+            const ciudad=String(item.ciudad||'').trim();
+            const tipoCliente=String(item.tipo_cliente||item.tipo||'GENERAL').trim().toUpperCase();
+            let focus=String(item.enfoque||'GENERAL').trim();if(!focus||focus==='0'||focus.toUpperCase()==='NULL')focus='GENERAL';
+            const financiero=extractFinancialHistory(item);
+            let foundReg='SIN JERARQUIA ASIGNADA',advNode=null,regNode=null;
+            for(const [rName,candidate] of companyTree.entries()){if(candidate.asesores.has(advName)){foundReg=rName;regNode=candidate;advNode=candidate.asesores.get(advName);break}}
+            if(!advNode){dataQuality.asesoresSinJerarquia.add(advName);if(!companyTree.has(foundReg))companyTree.set(foundReg,{name:foundReg,territorial:'SIN GERENTE TERRITORIAL',region:'SIN SUCURSAL',totalVenta:0,totalCuota:0,asesores:new Map()});regNode=companyTree.get(foundReg);if(!regNode.asesores.has(advName))regNode.asesores.set(advName,{name:advName,sucursal:'SIN SUCURSAL',totalVenta:0,totalCuota:0,clientes:new Map()});advNode=regNode.asesores.get(advName)}
+            const cliObj={id:cliId,cliVendId,uniqueKey:cliVendId,name:cliName,ciudad,focus,advisor:advName,regional:foundReg,territorial:regNode.territorial,tipoCliente,financiero,venta:0,cuota:0,objetivoEnfoque:0,piezas:0,disciplina:{},rawItems:[]};
+            advNode.clientes.set(cliVendId,cliObj);allClientsFlat.set(cliVendId,cliObj);if(!clientsById.has(cliId))clientsById.set(cliId,[]);clientsById.get(cliId).push(cliObj);
         });
-
-        // 3. PRODUCTOS
+        refreshHierarchyFinancialTotals();
         dataProductos.forEach(row => {
             const item = normalizeRow(row);
             const sku = getSku(item);
             if (!sku) return;
-
-            // Promociones: reconoce precio, tipo de promocion y comentario.
-            const tempPromoVal = parseMoney(
-                item["precio solicitado"] || item["preciosolicitado"] ||
-                item["precio promocion"] || item["preciopromocion"] ||
-                item["precio promo"] || item["preciopromo"] || 0
-            );
-            const rawPromoText = String(
-                item["tipo promocion"] || item["tipopromocion"] ||
-                item["promocion"] || item["promo"] || ""
-            ).trim();
-            const rawComment = String(
-                item["comentario"] || item["comentario promocion"] ||
-                item["comentariopromocion"] || ""
-            ).trim();
-            const isValidPromoText = value => {
-                const normalized = String(value || "").trim().toLowerCase();
-                return normalized && !["0", "null", "undefined", "na", "n/a"].includes(normalized);
-            };
+            const tempPromoVal = parseMoney(item["precio solicitado"] || item["preciosolicitado"] || item["precio promocion"] || item["preciopromocion"] || item["precio promo"] || item["preciopromo"] || 0);
+            const rawPromoText = String(item["tipo promocion"] || item["tipopromocion"] || item["promocion"] || item["promo"] || "").trim();
+            const rawComment = String(item["comentario"] || item["comentario promocion"] || item["comentariopromocion"] || "").trim();
+            const isValidPromoText = value => { const normalized = String(value || "").trim().toLowerCase(); return normalized && !["0", "null", "undefined", "na", "n/a"].includes(normalized); };
             const tempPromoText = isValidPromoText(rawPromoText) ? rawPromoText : "";
             const tempPromoComment = isValidPromoText(rawComment) ? rawComment : "";
 
@@ -806,68 +1020,233 @@
             globalProducts.set(sku, item);
         });
 
-        // 4. VENTAS FACTURACIÓN
-        dataVentas.forEach(row => {
-            const item = normalizeRow(row);
-            const cliId = String(item.cliente_id || item.clienteid || item.id_cliente || "").trim().toUpperCase();
-            if (!cliId || !allClientsFlat.has(cliId)) return;
-
-            const sku = getSku(item);
-            if (!sku) return;
-
-            // Ventas admite la columna "Marca"; si esta vacia se completa desde Productos.
-            const productForSale = globalProducts.get(sku);
-            item.marca = String(item.marca || item.brand || (productForSale ? getBrand(productForSale) : "SIN MARCA")).trim();
-
-            const cliNode = allClientsFlat.get(cliId);
-            const tipoCliente = cliNode.tipoCliente;
-            
-            let vpesos = parseMoney(item['venta en pesos'] || item['venta_en_pesos'] || 0);
-            let pz = parseMoney(item['venta en piezas'] || item['venta_en_piezas'] || item['piezas'] || item['cantidad'] || 0);
-            
-            item._vmn_calculado = vpesos;
-            item._venta_piezas_calculada = pz;
-            item.fecha_doc = parseDate(item.fecha_factura || item.fecha);
-            
-            cliNode.rawItems.push(item);
-
-            if (pz > 0 && vpesos > 0) {
-                let pricePerUnit = vpesos / pz;
-                if (!globalLowestPrice[sku] || pricePerUnit < globalLowestPrice[sku]) globalLowestPrice[sku] = pricePerUnit;
-            }
-
-            if (!globalSalesPesos[sku]) globalSalesPesos[sku] = 0; globalSalesPesos[sku] += vpesos;
-            if (!globalSalesMn[sku]) globalSalesMn[sku] = 0; globalSalesMn[sku] += vpesos; 
-            if (!globalPiezas[sku]) globalPiezas[sku] = 0; globalPiezas[sku] += pz;
-            
-            if (!globalSkuStats[sku]) globalSkuStats[sku] = {};
-            if (!globalSkuStats[sku][tipoCliente]) globalSkuStats[sku][tipoCliente] = { mn: 0, pz: 0 };
-            globalSkuStats[sku][tipoCliente].mn += vpesos;
-            globalSkuStats[sku][tipoCliente].pz += pz;
-
-            if (!globalClientsPerSku[sku]) globalClientsPerSku[sku] = new Set();
-            globalClientsPerSku[sku].add(cliId);
+        dataVentas.forEach(row=>{
+            const item=normalizeRow(row),cliId=String(item.cliente_id||item.clienteid||'').trim().toUpperCase(),sku=getSku(item).toUpperCase();if(!cliId||!sku)return;
+            const product=globalProducts.get(sku);if(!product)dataQuality.codigosSinMaestro.add(sku);item.marca=product?getBrand(product):'SIN MARCA';item.familia=product?getFamily(product):'SIN FAMILIA';
+            const vpesos=parseMoney(item['venta en pesos']||item.venta_en_pesos||0),pz=parseMoney(item['venta en piezas']||item.venta_en_piezas||0);item._vmn_calculado=vpesos;item._venta_piezas_calculada=pz;item.fecha_doc=parseDate(item.fecha_factura||item.fecha);
+            const rel=clientsById.get(cliId)||[];let cliNode=null;if(rel.length===1)cliNode=rel[0];else if(!rel.length)dataQuality.ventasSinCliente++;else dataQuality.ventasAmbiguas++;if(cliNode)cliNode.rawItems.push(item);
+            if(pz>0&&vpesos>0){const unit=vpesos/pz;if(!globalLowestPrice[sku]||unit<globalLowestPrice[sku])globalLowestPrice[sku]=unit}
+            globalSalesPesos[sku]=(globalSalesPesos[sku]||0)+vpesos;globalSalesMn[sku]=(globalSalesMn[sku]||0)+vpesos;globalPiezas[sku]=(globalPiezas[sku]||0)+pz;
+            const tipo=cliNode?cliNode.tipoCliente:'SIN ASIGNACION';if(!globalSkuStats[sku])globalSkuStats[sku]={};if(!globalSkuStats[sku][tipo])globalSkuStats[sku][tipo]={mn:0,pz:0};globalSkuStats[sku][tipo].mn+=vpesos;globalSkuStats[sku][tipo].pz+=pz;if(!globalClientsPerSku[sku])globalClientsPerSku[sku]=new Set();globalClientsPerSku[sku].add(cliId);
         });
-
+        const byCV=allClientsFlat;dataDisciplina.forEach(row=>{const i=normalizeRow(row),key=String(i.cliente_vendedor_id||i.clientevendedorid||'').trim().toUpperCase(),c=byCV.get(key);if(!c)return;MESES_NOMBRES.forEach(m=>{const n=normalizeKey(m);c.disciplina[n]={agendado:parseMoney(i[`agendado_${n}_2026`]||i[`agendado${n}2026`]||0)>0?1:0,visitado:Math.max(0,Math.trunc(parseMoney(i[`visitado_${n}_2026`]||i[`visitado${n}2026`]||0)))}})});
         loaderIcon.classList.remove('hidden'); loaderSpinner.classList.add('hidden');
         step1.classList.add('hidden'); step2.classList.remove('hidden'); btnBack.classList.remove('hidden');
         appCurrentState = "PANEL_REGIONALES";
         document.getElementById('summary-count').innerText = `${allClientsFlat.size} clientes | ${globalProducts.size} códigos`;
         populateSelectors();
-        renderRegionalCards();
+        renderTerritorialCards();
     }
 
+    function dateOnly(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate(),12,0,0)}
+    function sameDate(a,b){return a&&b&&a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+    function previousOperationalDay(from){const d=dateOnly(from);d.setDate(d.getDate()-1);while(d.getDay()===0)d.setDate(d.getDate()-1);return d}
+    function lastBusinessCutoff(){return previousOperationalDay(NOW)}
+    function effectiveDaysToDate(c){if(c.getFullYear()!==CURRENT_YEAR||c.getMonth()!==CURRENT_MONTH)return 0;let n=0;for(let d=1;d<=c.getDate();d++){const w=new Date(CURRENT_YEAR,CURRENT_MONTH,d).getDay();if(w>=1&&w<=5)n++;else if(w===6)n+=.5}return n}
+    function operationalMetrics(cs){const cutoff=lastBusinessCutoff(),prev=previousOperationalDay(cutoff),start=new Date(CURRENT_YEAR,CURRENT_MONTH,1,12),end=dateOnly(cutoff),prevEnd=dateOnly(prev);let ventaDia=0,ventaMes=0,cuota=0,cc=0,cp=0,rec=0;cs.forEach(c=>{cuota+=Number(c.cuota||0);ventaMes+=Number(c.venta||0);const s=(c.rawItems||[]).filter(i=>i.fecha_doc&&Number(i._vmn_calculado||0)>0).sort((a,b)=>a.fecha_doc-b.fecha_doc);s.forEach(i=>{if(sameDate(i.fecha_doc,cutoff))ventaDia+=Number(i._vmn_calculado||0)});if(s.some(i=>i.fecha_doc>=start&&i.fecha_doc<=end))cc++;if(s.some(i=>i.fecha_doc>=start&&i.fecha_doc<=prevEnd))cp++;const ms=s.filter(i=>i.fecha_doc>=start&&i.fecha_doc<=end),prior=s.filter(i=>i.fecha_doc<start);if(ms.length&&prior.length&&(ms[0].fecha_doc-prior[prior.length-1].fecha_doc)/86400000>90)rec++});const elapsed=effectiveDaysToDate(cutoff),total=obtenerDiasEfectivosDelMes(CURRENT_YEAR,CURRENT_MONTH),remaining=Math.max(total-elapsed,0),promedio=elapsed?ventaMes/elapsed:0,cuotaDiaria=total?cuota/total:0,recalculada=remaining?Math.max(cuota-ventaMes,0)/remaining:0,esperado=total?elapsed/total*100:0,real=cuota?ventaMes/cuota*100:0;return{cutoff,ventaDia,ventaMes,cuota,promedio,cuotaDiaria,recalculada,inc:Math.max(cc-cp,0),cc,cp,rec,esperado,real,diff:real-esperado,elapsed,total,remaining}}
+    function renderOperational(cs,scope){const e=document.getElementById(scope+'-operational');if(!e)return;const m=operationalMetrics(cs),f=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}),d=m.cutoff.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}).replace('.','').toUpperCase(),lamp=m.diff>=0?'green':m.diff>=-5?'amber':'red';e.innerHTML=`<section class="operational-block"><div class="operational-head"><div><div class="operational-title">Corte operativo diario</div><div class="text-[8px] text-slate-500 font-bold uppercase mt-1">Indicadores consolidados de la jerarquía seleccionada</div></div><div class="operational-date">Corte al ${d} · último día hábil</div></div><div class="operational-grid"><div class="operational-card"><small>Venta último día hábil</small><b>${f.format(m.ventaDia)}</b><span>Facturación del ${d}</span></div><div class="operational-card"><small>Promedio diario del mes</small><b>${f.format(m.promedio)}</b><span>${f.format(m.ventaMes)} ÷ ${m.elapsed.toFixed(1)} días efectivos</span></div><div class="operational-card white"><small>Cuota diaria original</small><b>${f.format(m.cuotaDiaria)}</b><span>${f.format(m.cuota)} ÷ ${m.total.toFixed(1)} días</span></div><div class="operational-card peach"><small>Cuota diaria recalculada</small><b>${f.format(m.recalculada)}</b><span>Saldo ÷ ${m.remaining.toFixed(1)} días restantes</span></div><div class="operational-card"><small>Incremento clientes con venta</small><b>${m.inc}</b><span>${m.cc} al corte vs ${m.cp} anterior</span></div><div class="operational-card"><small>Clientes recuperados +90 días</small><b>${m.rec}</b><span>Reactivados después de más de 90 días</span></div><div class="operational-card white"><small>Avance esperado</small><b>${m.esperado.toFixed(1)}%</b><span>${m.elapsed.toFixed(1)} de ${m.total.toFixed(1)} días</span></div><div class="operational-card white"><i class="operational-lamp ${lamp}"></i><small>Avance real</small><b>${m.real.toFixed(1)}%</b><span>${f.format(m.ventaMes)} ÷ ${f.format(m.cuota)}</span></div></div></section>`}
+    function destroySegmentCharts(scope,type){['ENFOQUE','FUGA','GENERAL'].forEach(k=>{const id=`${scope}-${type}-${k}`;if(segmentChartInstances[id]){segmentChartInstances[id].destroy();delete segmentChartInstances[id]}})}
+    
+    function renderSegmentCharts(cs,scope,type){
+        const box=document.getElementById(`${scope}-${type}-segment-charts`);
+        if(!box)return;
+        destroySegmentCharts(scope,type);
+        const cfg={ENFOQUE:{title:'Clientes enfoque',color:'#245F70',cls:'segment-enfoque'},FUGA:{title:'Clientes en fuga',color:'#D92D20',cls:'segment-fuga'},GENERAL:{title:'Clientes generales',color:'#555B6E',cls:'segment-general'}};
+        const g=groups(cs);
+        const mesesTranscurridos=CURRENT_MONTH+1;
+        box.innerHTML=['ENFOQUE','FUGA','GENERAL'].map(k=>`<div class="segment-chart-card ${cfg[k].cls}"><div class="segment-chart-title">${cfg[k].title}</div><div class="segment-chart-subtitle">${type==='intel'?'Venta mensual 2026':'Clientes visitados por mes 2026'} · línea promedio enero a ${MESES_NOMBRES[CURRENT_MONTH]}</div><div class="segment-chart-canvas"><canvas id="chart-${scope}-${type}-${k}"></canvas></div></div>`).join('');
+        ['ENFOQUE','FUGA','GENERAL'].forEach(k=>{
+            const values=Array(12).fill(0);
+            if(type==='intel'){
+                g[k].forEach(c=>{for(let m=0;m<12;m++)values[m]+=financialValue(c,CURRENT_YEAR,m,'venta')});
+            }else{
+                g[k].forEach(c=>{for(let m=0;m<12;m++)values[m]+=(dv(c,m,'visitado')>0?1:0)});
+            }
+            const acumuladoTranscurrido=values.slice(0,mesesTranscurridos).reduce((a,b)=>a+b,0);
+            const avg=mesesTranscurridos>0?acumuladoTranscurrido/mesesTranscurridos:0;
+            const id=`${scope}-${type}-${k}`,money=type==='intel';
+            segmentChartInstances[id]=new Chart(document.getElementById('chart-'+id),{
+                data:{labels:MESES_NOMBRES.map(x=>x.slice(0,3)),datasets:[
+                    {type:'bar',label:money?'Venta mensual':'Clientes visitados',data:values,backgroundColor:cfg[k].color,borderColor:'#ffffff',borderWidth:2,borderRadius:6,maxBarThickness:54},
+                    {type:'line',label:`Promedio ${mesesTranscurridos} meses`,data:Array(12).fill(avg),borderColor:'#00f3ff',backgroundColor:'#00f3ff',borderWidth:4,pointRadius:0,tension:0,fill:false}
+                ]},
+                plugins:[ChartDataLabels],
+                options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:22}},scales:{y:{beginAtZero:true,ticks:{color:'#DCEAF0',font:{weight:'bold',size:11},precision:money?undefined:0,callback:v=>money?'$'+Intl.NumberFormat('es-MX',{notation:'compact'}).format(v):v},grid:{color:'rgba(85,91,110,.25)'}},x:{grid:{display:false},ticks:{color:'#DCEAF0',font:{weight:'900',size:11},autoSkip:false,maxRotation:0,minRotation:0,callback:function(value){return String(this.getLabelForValue(value)).slice(0,3).toUpperCase()}}}},plugins:{legend:{position:'top',labels:{color:'#DCEAF0',boxWidth:14,font:{size:11,weight:'bold'}}},tooltip:{callbacks:{afterBody:()=>`Promedio enero-${MESES_NOMBRES[CURRENT_MONTH]}: ${money?new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(avg):avg.toFixed(1)}`}},datalabels:{display:ctx=>ctx.dataset.type==='bar'&&ctx.raw>0,anchor:'end',align:'top',color:'#ffffff',textShadowBlur:6,textShadowColor:'#000000',font:{size:11,weight:'900'},formatter:v=>money?'$'+Intl.NumberFormat('es-MX',{notation:'compact'}).format(v):v}}}
+            });
+        });
+    }
+
+    function commercialBlock(c){const t=`${c.focus||''} ${c.tipoCliente||''}`.toUpperCase();if(t.includes('FUGA')||t.includes('SIN VENTA'))return'FUGA';if(t.includes('ENFOQUE'))return'ENFOQUE';return'GENERAL'}
+    function groups(cs){const g={ENFOQUE:[],FUGA:[],GENERAL:[]};cs.forEach(c=>g[commercialBlock(c)].push(c));return g}
+    function saleMonth(c,y,m){return financialValue(c,y,m,'venta')}
+    function intelCard(t,cs,color){const v=cs.reduce((a,c)=>a+saleMonth(c,2026,CURRENT_MONTH),0),aa=cs.reduce((a,c)=>a+saleMonth(c,2025,CURRENT_MONTH),0),o=cs.reduce((a,c)=>a+financialValue(c,CURRENT_YEAR,CURRENT_MONTH,'cuota'),0),proy=DIAS_TRANSCURRIDOS>0?(v/DIAS_TRANSCURRIDOS)*DIAS_EFECTIVOS_MES:0,pct=o?(proy/o*100):0,lamp=pct>=100?'green':pct>=85?'amber':'red',f=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0});return`<div class="segment-kpi-card bg-black/50 border rounded-2xl p-5" style="border-color:${color}"><span class="segment-lamp segment-lamp-${lamp}" title="Proyección ${pct.toFixed(1)}% · ${pct>=100?'En ruta':pct>=85?'Atención':'Urgente'}"></span><h3 class="text-sm text-white font-black uppercase">${t}</h3><p class="text-[8px] text-slate-400 font-bold uppercase mb-4">${MESES_NOMBRES[CURRENT_MONTH]} 2026</p><div class="grid grid-cols-3 gap-2"><div><small>VENTA 2026</small><b class="block text-neon-cyan text-[11px]">${f.format(v)}</b></div><div><small>VENTA 2025</small><b class="block text-neon-green text-[11px]">${f.format(aa)}</b></div><div><small>CUOTA ${MESES_NOMBRES[CURRENT_MONTH]} 2026</small><b class="block text-neon-orange text-[11px]">${f.format(o)}</b></div></div><div class="segment-projection-footer"><span>${cs.length} CLIENTES</span><strong class="segment-projection-value segment-projection-${lamp}">PROYECCIÓN ${pct.toFixed(1)}%</strong></div></div>`}
+    function intelTop(t,cs,color){const arr=worstProjectionTen(cs);return`<div class="bg-black/40 border border-white/10 rounded-2xl p-5"><h4 class="text-[12px] font-black uppercase mb-4" style="color:${color}">${t} · peores proyecciones</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-4">${arr.map(projectionClientCard).join('')}</div></div>`}function renderIntel(cs,scope){renderOperational(cs,scope);const g=groups(cs);document.getElementById(`${scope}-intel-kpis`).innerHTML=intelCard('1. Clientes enfoque',g.ENFOQUE,'#00f3ff')+intelCard('2. Clientes en fuga',g.FUGA,'#ff004c')+intelCard('3. Clientes generales',g.GENERAL,'#64748b');renderSegmentCharts(cs,scope,'intel');document.getElementById(`${scope}-intel-tops`).innerHTML=intelTop('1. Principales clientes enfoque',g.ENFOQUE,'#00f3ff')+intelTop('2. Principales clientes en fuga',g.FUGA,'#ff004c')+intelTop('3. Principales clientes generales',g.GENERAL,'#cbd5e1')}
+    function dv(c,m,t){const k=normalizeKey(MESES_NOMBRES[m]);return c.disciplina&&c.disciplina[k]?Number(c.disciplina[k][t]||0):0}function visits(c){let n=0;for(let m=0;m<12;m++)n+=dv(c,m,'visitado');return n}function recurrence(c){let current=0,max=0,total=0;for(let m=0;m<=CURRENT_MONTH;m++){if(!dv(c,m,'visitado')){current++;total++;max=Math.max(max,current)}else current=0}return{run:current,max,total}}
+    function salesYTD(c,year){return financialYTD(c,year,'venta')}
+    function annualQuotaYTD(c){return financialYTD(c,CURRENT_YEAR,'cuota')}
+    function currentProjectionMetrics(c){const ventaMes=financialValue(c,CURRENT_YEAR,CURRENT_MONTH,'venta'),ventaAnterior=financialValue(c,CURRENT_YEAR-1,CURRENT_MONTH,'venta'),cuota=financialValue(c,CURRENT_YEAR,CURRENT_MONTH,'cuota'),proyeccion=DIAS_TRANSCURRIDOS>0?(ventaMes/DIAS_TRANSCURRIDOS)*DIAS_EFECTIVOS_MES:0,pct=cuota>0?proyeccion/cuota*100:0,crec=ventaAnterior>0?(ventaMes-ventaAnterior)/ventaAnterior*100:(ventaMes>0?100:0),rec=recurrence(c),ventaYTD=financialYTD(c,CURRENT_YEAR,'venta'),cuotaYTD=financialYTD(c,CURRENT_YEAR,'cuota'),deficitAnual=Math.max(cuotaYTD-ventaYTD,0),deficitMes=Math.max(cuota-ventaMes,0),visitadoMes=dv(c,CURRENT_MONTH,'visitado')>0;return{ventaMes,ventaAnterior,cuota,proyeccion,pct,crec,vis:visits(c),rec,ventaYTD,cuotaYTD,deficitAnual,deficitMes,visitadoMes}}
+    function urgencyFor(m){if(!m.visitadoMes||m.rec.run>=2||m.pct<70)return{c:'red',l:'URGENTE'};if(m.rec.run===1||m.pct<100)return{c:'amber',l:'ATENCIÓN'};return{c:'green',l:'EN RUTA'}}
+    function projectionClientCard(c,i){const m=currentProjectionMetrics(c),u=urgencyFor(m),f=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}),growth=m.crec>=0?'text-neon-green':'text-neon-red';return`<button onclick="openDisciplineDetail('${c.cliVendId}')" class="apple-depth-card"><div class="depth-card-head"><span class="urgency-light urgency-${u.c}"></span><div class="depth-title"><span class="depth-id">#${i+1} · CLIENTE ${c.id}</span><span class="depth-name" title="${c.name}">${c.name}</span></div><span class="urgency-label ${u.c}">${u.l}</span></div><div class="depth-body"><div class="flex justify-end mb-2">${m.visitadoMes?'<span class="visited-badge">VISITADO ESTE MES</span>':'<span class="no-visit-badge">NO VISITADO ESTE MES</span>'}</div><div class="depth-grid"><div class="depth-metric deficit-metric"><small>PÉRDIDA CUOTA 2026 YTD</small><b>${f.format(m.deficitAnual)}</b></div><div class="depth-metric deficit-metric"><small>PÉRDIDA OBJETIVO MES</small><b>${f.format(m.deficitMes)}</b></div><div class="depth-metric"><small>VENTA 2026 YTD</small><b class="text-neon-cyan">${f.format(m.ventaYTD)}</b></div><div class="depth-metric"><small>CUOTA 2026 YTD</small><b class="text-neon-orange">${f.format(m.cuotaYTD)}</b></div><div class="depth-metric"><small>VENTA MES ACTUAL</small><b class="text-neon-cyan">${f.format(m.ventaMes)}</b></div><div class="depth-metric"><small>CUOTA MES ACTUAL</small><b class="text-neon-orange">${f.format(m.cuota)}</b></div><div class="depth-metric"><small>PROYECCIÓN DE CIERRE</small><b class="${m.pct>=100?'text-neon-green':m.pct>=85?'text-neon-orange':'text-neon-red'}">${f.format(m.proyeccion)}</b></div><div class="depth-metric"><small>CUMPLIMIENTO PROYECTADO</small><b class="${m.pct>=100?'text-neon-green':m.pct>=85?'text-neon-orange':'text-neon-red'}">${m.pct.toFixed(1)}%</b></div><div class="depth-metric"><small>CRECIMIENTO VS ${CURRENT_YEAR-1}</small><b class="${growth}">${m.crec>=0?'+':''}${m.crec.toFixed(1)}%</b></div><div class="depth-metric"><small>VISITAS 2026</small><b class="text-neon-green">${m.vis}</b></div><div class="depth-metric depth-wide"><small>URGENCIA COMERCIAL</small><b class="${u.c==='green'?'text-neon-green':u.c==='amber'?'text-neon-orange':'text-neon-red'}">${u.l} · ${m.rec.run} MES(ES) SIN VISITA</b></div></div></div></button>`}
+    function worstProjectionTen(cs){return cs.map(c=>({c,m:currentProjectionMetrics(c)})).sort((a,b)=>b.m.deficitAnual-a.m.deficitAnual||b.m.deficitMes-a.m.deficitMes||Number(a.m.visitadoMes)-Number(b.m.visitadoMes)||a.m.pct-b.m.pct).slice(0,10).map(x=>x.c)}
+    function disciplineCard(t,cs,color){
+        const agendados=cs.filter(c=>dv(c,CURRENT_MONTH,'agendado')>0).length;
+        const visitados=cs.filter(c=>dv(c,CURRENT_MONTH,'visitado')>0).length;
+        const noVisitados=cs.filter(c=>dv(c,CURRENT_MONTH,'visitado')<=0).length;
+        const cumplimiento=cs.length>0?visitados/cs.length*100:0;
+        const lamp=cumplimiento>=100?'green':cumplimiento>=85?'amber':'red';
+        return `<div class="discipline-kpi-card segment-kpi-card bg-black/50 border rounded-2xl p-5" style="border-color:${color}"><span class="segment-lamp segment-lamp-${lamp}" title="${cumplimiento>=100?'En ruta':cumplimiento>=85?'Atención':'Urgente'}"></span>
+            <h3 class="text-sm text-white font-black uppercase leading-tight">${t}</h3>
+            <p class="text-[8px] text-slate-400 mt-1">${MESES_NOMBRES[CURRENT_MONTH]} 2026 · RECUENTO DE CLIENTES</p>
+            <div class="discipline-kpi-grid">
+                <div class="discipline-kpi-item"><b class="discipline-kpi-value text-white">${cs.length}</b><small class="discipline-kpi-label">Total de clientes</small></div>
+                <div class="discipline-kpi-item"><b class="discipline-kpi-value text-neon-orange">${agendados}</b><small class="discipline-kpi-label">Agendados</small></div>
+                <div class="discipline-kpi-item"><b class="discipline-kpi-value text-neon-green">${visitados}</b><small class="discipline-kpi-label">Visitados</small></div>
+                <div class="discipline-kpi-item"><b class="discipline-kpi-value text-neon-red">${noVisitados}</b><small class="discipline-kpi-label">No visitados</small></div>
+            </div>
+            <p class="discipline-kpi-coverage ${cumplimiento>=100?'text-neon-green':'text-neon-red'}">Cobertura de visita ${cumplimiento.toFixed(1)}%</p>
+        </div>`
+    }
+    function disciplineList(title,cs,color,asc){const arr=worstProjectionTen(cs);return`<div class="bg-black/40 border border-white/10 rounded-2xl p-5"><h4 class="text-[11px] font-black uppercase mb-4" style="color:${color}">${title} · peores proyecciones</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-4">${arr.map(projectionClientCard).join('')}</div></div>`}function disciplineBlock(label,cs,color){return`<div><div class="flex justify-between mb-3"><h3 class="text-lg font-black uppercase" style="color:${color}">${label}</h3><span class="text-[9px] text-slate-400 font-black">${cs.length} CLIENTES · MÁXIMO 10</span></div>${disciplineList('Prioridad: déficit anual, después déficit mensual',cs,color,false)}</div>`}
+    function renderDiscipline(cs,scope){currentDisciplineClients=cs.slice();const g=groups(cs),recurrent=cs.filter(c=>recurrence(c).run>=2).length,noVisitados=cs.filter(c=>dv(c,CURRENT_MONTH,'visitado')<=0).length;document.getElementById(`${scope}-discipline-kpis`).innerHTML=disciplineCard('1. Clientes enfoque',g.ENFOQUE,'#00f3ff')+disciplineCard('2. Clientes en fuga',g.FUGA,'#ff004c')+disciplineCard('3. Clientes generales',g.GENERAL,'#64748b');document.getElementById(`${scope}-discipline-summary`).innerHTML=`<div class="bg-black/50 border border-neon-cyan rounded-2xl p-5"><small class="text-slate-400">TOTAL DE CLIENTES</small><b class="block text-3xl text-neon-cyan">${cs.length}</b></div><button onclick="openNoVisitModal()" class="text-left bg-red-50 border border-red-300 rounded-2xl p-5 hover:shadow-xl transition-all"><small class="text-red-700 font-black">CLIENTES NO VISITADOS ESTE MES</small><b class="block text-3xl text-red-700">${noVisitados}</b><span class="text-[8px] text-red-700 font-black">ABRIR LISTADO DETALLADO</span></button>`;renderSegmentCharts(cs,scope,'discipline');document.getElementById(`${scope}-discipline-tops`).innerHTML=disciplineBlock('Clientes enfoque',g.ENFOQUE,'#00f3ff')+disciplineBlock('Clientes en fuga',g.FUGA,'#ff004c')+disciplineBlock('Clientes generales',g.GENERAL,'#334155')}
+    function clientBranch(c){const reg=companyTree.get(c.regional),adv=reg&&reg.asesores?reg.asesores.get(c.advisor):null;return adv?adv.sucursal:'SIN SUCURSAL'}
+    
+    function openNoVisitModal(){
+        toggleBackgroundLock(true);
+        noVisitRowsCache=currentDisciplineClients.filter(c=>dv(c,CURRENT_MONTH,'visitado')<=0).map(c=>{const m=currentProjectionMetrics(c);return{c,deficit:m.deficitAnual,sucursal:clientBranch(c)}}).sort((a,b)=>b.deficit-a.deficit);document.getElementById('no-visit-month').innerText=MESES_NOMBRES[CURRENT_MONTH]+' '+CURRENT_YEAR;document.getElementById('no-visit-context').innerText=currentSelectedAdvisor?'ASESOR: '+currentSelectedAdvisor.name:(currentSelectedRegional?'REGIONAL: '+currentSelectedRegional.name:(currentSelectedTerritorial?'TERRITORIO: '+currentSelectedTerritorial:'VISTA ACTUAL'));document.getElementById('no-visit-search').value='';document.getElementById('no-visit-modal').classList.remove('hidden');renderNoVisitRows()}
+    
+    function closeNoVisitModal(){
+        toggleBackgroundLock(false);
+        document.getElementById('no-visit-modal').classList.add('hidden')
+    }
+    
+    function renderNoVisitRows(){const q=String(document.getElementById('no-visit-search').value||'').toLowerCase().trim(),money=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0});const rows=noVisitRowsCache.filter(x=>`${x.c.id} ${x.c.name} ${x.c.advisor} ${x.c.regional} ${x.sucursal}`.toLowerCase().includes(q));document.getElementById('no-visit-count').innerText=rows.length+' CLIENTES NO VISITADOS';document.getElementById('no-visit-rows').innerHTML=rows.map(x=>`<tr><td><b>${x.c.id}</b></td><td>${x.c.name}</td><td>${x.c.advisor}</td><td><b class="text-red-700">${money.format(x.deficit)}</b></td><td>${x.c.regional}</td><td>${x.sucursal}</td></tr>`).join('')||'<tr><td colspan="6" class="text-center font-black">Sin coincidencias</td></tr>'}
+
+    function regionalClients(){return currentSelectedRegional?Array.from(currentSelectedRegional.asesores.values()).flatMap(a=>Array.from(a.clientes.values())):[]}function switchRegionalTab(tab){['intel','discipline'].forEach(n=>document.getElementById('regional-'+n).classList.toggle('hidden',n!==tab));document.getElementById('regional-advisors-list').classList.toggle('hidden',tab!=='advisors');if(tab==='intel')renderIntel(regionalClients(),'regional');if(tab==='discipline')renderDiscipline(regionalClients(),'regional')}
+    function detailSummaryCard(label,value,color,caption){return`<div class="bg-black/50 border rounded-2xl p-4" style="border-color:${color}"><span class="text-[8px] text-slate-400 font-black uppercase">${label}</span><b class="block text-xl mt-2" style="color:${color}">${value}</b><small class="text-[8px] text-slate-500 font-bold uppercase">${caption||''}</small></div>`}
+    function renderDisciplineExecutiveSummary(c){
+        let agendados=0,visitados=0,lastVisit=-1,currentRun=0,maxRun=0;
+        for(let m=0;m<12;m++){agendados+=dv(c,m,'agendado');visitados+=dv(c,m,'visitado');if(dv(c,m,'visitado'))lastVisit=m}
+        for(let m=0;m<=CURRENT_MONTH;m++){if(!dv(c,m,'visitado')){currentRun++;maxRun=Math.max(maxRun,currentRun)}else currentRun=0}
+        const cumplimiento=agendados>0?visitados/agendados*100:0;
+        const ventaMes=financialValue(c,CURRENT_YEAR,CURRENT_MONTH,'venta'),objetivo=financialValue(c,CURRENT_YEAR,CURRENT_MONTH,'objetivoEnfoque'),alcance=objetivo>0?ventaMes/objetivo*100:0;
+        const money=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0});
+        const ultima=lastVisit>=0?MESES_NOMBRES[lastVisit]+' 2026':'Sin visita registrada';
+        const alert=document.getElementById('discipline-detail-alert');
+        alert.innerText=currentRun>=2?`Alerta: ${currentRun} meses consecutivos sin visita`:(currentRun===1?'Atención: mes actual sin visita':'Disciplina al corriente');
+        alert.className=`text-[9px] font-black uppercase ${currentRun>=2?'text-neon-red':(currentRun===1?'text-neon-orange':'text-neon-green')}`;
+        document.getElementById('discipline-detail-summary').innerHTML=
+          detailSummaryCard('Meses agendados',agendados,'#ffbb00','Enero a diciembre 2026')+
+          detailSummaryCard('visitas realizadas',visitados,'#00ff66','Enero a diciembre 2026')+
+          detailSummaryCard('Cumplimiento agenda',cumplimiento.toFixed(1)+'%',cumplimiento>=100?'#00ff66':(cumplimiento>=80?'#ffbb00':'#ff004c'),`${visitados} visitas / ${agendados} agendas`)+
+          detailSummaryCard('Última visita',ultima,lastVisit===CURRENT_MONTH?'#00ff66':'#ff004c',lastVisit>=0?`${CURRENT_MONTH-lastVisit} meses desde última visita`:'Requiere atención')+
+          detailSummaryCard('Racha sin visita',currentRun+' meses',currentRun>=2?'#ff004c':(currentRun===1?'#ffbb00':'#00ff66'),`Máxima racha: ${maxRun}`)+
+          detailSummaryCard('Venta mes actual',money.format(ventaMes),'#00f3ff',`${MESES_NOMBRES[CURRENT_MONTH]} 2026`)+
+          detailSummaryCard('Objetivo enfoque',money.format(objetivo),'#a855f7',objetivo>0?`Alcance ${alcance.toFixed(1)}%`:'Sin objetivo capturado')+
+          detailSummaryCard('Déficit al objetivo',money.format(Math.max(objetivo-ventaMes,0)),ventaMes>=objetivo&&objetivo>0?'#00ff66':'#ff004c',objetivo>0?(ventaMes>=objetivo?'Objetivo logrado':'Venta adicional requerida'):'No aplica');
+    }
+    function openDisciplineDetail(cv){const c=Array.from(allClientsFlat.values()).find(x=>String(x.cliVendId).toUpperCase()===String(cv).toUpperCase());if(!c)return;disciplineReturnContext=currentSelectedAdvisor?'advisor':'regional';selectedClient=c;step2.classList.add('hidden');document.getElementById('discipline-client-detail').classList.remove('hidden');document.getElementById('discipline-detail-name').innerText=c.name;document.getElementById('discipline-detail-meta').innerText=`CLIENTE ${c.id} · ${c.ciudad||'SIN CIUDAD'} · ${c.advisor}`;renderDisciplineExecutiveSummary(c);document.getElementById('discipline-detail-months').innerHTML=MESES_NOMBRES.map((m,i)=>`<div class="bg-black/40 border ${dv(c,i,'visitado')?'border-neon-green':(dv(c,i,'agendado')?'border-neon-orange':'border-white/10')} rounded-xl p-3"><div class="flex justify-between items-center"><b class="text-[9px] text-white uppercase">${m}</b><span class="text-[8px] font-black ${dv(c,i,'visitado')?'text-neon-green':(dv(c,i,'agendado')?'text-neon-orange':'text-slate-500')}">${dv(c,i,'visitado')?'VISITADO':(dv(c,i,'agendado')?'NO VISITADO':'SIN AGENDA')}</span></div><div class="text-[8px] mt-2">Agenda ${dv(c,i,'agendado')} · Visita ${dv(c,i,'visitado')}</div></div>`).join('');renderDetail360(c)}function closeDisciplineDetail(){document.getElementById('discipline-client-detail').classList.add('hidden');step2.classList.remove('hidden');if(disciplineReturnContext==='advisor')switchTab('discipline');else switchRegionalTab('discipline')}
+    function generateDisciplineOpportunityCatalog(){
+        if(!selectedClient){showAlert('NO HAY CLIENTE SELECCIONADO.');return;}
+        const products=disciplineOpportunitySkus.map(sku=>globalProducts.get(sku)).filter(Boolean);
+        if(!products.length){goToSelectedClientStrategies();return;}
+        currentStrategyLabel='Oportunidades por Ciudad';
+        document.getElementById('discipline-client-detail').classList.add('hidden');
+        renderCatalog(products);
+    }
+    function goToSelectedClientStrategies(){
+        if(!selectedClient){showAlert('NO HAY CLIENTE SELECCIONADO.');return;}
+        document.getElementById('discipline-client-detail').classList.add('hidden');
+        step2.classList.add('hidden');
+        stepStrategy.classList.remove('hidden');
+        catalogContainer.innerHTML='';
+        hideCartBar();
+        manualSkus=[];manualSkusQty={};const excelStatus=document.getElementById('strategy-excel-status');if(excelStatus)excelStatus.innerText='Sin archivo cargado';
+        const fmt=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:0,maximumFractionDigits:0});
+        document.getElementById('strategy-client-name').innerText=selectedClient.name;
+        document.getElementById('strategy-client-meta').innerText=`ID: ${selectedClient.id} | Asesor: ${selectedClient.advisor} | Venta Mes: ${fmt.format(selectedClient.venta||0)}`;
+        renderDashboards(selectedClient);
+        appCurrentState='MENU_ESTRATEGIAS';
+    }
+    function renderDisciplineOpportunityActions(count){
+        const box=document.getElementById('discipline-opportunity-actions');
+        if(!box)return;
+        if(count>0){
+            box.innerHTML=`<div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-[#001233]/70 border border-neon-cyan rounded-2xl p-4"><div><div class="text-[9px] text-slate-400 font-black uppercase">Oportunidades detectadas</div><div class="text-lg text-white font-black">${count} códigos sugeridos</div></div><button onclick="generateDisciplineOpportunityCatalog()" class="w-full md:w-auto bg-gradient-to-r from-[#00f3ff] to-[#008cff] text-black px-7 py-3 rounded-xl text-[10px] font-black uppercase shadow-[0_0_20px_rgba(0,243,255,0.35)] hover:scale-105 transition-all">Generar catálogo con estos códigos</button></div>`;
+        }else{
+            box.innerHTML=`<div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-[#001233]/70 border border-neon-orange rounded-2xl p-4"><div><div class="text-[9px] text-neon-orange font-black uppercase">Sin códigos sugeridos por ciudad</div><div class="text-[10px] text-slate-300 font-bold uppercase mt-1">Continúa con las estrategias comerciales disponibles para este cliente.</div></div><button onclick="goToSelectedClientStrategies()" class="w-full md:w-auto bg-gradient-to-r from-[#ffbb00] to-[#ff7a00] text-black px-7 py-3 rounded-xl text-[10px] font-black uppercase shadow-[0_0_20px_rgba(255,187,0,0.35)] hover:scale-105 transition-all">Ir a estrategias comerciales</button></div>`;
+        }
+    }
+    function renderDetail360(c){
+        const brands={},months=Array.from({length:12},()=>new Map()),bought=new Set();c.rawItems.forEach(i=>{const d=i.fecha_doc;if(!d||d.getFullYear()!==2026)return;const sku=getSku(i),v=i._vmn_calculado||0,b=getBrand(i);brands[b]=(brands[b]||0)+v;bought.add(sku);months[d.getMonth()].set(sku,(months[d.getMonth()].get(sku)||0)+v)});if(chartDetailBrands)chartDetailBrands.destroy();const top=Object.entries(brands).sort((a,b)=>b[1]-a[1]).slice(0,10);
+        chartDetailBrands=new Chart(document.getElementById('chart-detail-brands'),{type:'bar',data:{labels:top.map(x=>x[0]),datasets:[{data:top.map(x=>x[1]),backgroundColor:'#00f3ff',borderColor:'#ffffff',borderWidth:2,borderRadius:6}]},plugins:[ChartDataLabels],options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#ffffff',textShadowBlur:6,textShadowColor:'#000000',font:{weight:'900',size:11},formatter:v=>'$'+Intl.NumberFormat('es-MX',{notation:'compact'}).format(v)}},scales:{x:{grid:{color:'rgba(255,255,255,.15)'},ticks:{color:'#ffffff',font:{weight:'bold',size:11},callback:v=>'$'+Intl.NumberFormat('es-MX',{notation:'compact'}).format(v)}},y:{grid:{display:false},ticks:{color:'#ffffff',font:{weight:'bold',size:11}}}}}});
+        document.getElementById('discipline-detail-skus').innerHTML=months.map((mp,i)=>`<div class="bg-white/5 rounded-xl p-3"><b class="text-neon-cyan text-[9px] uppercase">${MESES_NOMBRES[i]} · ${mp.size} códigos</b><div class="text-[8px] text-slate-300 mt-1">${[...mp.entries()].sort((a,b)=>b[1]-a[1]).slice(0,15).map(x=>x[0]).join(', ')||'Sin compras'}</div></div>`).join('');const cityClients=Array.from(allClientsFlat.values()).filter(x=>normalizeBrandName(x.ciudad)===normalizeBrandName(c.ciudad)&&x.id!==c.id),opp={};cityClients.forEach(x=>x.rawItems.forEach(i=>{const d=i.fecha_doc,sku=getSku(i);if(d&&d.getFullYear()===2026&&!bought.has(sku))opp[sku]=(opp[sku]||0)+(i._vmn_calculado||0)}));const f=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0});const opportunityEntries=Object.entries(opp).sort((a,b)=>b[1]-a[1]).filter(([sku])=>globalProducts.has(sku)).slice(0,50);disciplineOpportunitySkus=opportunityEntries.map(([sku])=>sku);renderDisciplineOpportunityActions(disciplineOpportunitySkus.length);document.getElementById('discipline-detail-opps').innerHTML=opportunityEntries.map(([sku,v])=>`<div class="bg-white/5 border border-white/10 rounded-xl p-3"><div class="flex justify-between gap-3"><b class="text-neon-cyan">${sku}</b><span class="text-[8px] text-neon-green font-black uppercase">Sugerido</span></div><div class="text-[9px] text-white uppercase truncate">${getDescription(globalProducts.get(sku))}</div><small class="text-slate-400">Venta ciudad 2026: ${f.format(v)}</small></div>`).join('')||'<p class="text-slate-400 text-xs">Sin oportunidades calculables para este cliente.</p>'}
+    
+    function territorialClients(){
+        if(!currentSelectedTerritorial)return [];
+        return Array.from(companyTree.values())
+            .filter(reg=>reg.territorial===currentSelectedTerritorial)
+            .flatMap(reg=>Array.from(reg.asesores.values()))
+            .flatMap(adv=>Array.from(adv.clientes.values()));
+    }
+    function setTerritorialTabButton(active){
+        ['intel','discipline','regions'].forEach(name=>{
+            const btn=document.getElementById('territorial-tab-'+name);if(!btn)return;
+            const on=name===active;
+            btn.classList.toggle('bg-[#00f3ff]',on);btn.classList.toggle('text-black',on);
+            btn.classList.toggle('bg-[#0f172a]',!on);btn.classList.toggle('text-white',!on);
+        });
+    }
+    function switchTerritorialTab(tab){
+        const intel=document.getElementById('territorial-intel'),discipline=document.getElementById('territorial-discipline'),regions=document.getElementById('regional-cards');
+        intel.classList.toggle('hidden',tab!=='intel');discipline.classList.toggle('hidden',tab!=='discipline');regions.classList.toggle('hidden',tab!=='regions');
+        setTerritorialTabButton(tab);
+        const clients=territorialClients();
+        if(tab==='intel')renderIntel(clients,'territorial');
+        if(tab==='discipline')renderDiscipline(clients,'territorial');
+    }
+    function territorialNodes(){
+        const map=new Map();
+        companyTree.forEach(reg=>{
+            const name=reg.territorial||"SIN GERENTE TERRITORIAL";
+            if(!map.has(name))map.set(name,{name,totalVenta:0,totalCuota:0,regiones:[]});
+            const node=map.get(name);node.totalVenta+=reg.totalVenta||0;node.totalCuota+=reg.totalCuota||0;node.regiones.push(reg);
+        });
+        return Array.from(map.values());
+    }
+    function renderTerritorialCards(){
+        currentSelectedTerritorial=null;
+        document.getElementById('directory-title').innerHTML='Directorio de <span class="text-neon-cyan">Territorios</span>';
+        document.getElementById('directory-subtitle').innerText='Selecciona un gerente territorial para ver sus regiones';
+        document.getElementById('btnBackTerritories').classList.add('hidden');
+        document.getElementById('territorial-dashboard').classList.add('hidden');
+        document.getElementById('regional-cards').classList.remove('hidden');
+        const container=document.getElementById('regional-cards');container.innerHTML='';
+        const fmt=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0});
+        territorialNodes().sort((a,b)=>b.totalVenta-a.totalVenta).forEach(node=>{
+            const proy=DIAS_TRANSCURRIDOS>0?(node.totalVenta/DIAS_TRANSCURRIDOS)*DIAS_EFECTIVOS_MES:0;
+            const pct=node.totalCuota>0?proy/node.totalCuota*100:0;
+            const div=document.createElement('div');div.className='advisor-card-btn border rounded-2xl p-6 flex flex-col justify-between';div.onclick=()=>openTerritorialRegions(node.name);
+            div.innerHTML=`<div class="flex justify-between items-start mb-5"><div><div class="text-[9px] text-slate-400 font-bold uppercase mb-1">Gerente Territorial</div><div class="text-xl font-black text-white uppercase break-words">${node.name}</div><div class="text-[8px] text-neon-cyan font-bold mt-1">${node.regiones.length} REGIÓN(ES)</div></div><div class="traffic-light ${getSemaforoProyeccionClass(pct)}"></div></div><div class="grid grid-cols-2 gap-3"><div><small class="text-slate-400 font-bold">VENTA MES</small><b class="block text-white">${fmt.format(node.totalVenta)}</b></div><div><small class="text-slate-400 font-bold">CUOTA MES</small><b class="block text-white">${fmt.format(node.totalCuota)}</b></div></div><div class="border-t mt-4 pt-4 flex justify-between"><span class="text-[9px] text-slate-400 font-bold">PROYECCIÓN</span><b class="${getSemaforoProyeccionTextClass(pct)}">${pct.toFixed(1)}%</b></div>`;
+            container.appendChild(div);
+        });
+        appCurrentState='PANEL_TERRITORIALES';
+    }
+    function openTerritorialRegions(name){currentSelectedTerritorial=name;renderRegionalCards();document.getElementById('territorial-dashboard').classList.remove('hidden');switchTerritorialTab('intel');appCurrentState='PANEL_TERRITORIAL'}
+    function backToTerritories(){renderTerritorialCards()}
     function renderRegionalCards() {
         const container = document.getElementById('regional-cards'); container.innerHTML = '';
-        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
-        Array.from(companyTree.values()).sort((a,b)=> b.totalVenta - a.totalVenta).forEach(reg => {
+        document.getElementById('directory-title').innerHTML='Regiones de <span class="text-neon-cyan">'+currentSelectedTerritorial+'</span>';
+        document.getElementById('directory-subtitle').innerText='Selecciona una región para ver asesores';
+        document.getElementById('btnBackTerritories').classList.remove('hidden');
+        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        Array.from(companyTree.values()).filter(reg=>!currentSelectedTerritorial||reg.territorial===currentSelectedTerritorial).sort((a,b)=> b.totalVenta - a.totalVenta).forEach(reg => {
             const proyeccion = DIAS_TRANSCURRIDOS > 0 ? (reg.totalVenta / DIAS_TRANSCURRIDOS) * DIAS_EFECTIVOS_MES : 0;
             const porcentaje = reg.totalCuota > 0 ? (proyeccion / reg.totalCuota) * 100 : 0;
             const div = document.createElement('div');
             div.className = "advisor-card-btn border border-white/5 rounded-2xl p-6 flex flex-col justify-between";
             div.onclick = () => openRegionalAdvisors(reg.name);
             
-            let zoneTitle = reg.name !== "SIN GERENTE" ? "Director de Ventas" : "Zonas sin Asignar";
+            let zoneTitle = reg.name !== "SIN GERENTE" ? "Gerente Regional" : "Zonas sin Asignar";
             
             div.innerHTML = `
                 <div class="flex justify-between items-start mb-5">
@@ -878,7 +1257,7 @@
                     <div><div class="text-[8px] text-slate-400 font-bold uppercase">Venta Neta Mes</div><div class="text-[13px] font-black text-white">${fmt.format(reg.totalVenta)}</div></div>
                     <div><div class="text-[8px] text-slate-400 font-bold uppercase">Meta Acumulada</div><div class="text-[13px] font-black text-white">${fmt.format(reg.totalCuota)}</div></div>
                 </div>
-                <div class="border-t border-white/10 pt-4 flex justify-between items-center"><div class="text-[9px] text-slate-400 font-bold uppercase">Proyección Alcance</div><div class="text-lg font-black ${getSemaforoProyeccionTextClass(porcentaje)}">${porcentaje.toFixed(1)}%</div></div>`;
+                <div class="border-t border-white/10 pt-4 flex justify-between items-center"><div class="text-[9px] text-slate-400 font-bold uppercase">Proyección de Cierre</div><div class="text-lg font-black ${getSemaforoProyeccionTextClass(porcentaje)}">${porcentaje.toFixed(1)}%</div></div>`;
             container.appendChild(div);
         });
     }
@@ -886,7 +1265,7 @@
     function renderAdvisorCards() {
         const container = document.getElementById('advisor-cards'); container.innerHTML = '';
         if (!currentSelectedRegional) return;
-        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0, maximumFractionDigits: 0 });
         Array.from(currentSelectedRegional.asesores.values()).sort((a,b)=>b.totalVenta - a.totalVenta).forEach(adv => {
             const proyeccion = DIAS_TRANSCURRIDOS > 0 ? (adv.totalVenta / DIAS_TRANSCURRIDOS) * DIAS_EFECTIVOS_MES : 0;
             const porcentaje = adv.totalCuota > 0 ? (proyeccion / adv.totalCuota) * 100 : 0;
@@ -906,7 +1285,7 @@
                     <div><div class="text-[8px] text-slate-400 font-bold uppercase">Venta</div><div class="text-[13px] font-black text-white">${fmt.format(adv.totalVenta)}</div></div>
                     <div><div class="text-[8px] text-slate-400 font-bold uppercase">Objetivo</div><div class="text-[13px] font-black text-white">${fmt.format(adv.totalCuota)}</div></div>
                 </div>
-                <div class="border-t border-white/10 pt-4 flex justify-between items-center"><div class="text-[9px] text-slate-400 font-bold uppercase">Alcance</div><div class="text-lg font-black ${getSemaforoProyeccionTextClass(porcentaje)}">${porcentaje.toFixed(1)}%</div></div>`;
+                <div class="border-t border-white/10 pt-4 flex justify-between items-center"><div class="text-[9px] text-slate-400 font-bold uppercase">Proyección</div><div class="text-lg font-black ${getSemaforoProyeccionTextClass(porcentaje)}">${porcentaje.toFixed(1)}%</div></div>`;
             container.appendChild(div);
         });
     }
@@ -915,7 +1294,7 @@
         const container = document.getElementById('client-list'); container.innerHTML = '';
         if (!currentSelectedAdvisor) return;
         const search = document.getElementById('clientSearch').value.toLowerCase().trim();
-        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0, maximumFractionDigits: 0 });
         Array.from(currentSelectedAdvisor.clientes.values()).filter(c => c.id.toLowerCase().includes(search) || c.name.toLowerCase().includes(search)).sort((a,b)=>b.venta - a.venta).forEach(client => {
             const proyeccion = DIAS_TRANSCURRIDOS > 0 ? (client.venta / DIAS_TRANSCURRIDOS) * DIAS_EFECTIVOS_MES : 0;
             const porcentaje = client.cuota > 0 ? (proyeccion / client.cuota) * 100 : 0;
@@ -925,10 +1304,10 @@
             
             const div = document.createElement('div');
             div.className = "p-5 bg-[#050b14]/80 border-2 border-white/5 rounded-2xl hover:border-neon-cyan cursor-pointer flex flex-col md:flex-row justify-between items-center gap-4 group";
-            div.onclick = () => selectClient(client.id);
+            div.onclick = () => selectClient(client.uniqueKey);
             div.innerHTML = `
                 <div class="flex-grow w-full">
-                    <div class="flex items-center gap-3 mb-2"><span class="${focusColor} px-2.5 py-1 rounded text-[8px] font-black">${client.focus}</span><span class="text-[9px] text-slate-500 font-bold">ID: ${client.cliVendId || client.id}</span></div>
+                    <div class="client-identity-row"><span class="client-segment-badge">${client.focus || 'GENERAL'}</span><span class="client-id-badge">CLIENTE ID: ${client.id}</span></div>
                     <div class="text-xl font-black text-white uppercase group-hover:text-neon-cyan">${client.name}</div>
                     <div class="text-[10px] text-slate-400 font-bold uppercase mt-1"><span class="text-neon-cyan">📍</span> ${client.ciudad || 'CIUDAD NO ESPECIFICADA'}</div>
                     <div class="grid grid-cols-3 gap-4 mt-3 max-w-2xl bg-white/5 p-3 rounded-xl">
@@ -938,43 +1317,20 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-5 flex-shrink-0 w-full md:w-auto justify-between md:justify-end">
-                    <div class="text-right"><span class="text-[9px] text-slate-400 font-bold block uppercase">Alcance</span><span class="text-2xl font-black text-white">${porcentaje.toFixed(1)}%</span></div>
+                    <div class="text-right"><span class="text-[9px] text-slate-400 font-bold block uppercase">Proyección</span><span class="text-2xl font-black text-white">${porcentaje.toFixed(1)}%</span></div>
                     <div class="traffic-light ${getSemaforoProyeccionClass(porcentaje)} scale-125"></div>
                 </div>`;
             container.appendChild(div);
         });
     }
 
-    function switchTab(tabName) {
-        if (tabName === 'clientes') {
-            document.getElementById('tab-content-clientes').classList.remove('hidden');
-            document.getElementById('tab-content-bonos').classList.add('hidden');
-            
-            document.getElementById('tab-clientes').classList.add('bg-[#00f3ff]', 'text-black');
-            document.getElementById('tab-clientes').classList.remove('bg-[#0f172a]', 'text-neon-cyan');
-            
-            document.getElementById('tab-bonos').classList.add('bg-[#0f172a]', 'text-neon-orange');
-            document.getElementById('tab-bonos').classList.remove('bg-[#ffbb00]', 'text-black');
-        } else {
-            document.getElementById('tab-content-clientes').classList.add('hidden');
-            document.getElementById('tab-content-bonos').classList.remove('hidden');
-            
-            document.getElementById('tab-bonos').classList.add('bg-[#ffbb00]', 'text-black');
-            document.getElementById('tab-bonos').classList.remove('bg-[#0f172a]', 'text-neon-orange');
-            
-            document.getElementById('tab-clientes').classList.add('bg-[#0f172a]', 'text-neon-cyan');
-            document.getElementById('tab-clientes').classList.remove('bg-[#00f3ff]', 'text-black');
-            
-            renderBonusView();
-        }
-    }
-
+    function switchTab(tabName){['intel','discipline','clientes','bonos'].forEach(n=>{const p=document.getElementById('tab-content-'+n);if(p)p.classList.toggle('hidden',n!==tabName)});if(tabName==='intel'&&currentSelectedAdvisor)renderIntel(Array.from(currentSelectedAdvisor.clientes.values()),'advisor');if(tabName==='discipline'&&currentSelectedAdvisor)renderDiscipline(Array.from(currentSelectedAdvisor.clientes.values()),'advisor');if(tabName==='clientes')renderClientList();if(tabName==='bonos')renderBonusView();}
     function renderBonusView() {
         const container = document.getElementById('bonus-cards-container');
         container.innerHTML = '';
         if (!currentSelectedAdvisor) return;
 
-        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0, maximumFractionDigits: 0 });
         const ventaAcumulada = currentSelectedAdvisor.totalVenta;
         const cuotaTotal = currentSelectedAdvisor.totalCuota;
 
@@ -1000,7 +1356,7 @@
                     
                     <div class="mb-4 border-b border-white/10 pb-4">
                         <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">${meta.corte}</div>
-                        <div class="text-2xl font-black text-white uppercase">${meta.nombre} <span class="text-lg text-neon-orange">(${meta.obj * 100}%)</span></div>
+                        <div class="text-2xl font-black text-white uppercase">${meta.nombre} <span class="text-lg text-neon-orange">(${Number((meta.obj * 100).toFixed(1)).toLocaleString('es-MX')}%)</span></div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 mb-5">
@@ -1032,8 +1388,8 @@
         });
     }
 
-    function openRegionalAdvisors(name) { currentSelectedRegional = companyTree.get(name); if(!currentSelectedRegional) return; document.getElementById('regional-view').classList.add('hidden'); document.getElementById('advisor-view').classList.remove('hidden'); document.getElementById('current-regional-title').innerText = name; appCurrentState = "PANEL_ASESORES"; renderAdvisorCards(); }
-    function backToRegionals() { currentSelectedRegional = null; document.getElementById('advisor-view').classList.add('hidden'); document.getElementById('regional-view').classList.remove('hidden'); appCurrentState = "PANEL_REGIONALES"; }
+    function openRegionalAdvisors(name) { currentSelectedRegional = companyTree.get(name); if(!currentSelectedRegional) return; document.getElementById('regional-view').classList.add('hidden'); document.getElementById('advisor-view').classList.remove('hidden'); document.getElementById('current-regional-title').innerText = name; appCurrentState = "PANEL_ASESORES"; renderAdvisorCards(); switchRegionalTab('intel'); }
+    function backToRegionals() { currentSelectedRegional = null; document.getElementById('advisor-view').classList.add('hidden'); document.getElementById('regional-view').classList.remove('hidden'); renderRegionalCards(); appCurrentState = "PANEL_REGIONALES"; }
     
     function openAdvisorClients(name) { 
         if(!currentSelectedRegional) return; 
@@ -1059,9 +1415,9 @@
         manualSkus = []; 
         manualSkusQty = {}; 
 
-        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0, maximumFractionDigits: 0 });
         document.getElementById('strategy-client-name').innerText = selectedClient.name;
-        document.getElementById('strategy-client-meta').innerText = `ID: ${selectedClient.cliVendId || selectedClient.id} | Asesor: ${selectedClient.advisor} | Venta Mes: ${fmt.format(selectedClient.venta || 0)}`;
+        document.getElementById('strategy-client-meta').innerText = `CLIENTE ID: ${selectedClient.id} | Asesor: ${selectedClient.advisor} | Venta Mes: ${fmt.format(selectedClient.venta || 0)}`;
         renderDashboards(selectedClient); appCurrentState = "MENU_ESTRATEGIAS";
     }
 
@@ -1088,12 +1444,99 @@
 
         if(chartBrandsInstance) chartBrandsInstance.destroy();
         if(chartTrendInstance) chartTrendInstance.destroy();
-        Chart.defaults.color = '#94a3b8'; Chart.defaults.font.family = 'Montserrat';
-        const ctxBrands = document.getElementById('chart-brands').getContext('2d');
-        chartBrandsInstance = new Chart(ctxBrands, { type: 'doughnut', data: { labels: brandLabels, datasets: [{ data: brandData, backgroundColor: ['#00f3ff', '#ff004c', '#00ff66', '#ffbb00', '#a855f7', '#ec4899', '#334155'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 9, weight: 'bold' } } } } } });
+        
+        Chart.defaults.color = '#8ab4f8'; 
+        Chart.defaults.font.family = 'Montserrat';
 
+        // 1. TOP MARCAS: Anillo Neón con texto negro sobrio
+        const neonColors = ['#00f3ff', '#ff004c', '#39ff14', '#e6ff00', '#b026ff', '#00ffcc'];
+        const neonBg = ['rgba(0,243,255,0.15)', 'rgba(255,0,76,0.15)', 'rgba(57,255,20,0.15)', 'rgba(230,255,0,0.15)', 'rgba(176,38,255,0.15)', 'rgba(0,255,204,0.15)'];
+
+        const ctxBrands = document.getElementById('chart-brands').getContext('2d');
+        chartBrandsInstance = new Chart(ctxBrands, { 
+            type: 'doughnut', 
+            data: { 
+                labels: brandLabels, 
+                datasets: [{ 
+                    data: brandData, 
+                    backgroundColor: neonBg, 
+                    borderColor: neonColors, 
+                    borderWidth: 2,
+                    hoverOffset: 15
+                }] 
+            }, 
+            plugins: [ChartDataLabels], 
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                cutout: '80%', 
+                layout: { padding: 15 },
+                plugins: { 
+                    legend: { position: 'right', labels: { color: '#ffffff', boxWidth: 10, font: { size: 10, weight: '900' } } }, 
+                    datalabels: { 
+                        color: '#050505', // NEGRO SOBRIO
+                        backgroundColor: function(context) { return context.dataset.borderColor[context.dataIndex]; },
+                        borderRadius: 4,
+                        padding: 4,
+                        font: { weight: '900', size: 10 }, 
+                        formatter: v => '$'+Intl.NumberFormat('es-MX',{notation:'compact'}).format(v),
+                        display: 'auto'
+                    } 
+                } 
+            } 
+        });
+
+        // 2. TENDENCIA: Curva Holográfica con texto negro sobrio
         const ctxTrend = document.getElementById('chart-trend').getContext('2d');
-        chartTrendInstance = new Chart(ctxTrend, { type: 'bar', data: { labels: targets.map(t=>t.label), datasets: [{ label: 'Venta $', data: targets.map(t=>t.value), backgroundColor: 'rgba(0, 243, 255, 0.2)', borderColor: '#00f3ff', borderWidth: 1, borderRadius: 4 }] }, plugins: [ChartDataLabels], options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }, plugins: { legend: { display: false }, datalabels: { color: '#ffffff', font: { weight: '900', size: 11 }, formatter: v => v > 0 ? new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(v) : '' } } } });
+        let gradient = ctxTrend.createLinearGradient(0, 0, 0, 200);
+        gradient.addColorStop(0, 'rgba(0, 243, 255, 0.5)'); 
+        gradient.addColorStop(1, 'rgba(0, 243, 255, 0.0)'); 
+
+        chartTrendInstance = new Chart(ctxTrend, { 
+            type: 'line', 
+            data: { 
+                labels: targets.map(t=>t.label), 
+                datasets: [{ 
+                    label: 'Venta $', 
+                    data: targets.map(t=>t.value), 
+                    backgroundColor: gradient, 
+                    borderColor: '#00f3ff', 
+                    borderWidth: 3, 
+                    fill: true,
+                    tension: 0.4, 
+                    pointBackgroundColor: '#000', 
+                    pointBorderColor: '#00f3ff', 
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointHoverBackgroundColor: '#00f3ff'
+                }] 
+            }, 
+            plugins: [ChartDataLabels], 
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                layout: { padding: { top: 30 } },
+                scales: { 
+                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)', tickLength: 0 }, ticks: { display: false } }, 
+                    x: { grid: { display: false }, ticks: { color: '#ffffff', font: {weight: '900', size: 11} } } 
+                }, 
+                plugins: { 
+                    legend: { display: false }, 
+                    tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', titleColor: '#00f3ff', bodyColor: '#fff', borderColor: '#00f3ff', borderWidth: 1 },
+                    datalabels: { 
+                        color: '#050505', // NEGRO SOBRIO
+                        backgroundColor: '#00f3ff', // FONDO NEON
+                        borderRadius: 4,
+                        padding: { top: 4, bottom: 4, left: 6, right: 6 },
+                        align: 'top',
+                        offset: 8,
+                        font: { weight: '900', size: 12 }, 
+                        formatter: v => v > 0 ? new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(v) : '' 
+                    } 
+                } 
+            } 
+        });
     }
 
     function backToSelection() {
@@ -1101,7 +1544,9 @@
         else if (appCurrentState === "MENU_ESTRATEGIAS") { stepStrategy.classList.add('hidden'); step2.classList.remove('hidden'); hideCartBar(); appCurrentState = "LISTA_CLIENTES"; }
         else if (appCurrentState === "LISTA_CLIENTES") backToAdvisors();
         else if (appCurrentState === "PANEL_ASESORES") backToRegionals();
-        else if (appCurrentState === "PANEL_REGIONALES") { step2.classList.add('hidden'); step1.classList.remove('hidden'); btnBack.classList.add('hidden'); fileInput.value = ''; appCurrentState = "LOAD"; }
+        else if (appCurrentState === "PANEL_REGIONALES") { if(currentSelectedTerritorial){document.getElementById('advisor-view').classList.add('hidden');document.getElementById('regional-view').classList.remove('hidden');document.getElementById('territorial-dashboard').classList.remove('hidden');switchTerritorialTab('intel');appCurrentState='PANEL_TERRITORIAL';}else backToTerritories(); }
+        else if (appCurrentState === "PANEL_TERRITORIAL") { backToTerritories(); }
+        else if (appCurrentState === "PANEL_TERRITORIALES") { step2.classList.add('hidden'); step1.classList.remove('hidden'); btnBack.classList.add('hidden'); fileInput.value = ''; appCurrentState = "LOAD"; }
     }
 
     function getLastPriceForClient(sku, clientObj) {
@@ -1136,11 +1581,13 @@
     }
     
     function openManualModal() {
+        toggleBackgroundLock(true);
         document.getElementById('manual-modal').classList.remove('hidden');
         renderManualSelectedList();
     }
 
     function closeManualModal() {
+        toggleBackgroundLock(false);
         document.getElementById('manual-modal').classList.add('hidden');
         document.getElementById('manual-search-input').value = '';
         document.getElementById('manual-search-results').classList.add('hidden');
@@ -1210,7 +1657,7 @@
             return;
         }
 
-        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0, maximumFractionDigits: 0 });
         
         [...manualSkus].reverse().forEach(sku => {
             const prod = globalProducts.get(sku);
@@ -1274,44 +1721,39 @@
 
     function exportManualExcel() {
         if (manualSkus.length === 0) { showAlert("No hay códigos capturados."); return; }
-        let excelData = [];
-        
+        const excelData = [];
         manualSkus.forEach(sku => {
-            let ultimoPrecio = getLastPriceForClient(sku, selectedClient);
-            let precioPromo = globalPromociones[sku] || 0;
-            let comentarioPromo = globalComentarioPromo[sku] || "";
-            let psug = getPrecioSugerido(sku, selectedClient.tipoCliente);
+            const ultimoPrecio = getLastPriceForClient(sku, selectedClient);
+            const precioPromo = Number(globalPromociones[sku] || 0);
+            const promedioTipoCliente = Number(getPrecioSugerido(sku, selectedClient.tipoCliente) || 0);
+            const rawComentario = String(globalComentarioPromo[sku] || globalPromoText[sku] || '').trim();
+            const comentarioValido = rawComentario && !['0','0.0','0.00','$0','$0.00','null','undefined','n/a','na'].includes(rawComentario.toLowerCase());
 
-            let exComentario = "";
-            if (comentarioPromo !== "") exComentario = comentarioPromo;
-            else if (ultimoPrecio !== null) exComentario = "Precio Especial";
-            else exComentario = "no aplica";
+            let precioSolicitado = '';
+            if (precioPromo > 0) precioSolicitado = Number(precioPromo.toFixed(2));
+            else if (ultimoPrecio !== null && ultimoPrecio > 0) precioSolicitado = Number(ultimoPrecio.toFixed(2));
+            else if (promedioTipoCliente > 0) precioSolicitado = Number(promedioTipoCliente.toFixed(2));
 
-            let exPrecio = "";
-            if (precioPromo > 0) exPrecio = parseFloat(precioPromo.toFixed(2));
-            else if (ultimoPrecio !== null) exPrecio = parseFloat(ultimoPrecio.toFixed(2));
-            else if (psug > 0) exPrecio = parseFloat(psug.toFixed(2));
-            
+            let comentario = comentarioValido ? rawComentario : 'Precio Especial';
+            if (comentario === '0' || Number(comentario) === 0) comentario = 'Precio Especial';
+
             excelData.push({
                 "Producto": sku,
-                "Cantidad": manualSkusQty[sku] || 1, 
-                "Precio solicitado": exPrecio,
-                "Comentario": exComentario
+                "Cantidad": manualSkusQty[sku] || 1,
+                "Precio solicitado": precioSolicitado,
+                "Comentario": comentario
             });
         });
-        
-        const ws = XLSX.utils.json_to_sheet(excelData);
+
+        const ws = XLSX.utils.json_to_sheet(excelData, { header: ["Producto", "Cantidad", "Precio solicitado", "Comentario"] });
         const wb = XLSX.utils.book_new();
-        ws['!cols'] = [{wch: 20}, {wch: 15}, {wch: 15}, {wch: 40}];
-        
+        ws['!cols'] = [{wch: 20}, {wch: 12}, {wch: 20}, {wch: 40}];
         const headerStyle = { font: { color: { rgb: "FFFFFF" }, bold: true }, fill: { fgColor: { rgb: "17365D" } }, alignment: { horizontal: "center" } };
         const range = XLSX.utils.decode_range(ws['!ref']);
         for (let C = range.s.c; C <= range.e.c; ++C) {
             const address = XLSX.utils.encode_col(C) + "1";
-            if (!ws[address]) continue;
-            ws[address].s = headerStyle;
+            if (ws[address]) ws[address].s = headerStyle;
         }
-        
         XLSX.utils.book_append_sheet(wb, ws, "Cotización Manual");
         XLSX.writeFile(wb, `CotizacionManual_${selectedClient.id}_${new Date().getTime()}.xlsx`);
     }
@@ -1322,11 +1764,46 @@
         generateCatalogByStrategy('manual');
     }
 
+    async function handleStrategyExcel(event) {
+        const input=event.target,file=input.files&&input.files[0],status=document.getElementById('strategy-excel-status');
+        if(!file)return;
+        try{
+            status.innerText='Leyendo códigos del Excel...';
+            const wb=XLSX.read(await file.arrayBuffer(),{type:'array',raw:false});
+            const firstSheet=wb.SheetNames[0];
+            if(!firstSheet)throw new Error('El Excel no contiene hojas.');
+            const matrix=XLSX.utils.sheet_to_json(wb.Sheets[firstSheet],{header:1,defval:'',raw:false,blankrows:false});
+            if(!matrix.length)throw new Error('La primera hoja está vacía.');
+            const nonEmptyColumns=new Set();
+            matrix.forEach(row=>row.forEach((value,index)=>{if(String(value||'').trim())nonEmptyColumns.add(index)}));
+            if(nonEmptyColumns.size>1)throw new Error('El Excel debe contener una sola columna con códigos.');
+            const columnIndex=nonEmptyColumns.size?[...nonEmptyColumns][0]:0;
+            let values=matrix.map(row=>String(row[columnIndex]||'').trim()).filter(Boolean);
+            if(!values.length)throw new Error('No se encontraron códigos.');
+            const headerNorm=normalizeKey(values[0]);
+            if(['codigo','codigoproducto','producto','sku','codigodelproducto'].includes(headerNorm))values.shift();
+            const uniqueCodes=[...new Set(values.map(x=>x.toUpperCase()))];
+            const found=[],missing=[];
+            uniqueCodes.forEach(code=>{
+                const product=globalProducts.get(code)||Array.from(globalProducts.entries()).find(([sku])=>String(sku).trim().toUpperCase()===code)?.[1];
+                if(product)found.push(product);else missing.push(code);
+            });
+            if(!found.length)throw new Error('Ningún código del Excel se encontró en Productos.');
+            currentStrategyLabel='Carga Excel · '+found.length+' códigos';
+            status.innerText=`${found.length} códigos encontrados${missing.length?' · '+missing.length+' no encontrados':''}`;
+            if(missing.length)showAlert(`${missing.length} CÓDIGOS DEL EXCEL NO SE ENCONTRARON. SE GENERARÁ EL LISTADO CON ${found.length}.`);
+            renderCatalog(found);
+        }catch(err){
+            console.error('Error en carga Excel:',err);
+            status.innerText='Error: '+(err&&err.message?err.message:'No se pudo leer el Excel');
+            showAlert(status.innerText.toUpperCase());
+        }finally{
+            input.value='';
+        }
+    }
     function generateCatalogByStrategy(strategyType) {
         if (!selectedClient) { showAlert("No hay cliente seleccionado."); return; }
         let targetProducts = [];
-        // Regla general: las estrategias automáticas se ordenan de mayor a menor venta.
-        // Tipo Promoción incluye todos los códigos; las demás estrategias tienen un máximo de 50.
         const sortedGlobalSkusMn = Object.keys(globalSalesMn).sort((a, b) => (globalSalesMn[b] || 0) - (globalSalesMn[a] || 0));
         const sortedGlobalSkusPesos = Object.keys(globalSalesPesos).sort((a, b) => (globalSalesPesos[b] || 0) - (globalSalesPesos[a] || 0));
         
@@ -1387,10 +1864,15 @@
             targetProducts = sortedGlobalSkusPesos.map(sku => globalProducts.get(sku)).filter(item => item && marcasPropias.map(b=>b.toUpperCase()).includes(normalizeBrandName(getBrand(item)))).slice(0, 50);
         } else if (strategyType === 'marcaFamilia') {
             const selectedBrand = document.getElementById('brand-selector').value;
-            const selectedFamilia = document.getElementById('marca-family-selector').value;
+            const selectedFamily = document.getElementById('brand-family-selector')?.value || '';
             if (!selectedBrand) { showAlert("SELECCIONA UNA MARCA."); return; }
-            currentStrategyLabel = `Marca: ${selectedBrand}` + (selectedFamilia ? ` | Familia: ${selectedFamilia}` : '');
-            targetProducts = sortedGlobalSkusPesos.map(sku => globalProducts.get(sku)).filter(item => item && normalizeBrandName(getBrand(item)) === normalizeBrandName(selectedBrand) && (!selectedFamilia || normalizeBrandName(getFamily(item)) === normalizeBrandName(selectedFamilia))).slice(0, 50);
+            currentStrategyLabel = `Marca: ${selectedBrand}` + (selectedFamily ? ` | Familia: ${selectedFamily}` : ' | Todas las familias');
+            targetProducts = Array.from(globalProducts.values()).filter(item => item && normalizeBrandName(getBrand(item)) === normalizeBrandName(selectedBrand) && (!selectedFamily || normalizeBrandName(getFamily(item)) === normalizeBrandName(selectedFamily)));
+        } else if (strategyType === 'codigosNuevos') {
+            const selectedBrand = document.getElementById('new-code-brand-selector')?.value || '';
+            const selectedFamily = document.getElementById('new-code-family-selector')?.value || '';
+            currentStrategyLabel = 'Códigos Nuevos' + (selectedBrand ? ` | Marca: ${selectedBrand}` : ' | Todas las marcas') + (selectedFamily ? ` | Familia: ${selectedFamily}` : ' | Todas las familias');
+            targetProducts = Array.from(globalProducts.values()).filter(item => item && isNewProduct(item) && (!selectedBrand || normalizeBrandName(getBrand(item)) === normalizeBrandName(selectedBrand)) && (!selectedFamily || normalizeBrandName(getFamily(item)) === normalizeBrandName(selectedFamily)));
         } else if (strategyType === 'familyEspecifica') {
             const selectedFamily = document.getElementById('family-selector').value, selectedSistema = document.getElementById('sistema-selector').value;
             if (!selectedFamily) { showAlert("SELECCIONA UNA FAMILIA."); return; }
@@ -1404,13 +1886,15 @@
             targetProducts = sortedGlobalSkusPesos.map(sku => globalProducts.get(sku)).filter(item => item && normalizeBrandName(getTipoServicio(item)) === normalizeBrandName(selectedServicio) && (!selectedFamilia || normalizeBrandName(getFamily(item)) === normalizeBrandName(selectedFamilia))).slice(0, 50);
         }
 
-        if (targetProducts.length === 0) { showAlert("NO SE ENCONTRARON CÓDIGOS PARA ESTA ESTRATEGIA."); return; }
+        if (strategyType !== 'codigosNuevos') targetProducts = applyOpportunityFilter(targetProducts);
+        targetProducts.sort((a,b)=>getSku(a).localeCompare(getSku(b),'es',{numeric:true,sensitivity:'base'}));
+        if (targetProducts.length === 0) { showAlert("NO SE ENCONTRARON CÓDIGOS PARA ESTA ESTRATEGIA Y FILTRO."); return; }  
         renderCatalog(targetProducts);
     }
 
     function renderCatalog(products) {
         catalogContainer.innerHTML = ''; stepStrategy.classList.add('hidden'); appCurrentState = "CATALOGO_LISTO"; btnPrint.removeAttribute('disabled');
-        const itemsPerPage = 9, totalPages = Math.ceil(products.length / itemsPerPage), moneyFmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+        const itemsPerPage = 9, totalPages = Math.ceil(products.length / itemsPerPage), moneyFmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0, maximumFractionDigits: 0 });
         const proyeccion = DIAS_TRANSCURRIDOS > 0 ? (selectedClient.venta / DIAS_TRANSCURRIDOS) * DIAS_EFECTIVOS_MES : 0;
         const porcentaje = selectedClient.cuota > 0 ? (proyeccion / selectedClient.cuota) * 100 : 0;
 
@@ -1421,7 +1905,7 @@
                 <div class="client-header-card">
                     <div class="flex-grow">
                         <div class="text-[8px] font-black tracking-widest opacity-60 uppercase mb-0.5">Análisis Comercial Estructurado</div>
-                        <div class="neon-client-name uppercase">${selectedClient.cliVendId || selectedClient.id} - ${selectedClient.name}</div>
+                        <div class="neon-client-name uppercase">${selectedClient.id} - ${selectedClient.name}</div>
                         <div class="text-[8.5px] font-bold text-slate-200 mt-1.5 uppercase flex items-center gap-2">Estrategia: <span class="strategy-badge">${currentStrategyLabel}</span></div>
                     </div>
                     <div class="header-divider"></div>
@@ -1520,8 +2004,17 @@
     }
     
     function hideCartBar() { cartItems.clear(); updateCartUI(); closeCartDrawer(); }
-    function openCartDrawer() { if(cartItems.size > 0) document.getElementById('cart-drawer').classList.remove('translate-x-full'); }
-    function closeCartDrawer() { document.getElementById('cart-drawer').classList.add('translate-x-full'); }
+    
+    function openCartDrawer() { 
+        if(cartItems.size > 0) {
+            toggleBackgroundLock(true);
+            document.getElementById('cart-drawer').classList.remove('translate-x-full'); 
+        }
+    }
+    function closeCartDrawer() { 
+        toggleBackgroundLock(false);
+        document.getElementById('cart-drawer').classList.add('translate-x-full'); 
+    }
 
     function getCalculatedPriceForClient(sku, clientObj) {
         if (globalPromociones[sku] > 0) return globalPromociones[sku];
@@ -1538,7 +2031,7 @@
     function renderCartItems() {
         const container = document.getElementById('cart-drawer-items'); container.innerHTML = '';
         if(cartItems.size === 0) { container.innerHTML = '<div class="text-center text-slate-500 font-bold uppercase mt-10 text-[10px]">El carrito está vacío</div>'; return; }
-        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+        const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
         Array.from(cartItems).reverse().forEach(sku => {
             const prod = globalProducts.get(sku); if (!prod) return;
@@ -1557,10 +2050,16 @@
         });
     }
 
+    function syncStrategyFamilySelector(brandSelectorId,familySelectorId,onlyNewCodes=false){const brand=document.getElementById(brandSelectorId)?.value||'',sel=document.getElementById(familySelectorId);if(!sel)return;const families=[...new Set(Array.from(globalProducts.values()).filter(item=>item&&(!onlyNewCodes||isNewProduct(item))&&(!brand||normalizeBrandName(getBrand(item))===normalizeBrandName(brand))).map(getFamily).filter(f=>f&&f!=='SIN FAMILIA'))].sort((a,b)=>a.localeCompare(b,'es'));sel.innerHTML='<option value="">Todas las familias...</option>';families.forEach(f=>{const o=document.createElement('option');o.value=f;o.innerText=f.toUpperCase();sel.appendChild(o)})}
     function populateSelectors() {
         const uniqueBrands = [...new Set(Array.from(globalProducts.values()).map(item => getBrand(item)).filter(b => b && b !== "SIN MARCA"))].sort();
         const bSel = document.getElementById('brand-selector'); if(bSel) { bSel.innerHTML = '<option value="">Seleccionar marca...</option>'; uniqueBrands.forEach(b => { const opt = document.createElement('option'); opt.value = b; opt.innerText = b; bSel.appendChild(opt); }); }
         
+        const newCodeProducts=Array.from(globalProducts.values()).filter(isNewProduct);
+        const newBrands=[...new Set(newCodeProducts.map(getBrand).filter(b=>b&&b!=='SIN MARCA'))].sort((a,b)=>a.localeCompare(b,'es'));
+        const nbSel=document.getElementById('new-code-brand-selector');if(nbSel){nbSel.innerHTML='<option value="">Todas las marcas...</option>';newBrands.forEach(b=>{const o=document.createElement('option');o.value=b;o.innerText=b;nbSel.appendChild(o)})}
+        syncStrategyFamilySelector('brand-selector','brand-family-selector',false);
+        syncStrategyFamilySelector('new-code-brand-selector','new-code-family-selector',true);
         const uniqueOwnFamilies = [...new Set(Array.from(globalProducts.values()).filter(item => marcasPropias.map(b=>b.toUpperCase()).includes(normalizeBrandName(getBrand(item)))).map(item => getFamily(item)).filter(f => f && f !== "SIN FAMILIA"))].sort();
         const fSel = document.getElementById('family-selector'); if(fSel) { fSel.innerHTML = '<option value="">Seleccionar familia...</option>'; uniqueOwnFamilies.forEach(f => { const opt = document.createElement('option'); opt.value = f; opt.innerText = f.toUpperCase(); fSel.appendChild(opt); }); }
 
@@ -1570,12 +2069,6 @@
         if (sfSel) {
             sfSel.innerHTML = '<option value="">Seleccionar familia (Opcional)...</option>';
             uniqueAllFamilies.forEach(f => { const opt = document.createElement('option'); opt.value = f; opt.innerText = f.toUpperCase(); sfSel.appendChild(opt); });
-        }
-
-        const mfSel = document.getElementById('marca-family-selector');
-        if (mfSel) {
-            mfSel.innerHTML = '<option value="">Seleccionar familia (Opcional)...</option>';
-            uniqueAllFamilies.forEach(f => { const opt = document.createElement('option'); opt.value = f; opt.innerText = f.toUpperCase(); mfSel.appendChild(opt); });
         }
 
         const uniqueSistemas = [...new Set(Array.from(globalProducts.values()).map(item => getSistema(item)).filter(s => s && s !== "SIN SISTEMA"))].sort();
@@ -1606,7 +2099,7 @@
 
     function exportCartToExcel() {
         if (cartItems.size === 0) { showAlert("No hay artículos seleccionados."); return; }
-        let excelData = []; const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+        let excelData = []; const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0, maximumFractionDigits: 0 });
         cartItems.forEach(sku => {
             const prod = globalProducts.get(sku); if (!prod) return;
             let comment = globalComentarioPromo[sku] || (globalPromoText[sku] && globalPromoText[sku] !== "0" ? globalPromoText[sku] : (globalPromociones[sku] ? fmt.format(globalPromociones[sku]) : "Precio Sin IVA"));
@@ -1618,6 +2111,51 @@
         XLSX.utils.book_append_sheet(wb, ws, "Cotización");
         XLSX.writeFile(wb, `Cotizacion_${selectedClient.id}_${new Date().getTime()}.xlsx`);
     }
-</script>
+
+    function toggleBackgroundLock(lock) {
+        const uiContainers = ['step-1', 'step-2', 'step-strategy', 'discipline-client-detail', 'catalog-container', 'cart-bar'];
+        const header = document.querySelector('header');
+        if(header) {
+            header.style.pointerEvents = lock ? 'none' : 'auto';
+            header.style.filter = lock ? 'blur(2px) brightness(0.6)' : 'none';
+            header.style.transition = 'all 0.3s ease';
+        }
+        uiContainers.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) {
+                el.style.pointerEvents = lock ? 'none' : 'auto';
+                el.style.filter = lock ? 'blur(4px) brightness(0.5)' : 'none';
+                el.style.transition = 'all 0.3s ease';
+            }
+        });
+        document.body.style.overflow = lock ? 'hidden' : 'auto';
+    }
+
+    window.addEventListener('beforeunload', function (e) {
+        e.preventDefault();
+        e.returnValue = '¿Estás seguro de que deseas salir de la aplicación?';
+        return '¿Estás seguro de que deseas salir de la aplicación?';
+    });
+
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('selectstart', e => { 
+        if(e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault(); 
+        }
+    });
+    document.addEventListener('copy', e => { 
+        if(e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault(); 
+            showAlert("Función de copiado deshabilitada por seguridad."); 
+        }
+    });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'F12') { e.preventDefault(); return false; }
+        if (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) { e.preventDefault(); return false; }
+        if (e.ctrlKey && ['u','s','p'].includes(e.key.toLowerCase())) { e.preventDefault(); return false; }
+        if (e.ctrlKey && e.key.toLowerCase() === 'c' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); showAlert("Copiar contenido deshabilitado."); return false; }
+    });
+
+</script> <!-- AQUÍ FALTABA ESTE CIERRE -->
 </body>
 </html>
