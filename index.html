@@ -263,6 +263,16 @@
   .segment-projection-footer{align-items:flex-start!important;flex-direction:column!important}
   .segment-projection-value{width:100%!important}
 }
+
+/* V8.2 · Tarjetas limpias: sin formulas ni textos metodologicos visibles */
+.operational-card span{display:none!important}
+.operational-card{min-height:104px!important}
+.operational-card small{font-size:8px!important;line-height:1.25!important;text-transform:uppercase!important;font-weight:900!important}
+.operational-card b{margin-top:10px!important}
+
+/* V8.3 · El inicio por rol conserva la misma tarjeta de la jerarquia */
+#regional-cards:has(> .advisor-card-btn:only-child),
+#advisor-cards:has(> .advisor-card-btn:only-child){grid-template-columns:minmax(300px,390px)!important;justify-content:start!important}
 </style></head>
 <body>
 <header class="no-print bg-glass border-b border-neon-cyan sticky top-0 z-50">
@@ -280,7 +290,7 @@
                 </p>
 </div>
 </div>
-<div class="flex flex-wrap items-center justify-center gap-3"><button class="hidden bg-[#0f172a] border border-neon-cyan text-neon-cyan px-4 py-2 rounded-lg text-[10px] font-black uppercase" id="btnAccessAdmin" style="display:none!important" onclick="openAccessAdmin()">Usuarios</button><button class="hidden bg-[#0f172a] border border-neon-red text-neon-red px-4 py-2 rounded-lg text-[10px] font-black uppercase" id="btnLogout" onclick="logoutAccess()">Cerrar sesión</button>
+<div class="flex flex-wrap items-center justify-center gap-3"><button class="hidden bg-[#0f172a] border border-neon-cyan text-neon-cyan px-4 py-2 rounded-lg text-[10px] font-black uppercase" id="btnAccessAdmin" onclick="openAccessAdmin()" style="display:none!important">Usuarios</button><button class="hidden bg-[#0f172a] border border-neon-red text-neon-red px-4 py-2 rounded-lg text-[10px] font-black uppercase" id="btnLogout" onclick="logoutAccess()">Cerrar sesión</button>
 <input accept=".json.gz,.gz,application/gzip" class="hidden" id="dataFile" type="file"/>
 <button class="bg-[#0f172a] hover:bg-[#1e293b] px-4 py-2 rounded-lg text-[10px] font-bold border border-slate-500 text-white flex items-center gap-2 shadow-lg" id="btnFullScreen" onclick="toggleFullScreen()">
 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l-5 5m11 5l-5-5m5 5v-4m0 4h-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
@@ -911,7 +921,36 @@
     function saveAccessUsers(v){console.warn('Los usuarios se administran en la hoja Accesos del Excel.')}
     function initializeAccessControl(){const overlay=document.getElementById('access-overlay');overlay.classList.remove('hidden');step1.classList.add('hidden');document.getElementById('access-title').innerText='Acceso Inteligencia Comercial';document.getElementById('access-help').innerText='Para asesores, el usuario es el asesor_id de Jerarquia. Para gerentes, usa el usuario definido en Accesos.'}
     async function submitAccess(){const user=document.getElementById('access-user').value.trim(),pin=document.getElementById('access-pin').value,err=document.getElementById('access-error');err.classList.add('hidden');if(!user||!pin){err.innerText='Captura usuario y PIN';err.classList.remove('hidden');return}const hash=await hashPin(pin),account=accessUsers().find(x=>accessNorm(x.user)===accessNorm(user)&&x.hash===hash&&x.active!==false);if(!account){err.innerText='Usuario o PIN incorrecto, o usuario inactivo';err.classList.remove('hidden');return}ACCESS_SESSION={user:account.user,role:account.role,entity:account.entity};sessionStorage.setItem(ACCESS_SESSION_KEY,JSON.stringify(ACCESS_SESSION));document.getElementById('access-overlay').classList.add('hidden');document.getElementById('btnLogout').classList.remove('hidden');document.getElementById('btnAccessAdmin').classList.add('hidden');applyAccessLanding()}
-    function applyAccessLanding(){step1.classList.add('hidden');step2.classList.remove('hidden');btnBack.classList.remove('hidden');if(ACCESS_SESSION.role==='TERRITORIAL'){renderTerritorialCards();return}if(ACCESS_SESSION.role==='REGIONAL'){const reg=companyTree.get(ACCESS_SESSION.entity);if(!reg){showAlert('REGIÓN ASIGNADA NO ENCONTRADA');return}currentSelectedTerritorial=reg.territorial;openRegionalAdvisors(reg.name);return}let found=null,reg=null;for(const r of companyTree.values()){if(r.asesores.has(ACCESS_SESSION.entity)){reg=r;found=r.asesores.get(ACCESS_SESSION.entity);break}}if(!found){showAlert('ASESOR ASIGNADO NO ENCONTRADO');return}currentSelectedTerritorial=reg.territorial;currentSelectedRegional=reg;openAdvisorClients(found.name)}
+    function applyAccessLanding(){
+        step1.classList.add('hidden');step2.classList.remove('hidden');btnBack.classList.remove('hidden');
+        document.getElementById('client-view').classList.add('hidden');
+        document.getElementById('advisor-view').classList.add('hidden');
+        document.getElementById('regional-view').classList.remove('hidden');
+        if(ACCESS_SESSION.role==='TERRITORIAL'){
+            renderTerritorialCards();
+            return;
+        }
+        if(ACCESS_SESSION.role==='REGIONAL'){
+            const reg=companyTree.get(ACCESS_SESSION.entity);
+            if(!reg){showAlert('REGIÓN ASIGNADA NO ENCONTRADA');return;}
+            currentSelectedTerritorial=reg.territorial;currentSelectedRegional=null;currentSelectedAdvisor=null;
+            document.getElementById('directory-title').innerHTML='Región autorizada de <span class="text-neon-cyan">'+reg.territorial+'</span>';
+            document.getElementById('directory-subtitle').innerText='Selecciona tu tarjeta regional para comenzar';
+            document.getElementById('btnBackTerritories').classList.add('hidden');
+            document.getElementById('territorial-dashboard').classList.remove('hidden');
+            renderRegionalCards();switchTerritorialTab('regions');
+            appCurrentState='INICIO_REGIONAL';return;
+        }
+        let found=null,reg=null;
+        for(const r of companyTree.values()){if(r.asesores.has(ACCESS_SESSION.entity)){reg=r;found=r.asesores.get(ACCESS_SESSION.entity);break}}
+        if(!found){showAlert('ASESOR ASIGNADO NO ENCONTRADO');return;}
+        currentSelectedTerritorial=reg.territorial;currentSelectedRegional=reg;currentSelectedAdvisor=null;
+        document.getElementById('regional-view').classList.add('hidden');
+        document.getElementById('advisor-view').classList.remove('hidden');
+        document.getElementById('current-regional-title').innerText=reg.name;
+        renderAdvisorCards();switchRegionalTab('advisors');
+        appCurrentState='INICIO_ASESOR';
+    }
     function logoutAccess(){sessionStorage.removeItem(ACCESS_SESSION_KEY);ACCESS_SESSION=null;location.reload()}
     function openAccessAdmin(){showAlert('LOS USUARIOS SE ADMINISTRAN EN LA HOJA ACCESOS DEL EXCEL Y SE ACTUALIZAN AL REGENERAR NORTE.JSON.GZ.')}
     function closeAccessAdmin(){document.getElementById('access-admin-modal').classList.add('hidden')}
@@ -1009,7 +1048,7 @@
     function lastBusinessCutoff(){return previousOperationalDay(NOW)}
     function effectiveDaysToDate(c){if(c.getFullYear()!==CURRENT_YEAR||c.getMonth()!==CURRENT_MONTH)return 0;let n=0;for(let d=1;d<=c.getDate();d++){const w=new Date(CURRENT_YEAR,CURRENT_MONTH,d).getDay();if(w>=1&&w<=5)n++;else if(w===6)n+=.5}return n}
     function operationalMetrics(cs){const cutoff=lastBusinessCutoff(),prev=previousOperationalDay(cutoff),start=new Date(CURRENT_YEAR,CURRENT_MONTH,1,12),end=dateOnly(cutoff),prevEnd=dateOnly(prev);let ventaDia=0,ventaMes=0,cuota=0,cc=0,cp=0,rec=0;cs.forEach(c=>{cuota+=Number(c.cuota||0);ventaMes+=Number(c.venta||0);const s=(c.rawItems||[]).filter(i=>i.fecha_doc&&Number(i._vmn_calculado||0)>0).sort((a,b)=>a.fecha_doc-b.fecha_doc);s.forEach(i=>{if(sameDate(i.fecha_doc,cutoff))ventaDia+=Number(i._vmn_calculado||0)});if(s.some(i=>i.fecha_doc>=start&&i.fecha_doc<=end))cc++;if(s.some(i=>i.fecha_doc>=start&&i.fecha_doc<=prevEnd))cp++;const ms=s.filter(i=>i.fecha_doc>=start&&i.fecha_doc<=end),prior=s.filter(i=>i.fecha_doc<start);if(ms.length&&prior.length&&(ms[0].fecha_doc-prior[prior.length-1].fecha_doc)/86400000>90)rec++});const elapsed=effectiveDaysToDate(cutoff),total=obtenerDiasEfectivosDelMes(CURRENT_YEAR,CURRENT_MONTH),remaining=Math.max(total-elapsed,0),promedio=elapsed?ventaMes/elapsed:0,cuotaDiaria=total?cuota/total:0,recalculada=remaining?Math.max(cuota-ventaMes,0)/remaining:0,esperado=total?elapsed/total*100:0,real=cuota?ventaMes/cuota*100:0;return{cutoff,ventaDia,ventaMes,cuota,promedio,cuotaDiaria,recalculada,inc:Math.max(cc-cp,0),cc,cp,rec,esperado,real,diff:real-esperado,elapsed,total,remaining}}
-    function renderOperational(cs,scope){const e=document.getElementById(scope+'-operational');if(!e)return;const m=operationalMetrics(cs),f=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}),d=m.cutoff.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}).replace('.','').toUpperCase(),lamp=m.diff>=0?'green':m.diff>=-5?'amber':'red';e.innerHTML=`<section class="operational-block"><div class="operational-head"><div><div class="operational-title">Corte operativo diario</div><div class="text-[8px] text-slate-500 font-bold uppercase mt-1">Indicadores consolidados de la jerarquía seleccionada</div></div><div class="operational-date">Corte al ${d} · último día hábil</div></div><div class="operational-grid"><div class="operational-card"><small>Venta último día hábil</small><b>${f.format(m.ventaDia)}</b><span>Facturación del ${d}</span></div><div class="operational-card"><small>Promedio diario del mes</small><b>${f.format(m.promedio)}</b><span>${f.format(m.ventaMes)} ÷ ${m.elapsed.toFixed(1)} días efectivos</span></div><div class="operational-card white"><small>Cuota diaria original</small><b>${f.format(m.cuotaDiaria)}</b><span>${f.format(m.cuota)} ÷ ${m.total.toFixed(1)} días</span></div><div class="operational-card peach"><small>Cuota diaria recalculada</small><b>${f.format(m.recalculada)}</b><span>Saldo ÷ ${m.remaining.toFixed(1)} días restantes</span></div><div class="operational-card"><small>Incremento clientes con venta</small><b>${m.inc}</b><span>${m.cc} al corte vs ${m.cp} anterior</span></div><div class="operational-card"><small>Clientes recuperados +90 días</small><b>${m.rec}</b><span>Reactivados después de más de 90 días</span></div><div class="operational-card white"><small>Avance esperado</small><b>${m.esperado.toFixed(1)}%</b><span>${m.elapsed.toFixed(1)} de ${m.total.toFixed(1)} días</span></div><div class="operational-card white"><i class="operational-lamp ${lamp}"></i><small>Avance real</small><b>${m.real.toFixed(1)}%</b><span>${f.format(m.ventaMes)} ÷ ${f.format(m.cuota)}</span></div></div></section>`}
+    function renderOperational(cs,scope){const e=document.getElementById(scope+'-operational');if(!e)return;const m=operationalMetrics(cs),f=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}),d=m.cutoff.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}).replace('.','').toUpperCase(),lamp=m.diff>=0?'green':m.diff>=-5?'amber':'red';e.innerHTML=`<section class="operational-block"><div class="operational-head"><div><div class="operational-title">Corte operativo diario</div></div><div class="operational-date">Corte al ${d} · último día hábil</div></div><div class="operational-grid"><div class="operational-card"><small>Venta último día hábil</small><b>${f.format(m.ventaDia)}</b></div><div class="operational-card"><small>Promedio diario del mes</small><b>${f.format(m.promedio)}</b></div><div class="operational-card white"><small>Cuota diaria original</small><b>${f.format(m.cuotaDiaria)}</b></div><div class="operational-card peach"><small>Cuota diaria recalculada</small><b>${f.format(m.recalculada)}</b></div><div class="operational-card"><small>Incremento clientes con venta</small><b>${m.inc}</b></div><div class="operational-card"><small>Clientes recuperados +90 días</small><b>${m.rec}</b></div><div class="operational-card white"><small>Avance esperado</small><b>${m.esperado.toFixed(1)}%</b></div><div class="operational-card white"><i class="operational-lamp ${lamp}"></i><small>Avance real</small><b>${m.real.toFixed(1)}%</b></div></div></section>`}
     function destroySegmentCharts(scope,type){['ENFOQUE','FUGA','GENERAL'].forEach(k=>{const id=`${scope}-${type}-${k}`;if(segmentChartInstances[id]){segmentChartInstances[id].destroy();delete segmentChartInstances[id]}})}
     
     function renderSegmentCharts(cs,scope,type){
@@ -1187,7 +1226,7 @@
         document.getElementById('regional-cards').classList.remove('hidden');
         const container=document.getElementById('regional-cards');container.innerHTML='';
         const fmt=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0});
-        territorialNodes().sort((a,b)=>b.totalVenta-a.totalVenta).forEach(node=>{
+        territorialNodes().filter(node=>!ACCESS_SESSION||ACCESS_SESSION.role!=='TERRITORIAL'||ACCESS_SESSION.entity==='*'||accessNorm(node.name)===accessNorm(ACCESS_SESSION.entity)).sort((a,b)=>b.totalVenta-a.totalVenta).forEach(node=>{
             const proy=DIAS_TRANSCURRIDOS>0?(node.totalVenta/DIAS_TRANSCURRIDOS)*DIAS_EFECTIVOS_MES:0;
             const pct=node.totalCuota>0?proy/node.totalCuota*100:0;
             const div=document.createElement('div');div.className='advisor-card-btn border rounded-2xl p-6 flex flex-col justify-between';div.onclick=()=>openTerritorialRegions(node.name);
@@ -1204,7 +1243,7 @@
         document.getElementById('directory-subtitle').innerText='Selecciona una región para ver asesores';
         document.getElementById('btnBackTerritories').classList.remove('hidden');
         const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0, maximumFractionDigits: 0 });
-        Array.from(companyTree.values()).filter(reg=>!currentSelectedTerritorial||reg.territorial===currentSelectedTerritorial).sort((a,b)=> b.totalVenta - a.totalVenta).forEach(reg => {
+        Array.from(companyTree.values()).filter(reg=>(!currentSelectedTerritorial||reg.territorial===currentSelectedTerritorial)&&(!ACCESS_SESSION||ACCESS_SESSION.role!=='REGIONAL'||accessNorm(reg.name)===accessNorm(ACCESS_SESSION.entity))).sort((a,b)=> b.totalVenta - a.totalVenta).forEach(reg => {
             const proyeccion = DIAS_TRANSCURRIDOS > 0 ? (reg.totalVenta / DIAS_TRANSCURRIDOS) * DIAS_EFECTIVOS_MES : 0;
             const porcentaje = reg.totalCuota > 0 ? (proyeccion / reg.totalCuota) * 100 : 0;
             const div = document.createElement('div');
@@ -1231,7 +1270,7 @@
         const container = document.getElementById('advisor-cards'); container.innerHTML = '';
         if (!currentSelectedRegional) return;
         const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0, maximumFractionDigits: 0 });
-        Array.from(currentSelectedRegional.asesores.values()).sort((a,b)=>b.totalVenta - a.totalVenta).forEach(adv => {
+        Array.from(currentSelectedRegional.asesores.values()).filter(adv=>!ACCESS_SESSION||ACCESS_SESSION.role!=='ASESOR'||accessNorm(adv.name)===accessNorm(ACCESS_SESSION.entity)).sort((a,b)=>b.totalVenta - a.totalVenta).forEach(adv => {
             const proyeccion = DIAS_TRANSCURRIDOS > 0 ? (adv.totalVenta / DIAS_TRANSCURRIDOS) * DIAS_EFECTIVOS_MES : 0;
             const porcentaje = adv.totalCuota > 0 ? (proyeccion / adv.totalCuota) * 100 : 0;
             const div = document.createElement('div');
@@ -1365,13 +1404,11 @@
         document.getElementById('client-view').classList.remove('hidden'); 
         document.getElementById('current-advisor-title').innerText = name; 
         
-        switchTab('clientes');
-        
-        appCurrentState = "LISTA_CLIENTES"; 
-        renderClientList(); 
+        switchTab('intel');
+        appCurrentState = "PANEL_ASESOR"; 
     }
     
-    function backToAdvisors() { if(ACCESS_SESSION&&ACCESS_SESSION.role==='ASESOR'){showAlert('ACCESO LIMITADO A TU RUTA.');return;} currentSelectedAdvisor = null; document.getElementById('client-view').classList.add('hidden'); document.getElementById('advisor-view').classList.remove('hidden'); appCurrentState = "PANEL_ASESORES"; }
+    function backToAdvisors() { if(ACCESS_SESSION&&ACCESS_SESSION.role==='ASESOR'){currentSelectedAdvisor=null;document.getElementById('client-view').classList.add('hidden');document.getElementById('advisor-view').classList.remove('hidden');renderAdvisorCards();switchRegionalTab('advisors');appCurrentState='INICIO_ASESOR';return;} currentSelectedAdvisor = null; document.getElementById('client-view').classList.add('hidden'); document.getElementById('advisor-view').classList.remove('hidden'); appCurrentState = "PANEL_ASESORES"; }
 
     function selectClient(id) {
         if(!currentSelectedAdvisor) return; selectedClient = currentSelectedAdvisor.clientes.get(id); if(!selectedClient) return;
@@ -1506,7 +1543,9 @@
 
     function backToSelection() {
         if (appCurrentState === "CATALOGO_LISTO") { catalogContainer.innerHTML = ''; stepStrategy.classList.remove('hidden'); btnPrint.setAttribute('disabled', 'true'); closeCartDrawer(); appCurrentState = "MENU_ESTRATEGIAS"; }
-        else if (appCurrentState === "MENU_ESTRATEGIAS") { stepStrategy.classList.add('hidden'); step2.classList.remove('hidden'); hideCartBar(); appCurrentState = "LISTA_CLIENTES"; }
+        else if (appCurrentState === "MENU_ESTRATEGIAS") { stepStrategy.classList.add('hidden'); step2.classList.remove('hidden'); hideCartBar(); if(ACCESS_SESSION&&ACCESS_SESSION.role==='ASESOR'){switchTab('intel');appCurrentState='PANEL_ASESOR';}else{switchTab('clientes');appCurrentState='LISTA_CLIENTES';} }
+        else if (appCurrentState === 'INICIO_ASESOR' || appCurrentState === 'INICIO_REGIONAL') { applyAccessLanding(); }
+        else if (appCurrentState === 'PANEL_ASESOR_PROPIO') { backToAdvisors(); }
         else if (appCurrentState === "LISTA_CLIENTES") backToAdvisors();
         else if (appCurrentState === "PANEL_ASESORES") backToRegionals();
         else if (appCurrentState === "PANEL_REGIONALES") { if(currentSelectedTerritorial){document.getElementById('advisor-view').classList.add('hidden');document.getElementById('regional-view').classList.remove('hidden');document.getElementById('territorial-dashboard').classList.remove('hidden');switchTerritorialTab('intel');appCurrentState='PANEL_TERRITORIAL';}else backToTerritories(); }
