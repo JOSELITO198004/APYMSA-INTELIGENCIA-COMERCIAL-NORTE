@@ -280,7 +280,7 @@
                 </p>
 </div>
 </div>
-<div class="flex flex-wrap items-center justify-center gap-3">
+<div class="flex flex-wrap items-center justify-center gap-3"><button class="hidden bg-[#0f172a] border border-neon-cyan text-neon-cyan px-4 py-2 rounded-lg text-[10px] font-black uppercase" id="btnAccessAdmin" style="display:none!important" onclick="openAccessAdmin()">Usuarios</button><button class="hidden bg-[#0f172a] border border-neon-red text-neon-red px-4 py-2 rounded-lg text-[10px] font-black uppercase" id="btnLogout" onclick="logoutAccess()">Cerrar sesión</button>
 <input accept=".json.gz,.gz,application/gzip" class="hidden" id="dataFile" type="file"/>
 <button class="bg-[#0f172a] hover:bg-[#1e293b] px-4 py-2 rounded-lg text-[10px] font-bold border border-slate-500 text-white flex items-center gap-2 shadow-lg" id="btnFullScreen" onclick="toggleFullScreen()">
 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l-5 5m11 5l-5-5m5 5v-4m0 4h-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
@@ -292,7 +292,7 @@
 </div>
 </div>
 </header>
-<main class="min-h-[calc(100vh-80px)] flex flex-col items-center p-6 relative" id="main-content">
+<div class="hidden fixed inset-0 z-[310] bg-black/75 flex items-center justify-center p-5" id="access-admin-modal"><div class="w-full max-w-3xl max-h-[88vh] overflow-auto bg-white text-slate-900 rounded-3xl p-7"><div class="flex justify-between gap-4"><div><p class="text-[9px] font-black uppercase text-cyan-700">Administración central en Excel</p><h2 class="text-2xl font-black">Usuarios y accesos</h2></div><button class="bg-slate-900 text-white rounded-xl px-4 py-2 font-black" onclick="closeAccessAdmin()">Cerrar</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6"><input class="border p-3 rounded-xl" id="new-access-user" placeholder="Usuario / asesor_id"/><input class="border p-3 rounded-xl" id="new-access-pin" placeholder="PIN" type="password"/><select class="border p-3 rounded-xl" id="new-access-role" onchange="refreshAccessEntityOptions()"><option value="TERRITORIAL">Gerente territorial</option><option value="REGIONAL">Gerente regional</option><option value="ASESOR">Asesor</option></select><select class="border p-3 rounded-xl" id="new-access-entity"></select></div><button class="mt-4 bg-cyan-600 text-white px-5 py-3 rounded-xl font-black uppercase" onclick="saveAccessUser()">Guardar usuario</button><div class="mt-6 space-y-2" id="access-user-list"></div></div></div><div class="hidden fixed inset-0 z-[300] bg-[#071522]/95 backdrop-blur-xl flex items-center justify-center p-5" id="access-overlay"><div class="w-full max-w-lg bg-[#10263b] border border-[#2dd4e3] rounded-3xl p-8 shadow-2xl"><p class="text-[10px] text-neon-cyan font-black uppercase tracking-[.25em]">Control jerárquico</p><h2 class="text-3xl text-white font-black uppercase mt-2" id="access-title">Acceso Inteligencia Comercial</h2><p class="text-slate-400 text-[10px] font-bold uppercase mt-3 mb-6" id="access-help">Ingresa usuario y PIN.</p><input class="w-full bg-white text-slate-900 rounded-xl p-4 mb-3 font-bold" id="access-user" placeholder="Usuario"/><input class="w-full bg-white text-slate-900 rounded-xl p-4 mb-4 font-bold" id="access-pin" inputmode="numeric" placeholder="PIN de acceso" type="password"/><button class="w-full bg-neon-cyan text-black rounded-xl p-4 font-black uppercase" onclick="submitAccess()">Ingresar</button><p class="hidden text-red-300 text-[10px] font-black uppercase mt-4" id="access-error"></p></div></div><main class="min-h-[calc(100vh-80px)] flex flex-col items-center p-6 relative" id="main-content">
 <div class="hidden fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm p-4 flex items-center justify-center" id="load-error-panel">
 <div class="w-full max-w-3xl bg-white text-slate-900 border-4 border-red-600 rounded-2xl shadow-2xl p-6">
 <div class="flex justify-between gap-4 items-start"><div><p class="text-[10px] font-black uppercase text-red-700 tracking-widest">Error de carga JSON.GZ</p><h2 class="text-xl font-black mt-1">La aplicación encontró un problema</h2></div><button class="bg-slate-900 text-white px-4 py-2 rounded-lg font-black text-xs" onclick="closeLoadError()">Cerrar</button></div>
@@ -525,22 +525,7 @@
 </select>
 <button class="w-full bg-[#0f172a] hover:bg-[#ff004c] hover:text-black border border-neon-red text-neon-red py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(255,0,76,0.2)]" onclick="generateCatalogByStrategy('tipoServicioFamilia')">Generar Catálogo</button>
 </div>
-<div class="strategy-card">
-<div class="text-4xl mb-4">🎯</div>
-<h3 class="text-white font-black text-xl uppercase mb-3">Marca Específica</h3>
-<p class="text-slate-400 text-[9px] font-bold uppercase mb-4">Selecciona una marca y, opcionalmente, una familia de esa marca.</p>
-<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner" id="brand-selector" onchange="syncStrategyFamilySelector('brand-selector','brand-family-selector',false)"><option value="">Seleccionar marca...</option></select>
-<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner" id="brand-family-selector"><option value="">Todas las familias...</option></select>
-<button class="w-full bg-[#0f172a] hover:bg-[#00f3ff] hover:text-black border border-neon-cyan text-neon-cyan py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(0,243,255,0.2)]" onclick="generateCatalogByStrategy('marcaFamilia')">Generar Catálogo</button>
-</div>
-<div class="strategy-card" style="border-color:var(--neon-green)">
-<div class="text-4xl mb-4">✨</div>
-<h3 class="text-white font-black text-xl uppercase mb-3">Códigos Nuevos</h3>
-<p class="text-slate-400 text-[9px] font-bold uppercase mb-4">Todos los productos cuyo campo codigo_nuevo contiene “SI”, tengan o no historial de venta.</p>
-<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner" id="new-code-brand-selector" onchange="syncStrategyFamilySelector('new-code-brand-selector','new-code-family-selector',true)"><option value="">Todas las marcas...</option></select>
-<select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner" id="new-code-family-selector"><option value="">Todas las familias...</option></select>
-<button class="w-full bg-[#0f172a] hover:bg-[#00ff66] hover:text-black border border-neon-green text-neon-green py-3 rounded-xl text-[11px] font-black uppercase shadow-[0_0_15px_rgba(0,255,102,0.2)]" onclick="generateCatalogByStrategy('codigosNuevos')">Generar Códigos Nuevos</button>
-</div>
+<div class="strategy-card"><div class="text-4xl mb-4">🎯</div><h3 class="text-white font-black text-xl uppercase mb-3">Marca Específica</h3><p class="text-slate-400 text-[9px] font-bold uppercase mb-4">Marca obligatoria y familia opcional.</p><select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner" id="brand-selector" onchange="syncStrategyFamilySelector('brand-selector','brand-family-selector',false)"><option value="">Seleccionar marca...</option></select><select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner" id="brand-family-selector"><option value="">Todas las familias...</option></select><button class="w-full bg-[#0f172a] border border-neon-cyan text-neon-cyan py-3 rounded-xl text-[11px] font-black uppercase" onclick="generateCatalogByStrategy('marcaFamilia')">Generar Catálogo</button></div><div class="strategy-card" style="border-color:var(--neon-green)"><div class="text-4xl mb-4">✨</div><h3 class="text-white font-black text-xl uppercase mb-3">Códigos Nuevos</h3><p class="text-slate-400 text-[9px] font-bold uppercase mb-4">Todos los productos con codigo_nuevo = SI, tengan o no ventas.</p><select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-2 shadow-inner" id="new-code-brand-selector" onchange="syncStrategyFamilySelector('new-code-brand-selector','new-code-family-selector',true)"><option value="">Todas las marcas...</option></select><select class="w-full bg-[#030712] border border-slate-500 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none mb-4 shadow-inner" id="new-code-family-selector"><option value="">Todas las familias...</option></select><button class="w-full bg-[#0f172a] border border-neon-green text-neon-green py-3 rounded-xl text-[11px] font-black uppercase" onclick="generateCatalogByStrategy('codigosNuevos')">Generar Códigos Nuevos</button></div>
 <div class="strategy-card">
 <div class="text-4xl mb-4">📂</div>
 <h3 class="text-white font-black text-xl uppercase mb-3">Familia Propia</h3>
@@ -756,66 +741,24 @@
         const dataJerarquia = pickCloudArray(root, ['Jerarquia', 'Jerarquía', 'jerarquia', 'dataJerarquia']);
         const dataVentas = pickCloudArray(root, ['Ventas','Venta','ventas','venta','dataVentas']);
         const dataDisciplina = pickCloudArray(root, ['Disciplina','disciplina','Disciplina Comercial','dataDisciplina']);
+        const dataAccesos = pickCloudArray(root, ['Accesos','accesos','Usuarios','usuarios']);
         const missingCollections = [];
         if(!dataProductos.length) missingCollections.push('Productos');
         if(!dataClientes.length) missingCollections.push('Clientes');
         if(!dataJerarquia.length) missingCollections.push('Jerarquia');
         if(!dataVentas.length) missingCollections.push('Ventas');
         if(!dataDisciplina.length) missingCollections.push('Disciplina');
+        if(!dataAccesos.length) missingCollections.push('Accesos');
         if(missingCollections.length) throw new Error('Colecciones faltantes o vacías: ' + missingCollections.join(', ') + '. Claves encontradas: ' + Object.keys(root || {}).join(', '));
         const primeraJerarquia=normalizeRow(dataJerarquia[0]);
         if(!('gerente_territorial' in primeraJerarquia)||!String(primeraJerarquia.gerente_territorial||'').trim()){
             throw new Error('La hoja Jerarquía requiere la columna gerente_territorial con valores.');
         }
-        processData(dataProductos, dataClientes, dataJerarquia, dataVentas, dataDisciplina);
+        processData(dataProductos, dataClientes, dataJerarquia, dataVentas, dataDisciplina, dataAccesos);
     }
 
-    async function tryLoadGzipJson() {
-        const gzFileName = 'norte.json.gz';
-        const encodedGz = encodeURIComponent(gzFileName);
-        const repository = 'APYMSA-INTELIGENCIA-COMERCIAL-NORTE';
-        const gzUrls = [
-            new URL(gzFileName, window.location.href).href,
-            'https://joselito198004.github.io/' + repository + '/' + encodedGz,
-            'https://raw.githubusercontent.com/JOSELITO198004/' + repository + '/main/' + encodedGz,
-            'https://github.com/JOSELITO198004/' + repository + '/raw/refs/heads/main/' + encodedGz,
-            'https://cdn.jsdelivr.net/gh/JOSELITO198004/' + repository + '@main/' + encodedGz
-        ];
-        const errors = [];
-        const cloudButton = document.getElementById('btnLoadCloud');
-        loaderIcon.classList.add('hidden');
-        loaderSpinner.classList.remove('hidden');
-        document.getElementById('loader-text').innerText = 'Cargando norte.json.gz desde la nube...';
-        cloudButton.disabled = true;
-        cloudButton.classList.add('opacity-50', 'cursor-wait');
-        try {
-            for (const url of gzUrls) {
-                try {
-                    const response = await fetch(url, { cache: 'no-store' });
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    const compressed = new Uint8Array(await response.arrayBuffer());
-                    if (compressed.length < 2 || compressed[0] !== 0x1f || compressed[1] !== 0x8b) {
-                        const contentType = response.headers.get('content-type') || 'desconocido';
-                        throw new Error(`La respuesta no es GZIP (Content-Type: ${contentType}).`);
-                    }
-                    if (!window.pako) throw new Error('No se pudo cargar Pako.');
-                    const jsonText = pako.ungzip(compressed, { to: 'string' });
-                    processCloudPayload(JSON.parse(jsonText.replace(/^\uFEFF/, '').trim()));
-                    return;
-                } catch (err) {
-                    errors.push(`${url}: ${err.message}`);
-                }
-            }
-            throw new Error(errors.join(' | '));
-        } catch (err) {
-            console.error('Error cargando norte.json.gz:', err);
-            showAlert('NO SE PUDO CARGAR NORTE.JSON.GZ. REVISA QUE ESTE EN LA RAIZ DE MAIN JUNTO A INDEX.HTML.');
-            resetCarga();
-        } finally {
-            cloudButton.disabled = false;
-            cloudButton.classList.remove('opacity-50', 'cursor-wait');
-        }
-    }
+    async function decodeGzipResponse(response){const bytes=await response.arrayBuffer();const u=new Uint8Array(bytes);if(u.length<2||u[0]!==31||u[1]!==139)throw new Error('Respuesta no GZIP');if('DecompressionStream' in window){const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));return await new Response(stream).text()}if(!window.pako)throw new Error('Pako no disponible');return pako.ungzip(u,{to:'string'})}
+    async function tryLoadGzipJson(){const repository='APYMSA-INTELIGENCIA-COMERCIAL-NORTE',file='norte.json.gz',urls=[new URL(file,location.href).href,`https://joselito198004.github.io/${repository}/${file}`,`https://raw.githubusercontent.com/JOSELITO198004/${repository}/main/${file}`,`https://cdn.jsdelivr.net/gh/JOSELITO198004/${repository}@main/${file}`],controllers=urls.map(()=>new AbortController());loaderIcon.classList.add('hidden');loaderSpinner.classList.remove('hidden');document.getElementById('loader-text').innerText='Buscando la fuente más rápida...';const button=document.getElementById('btnLoadCloud');button.disabled=true;try{const attempts=urls.map((url,i)=>fetch(url,{cache:'force-cache',signal:controllers[i].signal}).then(r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return decodeGzipResponse(r).then(text=>({text,index:i}))}));const winner=await Promise.any(attempts);controllers.forEach((c,i)=>{if(i!==winner.index)c.abort()});processCloudPayload(JSON.parse(winner.text.replace(/^\uFEFF/,'').trim()))}catch(err){console.error(err);showAlert('NO SE PUDO CARGAR NORTE.JSON.GZ.');resetCarga()}finally{button.disabled=false}}
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => { dropZone.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); }); });
     dropZone.addEventListener('dragover', () => { dropZone.classList.add('bg-[#00f3ff]/10', 'border-[#00f3ff]'); });
     dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('bg-[#00f3ff]/10', 'border-[#00f3ff]'); });
@@ -959,7 +902,29 @@
         return item;
     }
 
-    function processData(dataProductos, dataClientes, dataJerarquia, dataVentas, dataDisciplina) {
+
+    let ACCESS_SESSION=null,CLOUD_ACCESS_USERS=[];
+    const ACCESS_KEY='apymsa_access_users_v1',ACCESS_SESSION_KEY='apymsa_access_session_v1';
+    function accessNorm(v){return normalizeBrandName(v).replace(/[^A-Z0-9]/g,'')}
+    async function hashPin(pin){const data=new TextEncoder().encode(String(pin));const hash=await crypto.subtle.digest('SHA-256',data);return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('')}
+    function accessUsers(){return CLOUD_ACCESS_USERS.slice()}
+    function saveAccessUsers(v){console.warn('Los usuarios se administran en la hoja Accesos del Excel.')}
+    function initializeAccessControl(){const overlay=document.getElementById('access-overlay');overlay.classList.remove('hidden');step1.classList.add('hidden');document.getElementById('access-title').innerText='Acceso Inteligencia Comercial';document.getElementById('access-help').innerText='Para asesores, el usuario es el asesor_id de Jerarquia. Para gerentes, usa el usuario definido en Accesos.'}
+    async function submitAccess(){const user=document.getElementById('access-user').value.trim(),pin=document.getElementById('access-pin').value,err=document.getElementById('access-error');err.classList.add('hidden');if(!user||!pin){err.innerText='Captura usuario y PIN';err.classList.remove('hidden');return}const hash=await hashPin(pin),account=accessUsers().find(x=>accessNorm(x.user)===accessNorm(user)&&x.hash===hash&&x.active!==false);if(!account){err.innerText='Usuario o PIN incorrecto, o usuario inactivo';err.classList.remove('hidden');return}ACCESS_SESSION={user:account.user,role:account.role,entity:account.entity};sessionStorage.setItem(ACCESS_SESSION_KEY,JSON.stringify(ACCESS_SESSION));document.getElementById('access-overlay').classList.add('hidden');document.getElementById('btnLogout').classList.remove('hidden');document.getElementById('btnAccessAdmin').classList.add('hidden');applyAccessLanding()}
+    function applyAccessLanding(){step1.classList.add('hidden');step2.classList.remove('hidden');btnBack.classList.remove('hidden');if(ACCESS_SESSION.role==='TERRITORIAL'){renderTerritorialCards();return}if(ACCESS_SESSION.role==='REGIONAL'){const reg=companyTree.get(ACCESS_SESSION.entity);if(!reg){showAlert('REGIÓN ASIGNADA NO ENCONTRADA');return}currentSelectedTerritorial=reg.territorial;openRegionalAdvisors(reg.name);return}let found=null,reg=null;for(const r of companyTree.values()){if(r.asesores.has(ACCESS_SESSION.entity)){reg=r;found=r.asesores.get(ACCESS_SESSION.entity);break}}if(!found){showAlert('ASESOR ASIGNADO NO ENCONTRADO');return}currentSelectedTerritorial=reg.territorial;currentSelectedRegional=reg;openAdvisorClients(found.name)}
+    function logoutAccess(){sessionStorage.removeItem(ACCESS_SESSION_KEY);ACCESS_SESSION=null;location.reload()}
+    function openAccessAdmin(){showAlert('LOS USUARIOS SE ADMINISTRAN EN LA HOJA ACCESOS DEL EXCEL Y SE ACTUALIZAN AL REGENERAR NORTE.JSON.GZ.')}
+    function closeAccessAdmin(){document.getElementById('access-admin-modal').classList.add('hidden')}
+    function refreshAccessEntityOptions(){const role=document.getElementById('new-access-role').value,sel=document.getElementById('new-access-entity');let vals=[];if(role==='TERRITORIAL')vals=['*'];else if(role==='REGIONAL')vals=[...companyTree.keys()].sort();else vals=[...new Set([...companyTree.values()].flatMap(r=>[...r.asesores.keys()]))].sort();sel.innerHTML=vals.map(v=>`<option value="${v}">${v==='*'?'ACCESO COMPLETO':v}</option>`).join('')}
+    async function saveAccessUser(){const user=document.getElementById('new-access-user').value.trim(),pin=document.getElementById('new-access-pin').value,role=document.getElementById('new-access-role').value,entity=document.getElementById('new-access-entity').value;if(!user||pin.length<4){showAlert('USUARIO Y PIN DE AL MENOS 4 DÍGITOS.');return}const users=accessUsers().filter(x=>accessNorm(x.user)!==accessNorm(user));users.push({user,hash:await hashPin(pin),role,entity});saveAccessUsers(users);document.getElementById('new-access-user').value='';document.getElementById('new-access-pin').value='';renderAccessUsers()}
+    function deleteAccessUser(user){const users=accessUsers();if(users.length<=1){showAlert('DEBE EXISTIR AL MENOS UN USUARIO.');return}saveAccessUsers(users.filter(x=>x.user!==user));renderAccessUsers()}
+    function renderAccessUsers(){const box=document.getElementById('access-user-list');box.innerHTML=accessUsers().map(x=>`<div class="flex justify-between gap-3 border rounded-xl p-3"><div><b>${x.user}</b><div class="text-xs">${x.role} · ${x.entity}</div></div><button onclick="deleteAccessUser('${String(x.user).replace(/'/g,"\'")}')" class="text-red-700 font-black">Eliminar</button></div>`).join('')}
+    function canOpenRegional(name){return !ACCESS_SESSION||ACCESS_SESSION.role==='TERRITORIAL'||(ACCESS_SESSION.role==='REGIONAL'&&ACCESS_SESSION.entity===name)}
+    function canOpenAdvisor(name){return !ACCESS_SESSION||ACCESS_SESSION.role==='TERRITORIAL'||ACCESS_SESSION.role==='REGIONAL'||(ACCESS_SESSION.role==='ASESOR'&&ACCESS_SESSION.entity===name)}
+
+    function processData(dataProductos, dataClientes, dataJerarquia, dataVentas, dataDisciplina, dataAccesos) {
+        CLOUD_ACCESS_USERS=(dataAccesos||[]).map(normalizeRow).filter(x=>String(x.estatus||'ACTIVO').toUpperCase()==='ACTIVO').map(x=>({user:String(x.usuario||'').trim(),hash:String(x.pin_hash||x.pinhash||'').trim().toLowerCase(),role:String(x.rol||'').trim().toUpperCase(),entity:String(x.entidad||x.gerente_regional||x.asesor||x.gerente_territorial||'*').trim().toUpperCase(),active:true})).filter(x=>x.user&&x.hash&&['TERRITORIAL','REGIONAL','ASESOR'].includes(x.role));
+        if(!CLOUD_ACCESS_USERS.length)throw new Error('La colección Accesos no contiene usuarios activos válidos.');
         companyTree.clear(); allClientsFlat.clear(); clientsById.clear(); globalProducts.clear();
         dataQuality={ventasSinCliente:0,ventasAmbiguas:0,codigosSinMaestro:new Set(),asesoresSinJerarquia:new Set(),disciplinaSinCliente:0,clientesDuplicadosCV:[]};
         globalSalesMn = {}; globalSalesPesos = {}; globalPiezas = {}; globalClientsPerSku = {};
@@ -1035,7 +1000,7 @@
         appCurrentState = "PANEL_REGIONALES";
         document.getElementById('summary-count').innerText = `${allClientsFlat.size} clientes | ${globalProducts.size} códigos`;
         populateSelectors();
-        renderTerritorialCards();
+        initializeAccessControl();
     }
 
     function dateOnly(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate(),12,0,0)}
@@ -1388,8 +1353,8 @@
         });
     }
 
-    function openRegionalAdvisors(name) { currentSelectedRegional = companyTree.get(name); if(!currentSelectedRegional) return; document.getElementById('regional-view').classList.add('hidden'); document.getElementById('advisor-view').classList.remove('hidden'); document.getElementById('current-regional-title').innerText = name; appCurrentState = "PANEL_ASESORES"; renderAdvisorCards(); switchRegionalTab('intel'); }
-    function backToRegionals() { currentSelectedRegional = null; document.getElementById('advisor-view').classList.add('hidden'); document.getElementById('regional-view').classList.remove('hidden'); renderRegionalCards(); appCurrentState = "PANEL_REGIONALES"; }
+    function openRegionalAdvisors(name) { if(!canOpenRegional(name)){showAlert('ACCESO RESTRINGIDO A TU REGIÓN.');return;} currentSelectedRegional = companyTree.get(name); if(!currentSelectedRegional) return; document.getElementById('regional-view').classList.add('hidden'); document.getElementById('advisor-view').classList.remove('hidden'); document.getElementById('current-regional-title').innerText = name; appCurrentState = "PANEL_ASESORES"; renderAdvisorCards(); switchRegionalTab('intel'); }
+    function backToRegionals() { if(ACCESS_SESSION&&ACCESS_SESSION.role!=='TERRITORIAL'){applyAccessLanding();return;} currentSelectedRegional = null; document.getElementById('advisor-view').classList.add('hidden'); document.getElementById('regional-view').classList.remove('hidden'); renderRegionalCards(); appCurrentState = "PANEL_REGIONALES"; }
     
     function openAdvisorClients(name) { 
         if(!currentSelectedRegional) return; 
@@ -1406,7 +1371,7 @@
         renderClientList(); 
     }
     
-    function backToAdvisors() { currentSelectedAdvisor = null; document.getElementById('client-view').classList.add('hidden'); document.getElementById('advisor-view').classList.remove('hidden'); appCurrentState = "PANEL_ASESORES"; }
+    function backToAdvisors() { if(ACCESS_SESSION&&ACCESS_SESSION.role==='ASESOR'){showAlert('ACCESO LIMITADO A TU RUTA.');return;} currentSelectedAdvisor = null; document.getElementById('client-view').classList.add('hidden'); document.getElementById('advisor-view').classList.remove('hidden'); appCurrentState = "PANEL_ASESORES"; }
 
     function selectClient(id) {
         if(!currentSelectedAdvisor) return; selectedClient = currentSelectedAdvisor.clientes.get(id); if(!selectedClient) return;
@@ -1863,16 +1828,14 @@
             currentStrategyLabel = "Top Marcas Propias";
             targetProducts = sortedGlobalSkusPesos.map(sku => globalProducts.get(sku)).filter(item => item && marcasPropias.map(b=>b.toUpperCase()).includes(normalizeBrandName(getBrand(item)))).slice(0, 50);
         } else if (strategyType === 'marcaFamilia') {
-            const selectedBrand = document.getElementById('brand-selector').value;
-            const selectedFamily = document.getElementById('brand-family-selector')?.value || '';
-            if (!selectedBrand) { showAlert("SELECCIONA UNA MARCA."); return; }
-            currentStrategyLabel = `Marca: ${selectedBrand}` + (selectedFamily ? ` | Familia: ${selectedFamily}` : ' | Todas las familias');
-            targetProducts = Array.from(globalProducts.values()).filter(item => item && normalizeBrandName(getBrand(item)) === normalizeBrandName(selectedBrand) && (!selectedFamily || normalizeBrandName(getFamily(item)) === normalizeBrandName(selectedFamily)));
+            const selectedBrand=document.getElementById('brand-selector').value,selectedFamily=document.getElementById('brand-family-selector')?.value||'';
+            if(!selectedBrand){showAlert('SELECCIONA UNA MARCA.');return;}
+            currentStrategyLabel=`Marca: ${selectedBrand}`+(selectedFamily?` | Familia: ${selectedFamily}`:' | Todas las familias');
+            targetProducts=Array.from(globalProducts.values()).filter(item=>item&&normalizeBrandName(getBrand(item))===normalizeBrandName(selectedBrand)&&(!selectedFamily||normalizeBrandName(getFamily(item))===normalizeBrandName(selectedFamily)));
         } else if (strategyType === 'codigosNuevos') {
-            const selectedBrand = document.getElementById('new-code-brand-selector')?.value || '';
-            const selectedFamily = document.getElementById('new-code-family-selector')?.value || '';
-            currentStrategyLabel = 'Códigos Nuevos' + (selectedBrand ? ` | Marca: ${selectedBrand}` : ' | Todas las marcas') + (selectedFamily ? ` | Familia: ${selectedFamily}` : ' | Todas las familias');
-            targetProducts = Array.from(globalProducts.values()).filter(item => item && isNewProduct(item) && (!selectedBrand || normalizeBrandName(getBrand(item)) === normalizeBrandName(selectedBrand)) && (!selectedFamily || normalizeBrandName(getFamily(item)) === normalizeBrandName(selectedFamily)));
+            const selectedBrand=document.getElementById('new-code-brand-selector')?.value||'',selectedFamily=document.getElementById('new-code-family-selector')?.value||'';
+            currentStrategyLabel='Códigos Nuevos'+(selectedBrand?` | Marca: ${selectedBrand}`:' | Todas las marcas')+(selectedFamily?` | Familia: ${selectedFamily}`:' | Todas las familias');
+            targetProducts=Array.from(globalProducts.values()).filter(item=>item&&isNewProduct(item)&&(!selectedBrand||normalizeBrandName(getBrand(item))===normalizeBrandName(selectedBrand))&&(!selectedFamily||normalizeBrandName(getFamily(item))===normalizeBrandName(selectedFamily)));
         } else if (strategyType === 'familyEspecifica') {
             const selectedFamily = document.getElementById('family-selector').value, selectedSistema = document.getElementById('sistema-selector').value;
             if (!selectedFamily) { showAlert("SELECCIONA UNA FAMILIA."); return; }
@@ -1886,7 +1849,7 @@
             targetProducts = sortedGlobalSkusPesos.map(sku => globalProducts.get(sku)).filter(item => item && normalizeBrandName(getTipoServicio(item)) === normalizeBrandName(selectedServicio) && (!selectedFamilia || normalizeBrandName(getFamily(item)) === normalizeBrandName(selectedFamilia))).slice(0, 50);
         }
 
-        if (strategyType !== 'codigosNuevos') targetProducts = applyOpportunityFilter(targetProducts);
+        if(strategyType!=='codigosNuevos')targetProducts=applyOpportunityFilter(targetProducts);
         targetProducts.sort((a,b)=>getSku(a).localeCompare(getSku(b),'es',{numeric:true,sensitivity:'base'}));
         if (targetProducts.length === 0) { showAlert("NO SE ENCONTRARON CÓDIGOS PARA ESTA ESTRATEGIA Y FILTRO."); return; }  
         renderCatalog(targetProducts);
@@ -2050,16 +2013,14 @@
         });
     }
 
-    function syncStrategyFamilySelector(brandSelectorId,familySelectorId,onlyNewCodes=false){const brand=document.getElementById(brandSelectorId)?.value||'',sel=document.getElementById(familySelectorId);if(!sel)return;const families=[...new Set(Array.from(globalProducts.values()).filter(item=>item&&(!onlyNewCodes||isNewProduct(item))&&(!brand||normalizeBrandName(getBrand(item))===normalizeBrandName(brand))).map(getFamily).filter(f=>f&&f!=='SIN FAMILIA'))].sort((a,b)=>a.localeCompare(b,'es'));sel.innerHTML='<option value="">Todas las familias...</option>';families.forEach(f=>{const o=document.createElement('option');o.value=f;o.innerText=f.toUpperCase();sel.appendChild(o)})}
+    function syncStrategyFamilySelector(brandId,familyId,onlyNew=false){const brand=document.getElementById(brandId)?.value||'',sel=document.getElementById(familyId);if(!sel)return;const fs=[...new Set(Array.from(globalProducts.values()).filter(p=>p&&(!onlyNew||isNewProduct(p))&&(!brand||normalizeBrandName(getBrand(p))===normalizeBrandName(brand))).map(getFamily).filter(f=>f&&f!=='SIN FAMILIA'))].sort((a,b)=>a.localeCompare(b,'es'));sel.innerHTML='<option value="">Todas las familias...</option>';fs.forEach(f=>{const o=document.createElement('option');o.value=f;o.innerText=f.toUpperCase();sel.appendChild(o)})}
     function populateSelectors() {
         const uniqueBrands = [...new Set(Array.from(globalProducts.values()).map(item => getBrand(item)).filter(b => b && b !== "SIN MARCA"))].sort();
         const bSel = document.getElementById('brand-selector'); if(bSel) { bSel.innerHTML = '<option value="">Seleccionar marca...</option>'; uniqueBrands.forEach(b => { const opt = document.createElement('option'); opt.value = b; opt.innerText = b; bSel.appendChild(opt); }); }
         
-        const newCodeProducts=Array.from(globalProducts.values()).filter(isNewProduct);
-        const newBrands=[...new Set(newCodeProducts.map(getBrand).filter(b=>b&&b!=='SIN MARCA'))].sort((a,b)=>a.localeCompare(b,'es'));
-        const nbSel=document.getElementById('new-code-brand-selector');if(nbSel){nbSel.innerHTML='<option value="">Todas las marcas...</option>';newBrands.forEach(b=>{const o=document.createElement('option');o.value=b;o.innerText=b;nbSel.appendChild(o)})}
-        syncStrategyFamilySelector('brand-selector','brand-family-selector',false);
-        syncStrategyFamilySelector('new-code-brand-selector','new-code-family-selector',true);
+        const newBrands=[...new Set(Array.from(globalProducts.values()).filter(isNewProduct).map(getBrand).filter(b=>b&&b!=='SIN MARCA'))].sort((a,b)=>a.localeCompare(b,'es'));
+        const nb=document.getElementById('new-code-brand-selector');if(nb){nb.innerHTML='<option value="">Todas las marcas...</option>';newBrands.forEach(b=>{const o=document.createElement('option');o.value=b;o.innerText=b;nb.appendChild(o)})}
+        syncStrategyFamilySelector('brand-selector','brand-family-selector',false);syncStrategyFamilySelector('new-code-brand-selector','new-code-family-selector',true);
         const uniqueOwnFamilies = [...new Set(Array.from(globalProducts.values()).filter(item => marcasPropias.map(b=>b.toUpperCase()).includes(normalizeBrandName(getBrand(item)))).map(item => getFamily(item)).filter(f => f && f !== "SIN FAMILIA"))].sort();
         const fSel = document.getElementById('family-selector'); if(fSel) { fSel.innerHTML = '<option value="">Seleccionar familia...</option>'; uniqueOwnFamilies.forEach(f => { const opt = document.createElement('option'); opt.value = f; opt.innerText = f.toUpperCase(); fSel.appendChild(opt); }); }
 
