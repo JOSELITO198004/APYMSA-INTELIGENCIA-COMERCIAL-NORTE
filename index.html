@@ -459,6 +459,12 @@
 <option value="all">Todos los códigos</option>
 <option value="new">Nueva oportunidad: códigos nunca comprados</option>
 </select>
+<label class="block text-[10px] text-neon-cyan font-black uppercase tracking-widest mb-2 mt-3" for="strategy-familias-enfoque-filter">Filtro familias enfoque</label>
+<select class="w-full bg-[#001233] border border-[#00f3ff]/40 text-white rounded-xl p-3 text-[10px] font-black uppercase outline-none" id="strategy-familias-enfoque-filter">
+<option value="all">Todas las familias</option>
+<option value="si">Sólo familias enfoque (SI)</option>
+<option value="no">Sólo fuera de familias enfoque (NO)</option>
+</select>
 </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
@@ -878,7 +884,7 @@
     function financialYTD(client,year,metric,throughMonth=CURRENT_MONTH){let total=0;for(let m=0;m<=throughMonth;m++)total+=financialValue(client,year,m,metric);return total}
     function refreshHierarchyFinancialTotals(){companyTree.forEach(reg=>{reg.totalVenta=0;reg.totalCuota=0;reg.asesores.forEach(adv=>{adv.totalVenta=0;adv.totalCuota=0;adv.clientes.forEach(c=>{c.venta=financialValue(c,CURRENT_YEAR,CURRENT_MONTH,'venta');c.cuota=financialValue(c,CURRENT_YEAR,CURRENT_MONTH,'cuota');c.objetivoEnfoque=financialValue(c,CURRENT_YEAR,CURRENT_MONTH,'objetivoEnfoque');adv.totalVenta+=c.venta;adv.totalCuota+=c.cuota;reg.totalVenta+=c.venta;reg.totalCuota+=c.cuota})})})}
     function clientPurchasedSkus(client){return new Set((client&&client.rawItems||[]).map(getSku).filter(Boolean).map(x=>String(x).trim().toUpperCase()))}
-    function applyOpportunityFilter(products){const mode=document.getElementById('strategy-opportunity-filter')?.value||'all';if(mode!=='new'||!selectedClient)return products;const bought=clientPurchasedSkus(selectedClient);return products.filter(p=>!bought.has(getSku(p).toUpperCase()))}
+    function applyOpportunityFilter(products){const mode=document.getElementById('strategy-opportunity-filter')?.value||'all';const famMode=document.getElementById('strategy-familias-enfoque-filter')?.value||'all';let result=[...products];if(mode==='new'&&selectedClient){const bought=clientPurchasedSkus(selectedClient);result=result.filter(p=>!bought.has(getSku(p).toUpperCase()))}if(famMode!=='all'){result=result.filter(p=>String(p.familias_enfoque??p.familiasenfoque??'').trim().toLowerCase()===famMode)}return result}
     function isNewProduct(item){const v=String(item.codigo_nuevo??item.codigonuevo??item.CODIGO_NUEVO??'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');return v.split(/[^a-z0-9]+/).includes('si')}
     function getSemaforoProyeccionClass(porcentaje) { return porcentaje >= 100 ? "glow-green" : (porcentaje >= 85 ? "glow-orange" : "glow-red"); }
     function getSemaforoProyeccionTextClass(porcentaje) { return porcentaje >= 100 ? "status-text-green" : (porcentaje >= 85 ? "status-text-orange" : "status-text-red"); }
