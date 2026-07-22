@@ -1017,7 +1017,8 @@
             let foundReg='SIN JERARQUIA ASIGNADA',advNode=null,regNode=null;
             for(const [rName,candidate] of companyTree.entries()){if(candidate.asesores.has(advName)){foundReg=rName;regNode=candidate;advNode=candidate.asesores.get(advName);break}}
             if(!advNode){dataQuality.asesoresSinJerarquia.add(advName);if(!companyTree.has(foundReg))companyTree.set(foundReg,{name:foundReg,territorial:'SIN GERENTE TERRITORIAL',region:'SIN SUCURSAL',totalVenta:0,totalCuota:0,asesores:new Map()});regNode=companyTree.get(foundReg);if(!regNode.asesores.has(advName))regNode.asesores.set(advName,{name:advName,sucursal:'SIN SUCURSAL',totalVenta:0,totalCuota:0,clientes:new Map()});advNode=regNode.asesores.get(advName)}
-            const cliObj={id:cliId,cliVendId,uniqueKey:cliVendId,name:cliName,ciudad,focus,advisor:advName,regional:foundReg,territorial:regNode.territorial,tipoCliente,financiero,venta:0,cuota:0,objetivoEnfoque:0,piezas:0,disciplina:{},rawItems:[]};
+            const bonoSemanas=[1,2,3].map(n=>{const raw=item[`bono_semana_${n}`]??item[`bonosemana${n}`]??'';return{capturado:String(raw??'').trim()!=='',valor:parseMoney(raw)}});
+            const cliObj={id:cliId,cliVendId,uniqueKey:cliVendId,name:cliName,ciudad,focus,advisor:advName,regional:foundReg,territorial:regNode.territorial,tipoCliente,financiero,bonoSemanas,venta:0,cuota:0,objetivoEnfoque:0,piezas:0,disciplina:{},rawItems:[]};
             advNode.clientes.set(cliVendId,cliObj);allClientsFlat.set(cliVendId,cliObj);if(!clientsById.has(cliId))clientsById.set(cliId,[]);clientsById.get(cliId).push(cliObj);
         });
         refreshHierarchyFinancialTotals();
@@ -1361,11 +1362,17 @@
             { nombre: 'Semana 3', corte: 'Corte 1 al 25 de Julio', obj: 0.80 }
         ];
 
-        metasSemanales.forEach((meta) => {
+        const clientes = Array.from(currentSelectedAdvisor.clientes.values());
+        metasSemanales.forEach((meta, semanaIndex) => {
+            const registrosSemana = clientes.map(c => c.bonoSemanas?.[semanaIndex] || {capturado:false, valor:0});
+            const semanaCerrada = registrosSemana.some(r => r.capturado);
+            const ventaBono = semanaCerrada
+                ? registrosSemana.reduce((total, r) => total + (r.capturado ? Number(r.valor || 0) : 0), 0)
+                : ventaAcumulada;
             const metaSemanal = cuotaTotal * meta.obj;
-            const deficit = metaSemanal > ventaAcumulada ? metaSemanal - ventaAcumulada : 0;
-            const porcentajeAvance = metaSemanal > 0 ? (ventaAcumulada / metaSemanal) * 100 : 0;
-            const logrado = ventaAcumulada >= metaSemanal;
+            const deficit = metaSemanal > ventaBono ? metaSemanal - ventaBono : 0;
+            const porcentajeAvance = metaSemanal > 0 ? (ventaBono / metaSemanal) * 100 : 0;
+            const logrado = ventaBono >= metaSemanal;
 
             const colorBorder = logrado ? 'border-neon-green' : 'border-neon-red';
             const colorText = logrado ? 'text-neon-green' : 'text-neon-red';
@@ -1373,7 +1380,7 @@
 
             container.innerHTML += `
                 <div class="bg-black/60 border ${colorBorder} rounded-2xl p-6 ${shadow} flex flex-col justify-between relative overflow-hidden group hover:scale-105 transition-transform">
-                    ${logrado ? `<div class="absolute -right-8 top-4 bg-neon-green text-black text-[9px] font-black uppercase py-1 px-10 rotate-45 shadow-[0_0_10px_rgba(0,255,102,0.5)]">LOGRADO</div>` : ''}
+                    ${semanaCerrada ? `<div class="absolute -right-8 top-4 ${logrado ? 'bg-neon-green' : 'bg-neon-red'} text-black text-[9px] font-black uppercase py-1 px-10 rotate-45 shadow-lg">${logrado ? 'CERRADO · LOGRADO' : 'CERRADO · NO LOGRADO'}</div>` : `<div class="absolute -right-8 top-4 bg-neon-orange text-black text-[9px] font-black uppercase py-1 px-10 rotate-45 shadow-lg">EN CURSO</div>`}
                     
                     <div class="mb-4 border-b border-white/10 pb-4">
                         <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">${meta.corte}</div>
@@ -1387,7 +1394,8 @@
                         </div>
                         <div>
                             <span class="text-[8px] text-slate-500 font-bold block uppercase">Avance (Venta Real)</span>
-                            <span class="text-sm font-black text-white">${fmt.format(ventaAcumulada)}</span>
+                            <span class="text-sm font-black text-white">${fmt.format(ventaBono)}</span>
+                            <span class="text-[7px] ${semanaCerrada ? 'text-neon-green' : 'text-neon-orange'} font-black block uppercase mt-1">${semanaCerrada ? 'Valor cerrado desde bono_semana_' + (semanaIndex + 1) : 'Valor provisional de venta mensual'}</span>
                         </div>
                         <div class="col-span-2 bg-white/5 p-3 rounded-lg border border-white/5">
                             <span class="text-[9px] text-slate-500 font-bold block uppercase">Déficit para Lograr Bono</span>
