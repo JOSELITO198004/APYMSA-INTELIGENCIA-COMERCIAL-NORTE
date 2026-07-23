@@ -708,13 +708,15 @@
     function calcularDiasTranscurridos() {
         let diasAcumulados = 0;
         let hoy = new Date();
-        for (let d = 1; d <= hoy.getDate(); d++) {
+        // Excluye siempre el día de visualización. Solo considera los días
+        // efectivos completamente transcurridos hasta ayer.
+        for (let d = 1; d < hoy.getDate(); d++) {
             let fechaIterada = new Date(hoy.getFullYear(), hoy.getMonth(), d);
             let diaSemana = fechaIterada.getDay();
             if (diaSemana >= 1 && diaSemana <= 5) diasAcumulados += 1;
             else if (diaSemana === 6) diasAcumulados += 0.5;
         }
-        return diasAcumulados;
+        return Math.max(diasAcumulados, 0);
     }
 
     function obtenerDiasEfectivosDelMes(anio, mes) {
